@@ -27,6 +27,7 @@ public class TMD_api : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Init();
 
             if (monthTemp == currentMonth)
             {
@@ -52,7 +53,18 @@ public class TMD_api : MonoBehaviour
         int currentMonth = WeatherAPI.AllForecast[0].time.month;
         foreach (TMD_class.Forecast forecast in WeatherAPI.AllForecast)
         {
-            
+            if (currentMonth == forecast.time.month)
+            {
+                currentMonthForecast.Add(forecast);
+            }
+            else if (currentMonth + 1 == forecast.time.month)
+            {
+                nextMonthForecast.Add(forecast);
+            }
+            else if (currentMonth + 2 == forecast.time.month)
+            {
+                next2MonthForecast.Add(forecast);
+            }
         }
     }
 
