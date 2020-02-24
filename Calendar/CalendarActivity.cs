@@ -1,7 +1,4 @@
-﻿using Proyecto26;
-using UnityEditor;
-using UnityEngine;
-using Newtonsoft.Json;
+﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
 using UnityEngine.UI;
@@ -16,52 +13,43 @@ public class TMD_api : MonoBehaviour
     public GameObject scrollTextPrefeb;
     private List<GameObject> objs = new List<GameObject>();
 
-    List<TMD_class.Forecast> currentMonthForecast = new List<TMD_class.Forecast>();
-    List<TMD_class.Forecast> nextMonthForecast = new List<TMD_class.Forecast>();
-    List<TMD_class.Forecast> next2MonthForecast = new List<TMD_class.Forecast>();
+    private List<TMD_class.Forecast> currentMonthForecast = new List<TMD_class.Forecast>();
+    private List<TMD_class.Forecast> nextMonthForecast = new List<TMD_class.Forecast>();
+    private List<TMD_class.Forecast> next2MonthForecast = new List<TMD_class.Forecast>();
 
     const string pluginName = "com.example.androidlibrary.MyPlugin";
     static AndroidJavaClass _pluginClass;
     static AndroidJavaObject _pluginInstance;
 
+    private int currentMonth;
+    private int selectedMonth;
+
+    private int currentMonthCount;
+    private int nextMonthCount;
+    private int next2MonthCount;
+
     // Start is called before the first frame update
     void Start()
     {
         Init();
-
-            if (monthTemp == currentMonth)
-            {
-                if (currentMonthForecast != null && currentMonthForecast.Any())
-                {
-                    foreach (TMD_class.Forecast i in currentMonthForecast)
-                    {
-                        string[] temp = i.time.ToString("yyyy-MM-dd").Split('-');
-                        int temp2 = Int32.Parse(temp[1]);
-                        string forecast = temp[2] + " " + MonthString(temp2) + " - " + Conditions(i.data.cond);
-                        generateText(forecast);
-                    }
-
-                    Debug.Log("Current month");
-                }
-                else
-                    generateText("เดือนนี้ไม่มีฝนตก ดีจังเลย~");
-            }
+        CurrentMonth();
     }
 
     private void Init()
     {
-        int currentMonth = WeatherAPI.AllForecast[0].time.month;
+        currentMonth = WeatherAPI.CurrentDate.Month;
+        selectedMonth = currentMonth;
         foreach (TMD_class.Forecast forecast in WeatherAPI.AllForecast)
         {
-            if (currentMonth == forecast.time.month)
+            if (currentMonth == forecast.time.Month)
             {
                 currentMonthForecast.Add(forecast);
             }
-            else if (currentMonth + 1 == forecast.time.month)
+            else if (currentMonth + 1 == forecast.time.Month)
             {
                 nextMonthForecast.Add(forecast);
             }
-            else if (currentMonth + 2 == forecast.time.month)
+            else if (currentMonth + 2 == forecast.time.Month)
             {
                 next2MonthForecast.Add(forecast);
             }
@@ -101,24 +89,41 @@ public class TMD_api : MonoBehaviour
         }
     }
 
+    public void CurrentMonth()
+    {
+        if (selectedMonth == currentMonth)
+        {
+            if (currentMonthForecast != null && currentMonthForecast.Any())
+            {
+                foreach (TMD_class.Forecast i in currentMonthForecast)
+                {
+                    string forecast = i.time.Day + " " + MonthString(i.time.Month) + " - " + WeatherAPI.Conditions(i.data.cond);
+                    generateText(forecast);
+                }
+
+                Debug.Log("Current month");
+            }
+            else
+                generateText("เดือนนี้ไม่มีฝนตก ดีจังเลย~");
+        }
+    }
+
     public void nextMonth()
     {
         OnDestroy();
-        if (monthTemp - currentMonth >= 0 && monthTemp - currentMonth < 2)
+        if (selectedMonth - currentMonth >= 0 && selectedMonth - currentMonth < 2)
         {
-            month.text = MonthString(monthTemp + 1);
-            monthTemp++;
-            monthTemp %= 12;
+            month.text = MonthString(selectedMonth + 1);
+            selectedMonth++;
+            selectedMonth %= 12;
 
-            if (monthTemp == currentMonth + 1)
+            if (selectedMonth == currentMonth + 1)
             {
                 if (nextMonthForecast != null && nextMonthForecast.Any())
                 {
                     foreach (TMD_class.Forecast i in nextMonthForecast)
                     {
-                        string[] temp = i.time.ToString("yyyy-MM-dd").Split('-');
-                        int temp2 = Int32.Parse(temp[1]);
-                        string forecast = temp[2] + " " + MonthString(temp2) + " - " + Conditions(i.data.cond);
+                        string forecast = i.time.Day + " " + MonthString(i.time.Month) + " - " + WeatherAPI.Conditions(i.data.cond);
                         generateText(forecast);
                     }
 
@@ -128,15 +133,13 @@ public class TMD_api : MonoBehaviour
                     generateText("เดือนนี้ไม่มีฝนตก ดีจังเลย~");
             }
 
-            else if (monthTemp == currentMonth + 2)
+            else if (selectedMonth == currentMonth + 2)
             {
                 if (next2MonthForecast != null && next2MonthForecast.Any())
                 {
                     foreach (TMD_class.Forecast i in next2MonthForecast)
                     {
-                        string[] temp = i.time.ToString("yyyy-MM-dd").Split('-');
-                        int temp2 = Int32.Parse(temp[1]);
-                        string forecast = temp[2] + " " + MonthString(temp2) + " - " + Conditions(i.data.cond);
+                        string forecast = i.time.Day + " " + MonthString(i.time.Month) + " - " + WeatherAPI.Conditions(i.data.cond);
                         generateText(forecast);
                     }
 
@@ -151,13 +154,13 @@ public class TMD_api : MonoBehaviour
     public void prevMonth()
     {
         OnDestroy();
-        if (monthTemp - currentMonth < 3 && monthTemp - currentMonth > 0)
+        if (selectedMonth - currentMonth < 3 && selectedMonth - currentMonth > 0)
         {
-            month.text = MonthString(monthTemp - 1);
-            monthTemp--;
-            monthTemp %= 12;
+            month.text = MonthString(selectedMonth - 1);
+            selectedMonth--;
+            selectedMonth %= 12;
 
-            if (monthTemp == currentMonth)
+            if (selectedMonth == currentMonth)
             {
                 if (currentMonthForecast != null && currentMonthForecast.Any())
                 {
@@ -165,7 +168,7 @@ public class TMD_api : MonoBehaviour
                     {
                         string[] temp = i.time.ToString("yyyy-MM-dd").Split('-');
                         int temp2 = Int32.Parse(temp[1]);
-                        string forecast = temp[2] + " " + MonthString(temp2) + " - " + Conditions(i.data.cond);
+                        string forecast = temp[2] + " " + MonthString(temp2) + " - " + WeatherAPI.Conditions(i.data.cond);
                         generateText(forecast);
                     }
 
@@ -175,7 +178,7 @@ public class TMD_api : MonoBehaviour
                     generateText("เดือนนี้ไม่มีฝนตก ดีจังเลย~");
             }
 
-            else if (monthTemp == currentMonth + 1)
+            else if (selectedMonth == currentMonth + 1)
             {
                 if (nextMonthForecast != null && nextMonthForecast.Any())
                 {
@@ -183,7 +186,7 @@ public class TMD_api : MonoBehaviour
                     {
                         string[] temp = i.time.ToString("yyyy-MM-dd").Split('-');
                         int temp2 = Int32.Parse(temp[1]);
-                        string forecast = temp[2] + " " + MonthString(temp2) + " - " + Conditions(i.data.cond);
+                        string forecast = temp[2] + " " + MonthString(temp2) + " - " + WeatherAPI.Conditions(i.data.cond);
                         generateText(forecast);
                     }
 
