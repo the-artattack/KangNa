@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Proyecto26;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 public class WeatherAPI : MonoBehaviour
@@ -12,7 +9,7 @@ public class WeatherAPI : MonoBehaviour
     private TMD_class myObject = new TMD_class();
     private string lat = "13.655091";
     private string lon = "100.494908";
-    private string date = "2020-02-08";
+    private static string date = "2020-02-08";
     private string duration = "60";
     private string fields = "rain,cond";
 
@@ -32,9 +29,6 @@ public class WeatherAPI : MonoBehaviour
         RestClient.Get("https://data.tmd.go.th/nwpapi/v1/forecast/location/daily/at?lat=" + lat + "&lon=" + lon + "&fields=" + fields + "&date=" + date + "&duration=" + duration)
             .Then(response => {
                 myObject = JsonConvert.DeserializeObject<TMD_class>(response.Text);
-
-                string[] yyyymmdd = date.Split('-');
-                currentMonth = Int32.Parse(yyyymmdd[1]);
 
                 foreach (TMD_class.Forecast forecast in myObject.WeatherForecasts[0].forecasts)
                 {
@@ -83,5 +77,10 @@ public class WeatherAPI : MonoBehaviour
             default:
                 return "Error";
         }
+    }
+
+    public static DateTime CurrentDate
+    {
+        get { return DateTime.Parse(date); }
     }
 }
