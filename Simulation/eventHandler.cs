@@ -1,93 +1,29 @@
-public class eventHandler
+using System.Collections.Generic;
+using System.Linq;
+
+public static class eventHandler
 {
-    public int intNotDuplicated(List<int> chkList)
-    {
-        int number;
-        while (true)
-        {
-            number = UnityEngine.Random.Range(0, noRainForecast.Count);
-
-            if (!chkList.Any())
-                return number;
-            else
-            {
-                foreach (int check in chkList)
-                {
-                    if (check == number)
-                    {
-                        number = UnityEngine.Random.Range(0, noRainForecast.Count);
-                        break;
-                    }
-                    else
-                    {
-                        chkDuplicate.Add(number);
-                        return number;
-                    }
-                }
-            }
-
-        }
-    }
-    public void GenerateInsect(int limit)
-    {
-        for (int i = 0; i < limit; i++)
-        {
-            insectForecast.Add(noRainForecast[intNotDuplicated(chkDuplicate)]);
-        }
-    }
-
-    public void GenerateDisease(int limit)
-    {
-        for (int i = 0; i < limit; i++)
-        {
-            diseaseForecast.Add(noRainForecast[intNotDuplicated(chkDuplicate)]);
-        }
-    }
-
-    public void GenerateSeaRise(int limit)
-    {
-        for (int i = 0; i < limit; i++)
-        {
-            seaRiseForecast.Add(noRainForecast[intNotDuplicated(chkDuplicate)]);
-        }
-    }
-
     #region Trigger
 
-    public void upCommingRaining()
+    public static void upCommingRaining()
     {
         upCommingRain = true;
         onRainForecastTrigger?.Invoke();
     }
-    public void Insect()
+    public static void Insect()
     {
         insectTrigger = true;
         onInsectTrigger?.Invoke();
         //Trigger Insect        
     }
 
-    public void InsectSolution(bool useInsecticide)
-    {
-        this.useInsecticide = useInsecticide;
-        if (useInsecticide)
-        {
-            riceQuantity = RiceReduction(riceQuantity, 2);
-        }
-        else if (!useInsecticide)
-        {
-            riceQuantity = RiceReduction(riceQuantity, 5);
-        }
-        else
-            riceQuantity = RiceReduction(riceQuantity, 10);
-    }
-
-    public void Disease()
+    public static void Disease()
     {
         diseaseTrigger = true;
         onDiseaseTrigger?.Invoke();
     }
 
-    public void diseaseSolution(bool useHerbicide)
+    public static void diseaseSolution(bool useHerbicide)
     {
         this.useHerbicide = useHerbicide;
 
@@ -103,20 +39,14 @@ public class eventHandler
         else
             riceQuantity = RiceReduction(riceQuantity, 10);
     }
-    public void Flooding()
+    public static void Flooding()
     {
         floodTrigger = true;
         onFloodTrigger?.Invoke();
         //Trigger Flooding        
     }
 
-    public void FloodSolution(bool useDrain)
-    {
-        this.useDrain = useDrain;
-        riceQuantity = RiceReduction(riceQuantity, 5);
-    }
-
-    public void LackOfWater()
+    public static void LackOfWater()
     {
         droughtTrigger = true;
         onDroughtTrigger?.Invoke();
@@ -125,7 +55,7 @@ public class eventHandler
 
     }
 
-    public void SeaRise()
+    public static void SeaRise()
     {
         seaRiseTrigger = true;
         onSeaRiseTrigger?.Invoke();
@@ -133,16 +63,7 @@ public class eventHandler
 
     }
 
-    public void seaRiseSolution(bool close)
-    {
-        closeWaterWay = close;
-        if (!close)
-        {
-            riceQuantity = RiceReduction(riceQuantity, 2);
-        }
-    }
-
-    public double Rainning(double volume, int rainVolume)
+    public static double Rainning(double volume, int rainVolume)
     {
         rainTrigger = true;
         onRainTrigger?.Invoke();
@@ -161,7 +82,7 @@ public class eventHandler
         }
     }
 
-    public void notRaining()
+    public static void notRaining()
     {
         onNotRainTrigger?.Invoke();
     }
@@ -169,23 +90,23 @@ public class eventHandler
     #endregion
 
     #region rice parameters
-    public double RiceReduction(double quantity, double damage)
+    public static double RiceReduction(double quantity, double damage)
     {
         return quantity - (quantity * damage / 100);
     }
 
-    public double WaterReduction(double volume, double reductRatio)
+    public static double WaterReduction(double volume, double reductRatio)
     {
         return volume - (volume * reductRatio / 100);
     }
     #endregion
-    public void ToggleCanal(bool use)
+    public static void ToggleCanal(bool use)
     {
         useCanal = use;
         Debug.Log("Use canel: " + useCanal);
     }
 
-    public void makeReservior()
+    public static void makeReservior()
     {
         useReservoir = true;
     }
@@ -193,5 +114,10 @@ public class eventHandler
     public static double RiceQuantity
     {
         get { return riceQuantity; }
+    }
+
+    public static implicit operator SimulateParameters(MainGame v)
+    {
+        throw new NotImplementedException();
     }
 }
