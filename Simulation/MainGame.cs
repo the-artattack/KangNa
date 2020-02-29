@@ -20,14 +20,16 @@ public class MainGame : MonoBehaviour
     public delegate void onWeatherHandler(DateTime dateChanged);
 
     public static event OnEventTrigger onInsectTrigger;
-    public static event OnEventTrigger onRainTrigger;
     public static event OnEventTrigger onNotRainTrigger;
     public static event OnEventTrigger onSeaRiseTrigger;
     public static event OnEventTrigger onDroughtTrigger;
     public static event OnEventTrigger onDiseaseTrigger;
     public static event OnEventTrigger onFloodTrigger;
     public static event OnEventTrigger onRainForecastTrigger;
-    public delegate void OnEventTrigger();
+    public delegate void OnEventTrigger(SimulateParameters parameters);
+
+    public static event OnRainTrigger onRainTrigger;
+    public delegate void OnRainTrigger(SimulateParameters parameters, TMD_class.Forecast forecast);
 
     // Start is called before the first frame update
     void Start()
@@ -39,7 +41,7 @@ public class MainGame : MonoBehaviour
 
             onDateChanges?.Invoke(TurnControl.turnInstance.gameDate);
 
-            eventHandler.upCommingRaining();
+            upCommingRaining();
         }
         else
         {
@@ -50,9 +52,7 @@ public class MainGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        InsectAnimation.onUseInsecticide += InsectSolution;
-        FloodAnimation.onFlooding += FloodSolution;
-        SeaRiseAnimation.onSeaRise += seaRiseSolution;
+        UpdateParameters();
         if (oldTurn != TurnControl.turnInstance.turn)
         {
             if (TurnControl.turnInstance.turn % 24 == 0)
@@ -66,18 +66,12 @@ public class MainGame : MonoBehaviour
                     if (forecast.time.Date == TurnControl.turnInstance.gameDate.Date)
                     {
                         //Trigger Rain
-                        parameterInstance.WaterVolume = eventHandler.Rainning(parameterInstance.WaterVolume, forecast.data.cond);
-                        if (parameterInstance.UseReservoir)
-                        {
-                            parameterInstance.ReservoirVolume = eventHandler.Rainning(parameterInstance.ReservoirVolume, forecast.data.cond) / 100 * 40 * 20;
-                        }
+                        Rainning(forecast);
                         Debug.Log("Rainning");
-                        parameterInstance.IsRain = true;
                     }
                     else
                     {
-                        parameterInstance.IsRain = false;
-                        eventHandler.notRaining();
+                        notRaining();
                     }
                 }
 
@@ -100,7 +94,7 @@ public class MainGame : MonoBehaviour
                     if (forecast.time.Date == TurnControl.turnInstance.gameDate.Date)
                     {
                         //Trigger Insect invade
-                        eventHandler.Insect();
+                        Insect();
                         Debug.Log("Insect");
                     }
                 }
@@ -111,7 +105,7 @@ public class MainGame : MonoBehaviour
                     if (forecast.time.Date == TurnControl.turnInstance.gameDate.Date)
                     {
                         //Trigger Disease
-                        eventHandler.Disease();
+                        Disease();
                         Debug.Log("Disease");
                     }
                 }
@@ -124,7 +118,7 @@ public class MainGame : MonoBehaviour
                         if (parameterInstance.UseCanal)
                         {
                             //Trigger Sea rise
-                            eventHandler.SeaRise();
+                            SeaRise();
                             Debug.Log("Sea rise");
                         }
                     }
@@ -148,7 +142,7 @@ public class MainGame : MonoBehaviour
                     if (parameterInstance.day7Count > 4)
                     {
                         Debug.Log("Flooding");
-                        eventHandler.Flooding();
+                        Flooding();
                     }
                     parameterInstance.day7Count++;
                 }
@@ -171,7 +165,7 @@ public class MainGame : MonoBehaviour
                     if (parameterInstance.day7Count > 4)
                     {
                         Debug.Log("Lack of Water");
-                        eventHandler.LackOfWater();
+                        LackOfWater();
                     }
                     parameterInstance.day7Count++;
                 }
@@ -188,33 +182,69 @@ public class MainGame : MonoBehaviour
         oldTurn = TurnControl.turnInstance.turn;
     }
 
-    public void InsectSolution(bool useInsecticide)
+    private void UpdateParameters()
     {
-        parameterInstance.useInsecticide = useInsecticide;
-        if (useInsecticide)
-        {
-            parameterInstance.RiceQuantity = eventHandler.RiceReduction(parameterInstance.RiceQuantity, 2);
-        }
-        else if (!useInsecticide)
-        {
-            parameterInstance.RiceQuantity = eventHandler.RiceReduction(parameterInstance.RiceQuantity, 5);
-        }
-        else
-            parameterInstance.RiceQuantity = eventHandler.RiceReduction(parameterInstance.RiceQuantity, 10);
+        RainAnimation.onParameterUpdateTrigger += getParameterUpdate;
+        NotRainAnimation.onParameterUpdateTrigger += getParameterUpdate;
+        InsectAnimation.onParameterUpdateTrigger += getParameterUpdate;
+        FloodAnimation.onParameterUpdateTrigger += getParameterUpdate;
+        SeaRiseAnimation.onParameterUpdateTrigger += getParameterUpdate;
+        DiseaseAnimation.onParameterUpdateTrigger += getParameterUpdate;
     }
 
-    public void FloodSolution(bool useDrain)
+    private void getParameterUpdate(SimulateParameters parameters)
     {
-        parameterInstance.useDrain = useDrain;
-        parameterInstance.RiceQuantity = eventHandler.RiceReduction(parameterInstance.RiceQuantity, 5);
+        parameterInstance = parameters;
     }
 
-    public void seaRiseSolution(bool close)
+    public void upCommingRaining()
     {
-        parameterInstance.closeWaterWay = close;
-        if (!close)
-        {
-            parameterInstance.RiceQuantity = eventHandler.RiceReduction(parameterInstance.RiceQuantity, 2);
-        }
+        upCommingRain = true;
+        onRainForecastTrigger?.Invoke(parameterInstance);
+    }
+    public void Insect()
+    {
+        insectTrigger = true;
+        onInsectTrigger?.Invoke(parameterInstance);
+        //Trigger Insect        
+    }
+
+    public void Disease()
+    {
+        diseaseTrigger = true;
+        onDiseaseTrigger?.Invoke(parameterInstance);
+    }
+
+    public void Flooding()
+    {
+        floodTrigger = true;
+        onFloodTrigger?.Invoke(parameterInstance);
+        //Trigger Flooding        
+    }
+
+    public void SeaRise()
+    {
+        seaRiseTrigger = true;
+        onSeaRiseTrigger?.Invoke(parameterInstance);
+        //Trigger Sea rise
+    }
+
+    public void Rainning(TMD_class.Forecast forecast)
+    {
+        rainTrigger = true;
+        onRainTrigger?.Invoke(parameterInstance, forecast);
+    }
+
+    public void notRaining()
+    {
+        onNotRainTrigger?.Invoke(parameterInstance);
+    }
+
+    public void LackOfWater()
+    {
+        droughtTrigger = true;
+        onDroughtTrigger?.Invoke(parameterInstance);
+        //Trigger Low water
+        parameterInstance.RiceQuantity = eventHandler.RiceReduction(parameterInstance.RiceQuantity, 8);
     }
 }
