@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using Firebase.Database;
 using System.Collections.Generic;
-using System;
-using System.Threading.Tasks;
 
 public class UserSaveManager : MonoBehaviour
 {
     void Start()
     {
-        
+        SceneChanger.onSceneChanged += SavePlayer; 
     }
 
     public void writeNewUser(string userId, string username, string loginType)
@@ -26,6 +24,7 @@ public class UserSaveManager : MonoBehaviour
 
     public void SavePlayer()
     {
+        Debug.Log("Saved scene!!!");
         int balance = 100000;
         int scene = FirebaseInit.Instance.CurrentScene;
         UserBoard entry = new UserBoard(balance, scene);
@@ -42,26 +41,25 @@ public class UserSaveManager : MonoBehaviour
         Debug.Log("With current scene: " + scene + " and balance " + balance);
     }
 
-    public void LoadPlayer()
+    private void SaveScene(int scene)
     {
-        FirebaseInit.Instance._database.RootReference.GetValueAsync().ContinueWith((task =>
-        {
-            if (task.IsFaulted)
-            {
-                // Handle the error...
-            }
-            else if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
-                string playerData = snapshot.GetRawJsonValue();
-
-                //Player m = JsonUtility.FromJson<Player>(playerData);
-                foreach (var child in snapshot.Children)
-                {
-                    string t = child.GetRawJsonValue();
-                    print("Data is: " + t);
-                }
-            }
-        }));
+        FirebaseDatabase.DefaultInstance.GetReference("Users").Child(FirebaseInit.Instance.user.UserId)
+            .ValueChanged += HandleValueChanged;
     }
+
+    private void HandleValueChanged(object sender, ValueChangedEventArgs e)
+    {
+        if (e.DatabaseError != null)
+        {
+            Debug.LogError(e.DatabaseError.Message);
+            return;
+        }
+        else
+        {
+            FirebaseInit.Instance._database.RootReference
+                .Child("Users").Child(FirebaseInit.Instance.user.UserId).SetValueAsync(FirebaseInit.Instance.CurrentScene);
+            Debug.Log("Write current scene");
+        }
+    }
+
 }

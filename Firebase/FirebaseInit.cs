@@ -6,6 +6,7 @@ using Firebase;
 using Firebase.Database;
 using Firebase.Extensions;
 using Firebase.Unity.Editor;
+using System;
 
 public class FirebaseInit : MonoBehaviour
 {
@@ -14,7 +15,6 @@ public class FirebaseInit : MonoBehaviour
     public Firebase.Auth.FirebaseAuth auth;
     public Firebase.Auth.FirebaseUser user;    
     public FirebaseDatabase _database;
-    public UserSaveManager usereHandler;
 
     public int CurrentScene;
     public string riceType;
@@ -48,9 +48,7 @@ public class FirebaseInit : MonoBehaviour
             {
                 Debug.LogError("Failed to initialize Firebase with {task.Exception}");
                 return;
-            }
-            //if firebase have initialized then do something...
-            OnFirebaseInitialized.Invoke();
+            }            
         });
     }
 
@@ -76,17 +74,42 @@ public class FirebaseInit : MonoBehaviour
             user = auth.CurrentUser;
             if (signedIn)
             {
-                SceneChanger.nextScene(2);
-                Debug.Log("Signed in " + user.UserId);
+                LoadUser();
+            }
+        }
+    }       
+   
+    public void LoadUser()
+    {
+        FirebaseDatabase.DefaultInstance.GetReference("Users").Child(user.UserId)
+            .ValueChanged += LoadScene;
+    }
+
+    private void LoadScene(object sender, ValueChangedEventArgs e)
+    {
+        if (e.DatabaseError != null)
+        {
+            Debug.LogError(e.DatabaseError.Message);
+            return;
+        }
+        else
+        {
+            DataSnapshot data = e.Snapshot.Child("State").Child("scene");
+            if (data.Value != null)
+            {
+                int scene = Int32.Parse(data.Value.ToString());
+                Debug.Log("scene : " + scene);
+                SceneChanger.nextScene(scene);
+            }
+            else
+            { 
+                SceneChanger.nextScene(2); 
             }
         }
     }
-        
     void OnDestroy()
     {
         auth.StateChanged -= AuthStateChanged;
         auth = null;
-    }  
-
-
+    }
 }
