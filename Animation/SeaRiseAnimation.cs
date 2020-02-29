@@ -16,20 +16,24 @@ public class SeaRiseAnimation : MonoBehaviour
     public static event onSeaRiseEvent onSeaRise;
     public delegate void onSeaRiseEvent(bool closeWay);
 
+    public static event OnParameterTrigger onParameterUpdateTrigger;
+    public delegate void OnParameterTrigger(SimulateParameters parameters);
+
     // Start is called before the first frame update
     void Start()
     {
         questionBox.SetActive(false);
         seaRiseAnimation.SetActive(false);
         blackTransparency.SetActive(false);
-        SimulateParameters.onSeaRiseTrigger += enableSeaRise;
+        MainGame.onSeaRiseTrigger += enableSeaRise;
     }
 
-    private void enableSeaRise()
+    private void enableSeaRise(SimulateParameters parameters)
     {
         seaRiseAnimation.SetActive(true);
         seaRise.SetBool("isSea", true);
         questionTrigger();
+        seaRiseSolution(parameters);
     }
 
     private void disableSeaRise()
@@ -38,7 +42,7 @@ public class SeaRiseAnimation : MonoBehaviour
         blackTransparency.SetActive(false);
         seaRiseAnimation.SetActive(false);
         seaRise.SetBool("isSea", false);
-        SimulationManager.onSeaRiseTrigger -= enableSeaRise;
+        Mai.onSeaRiseTrigger -= enableSeaRise;
     }
     private void questionTrigger()
     {
@@ -69,5 +73,15 @@ public class SeaRiseAnimation : MonoBehaviour
         disableSeaRise();
         questionBox.SetActive(false);
         blackTransparency.SetActive(false);
+    }
+
+    public void seaRiseSolution(SimulateParameters parameters)
+    {
+        parameters.closeWaterWay = close;
+        if (!close)
+        {
+            parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 2);
+            onParameterUpdateTrigger?.Invoke(parameters);
+        }
     }
 }

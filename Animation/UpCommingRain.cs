@@ -11,10 +11,10 @@ public class UpCommingRain : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SimulateParameters.onRainForecastTrigger += onRaining;
+        MainGame.onRainForecastTrigger += onRaining;
     }
 
-    public void onRaining()
+    public void onRaining(SimulateParameters parameters)
     {        
         questionTrigger();
     }

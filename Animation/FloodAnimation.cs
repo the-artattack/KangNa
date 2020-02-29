@@ -16,20 +16,24 @@ public class FloodAnimation : MonoBehaviour
     public static event onFloodEvent onFlooding;
     public delegate void onFloodEvent(bool drain);
 
+    public static event OnParameterTrigger onParameterUpdateTrigger;
+    public delegate void OnParameterTrigger(SimulateParameters parameters);
+
     // Start is called before the first frame update
     void Start()
     {
         questionBox.SetActive(false);
         floodAnimation.SetActive(false);
         blackTransparency.SetActive(false);
-        SimulateParameters.onFloodTrigger += enableFlood;
+        MainGame.onFloodTrigger += enableFlood;
     }
 
-    private void enableFlood()
+    private void enableFlood(SimulateParameters parameters)
     {
         floodAnimation.SetActive(true);
         flood.SetBool("isFlood", true);        
         questionTrigger();
+        FloodSolution(parameters);
     }
 
     private void disableFlood()
@@ -38,7 +42,7 @@ public class FloodAnimation : MonoBehaviour
         blackTransparency.SetActive(false);
         floodAnimation.SetActive(false);
         flood.SetBool("isFlood", false);
-        SimulationManager.onSeaRiseTrigger -= enableFlood;
+        MainGame.onSeaRiseTrigger -= enableFlood;
     }
 
     private void questionTrigger()
@@ -70,5 +74,11 @@ public class FloodAnimation : MonoBehaviour
         disableFlood();
         questionBox.SetActive(false);
         blackTransparency.SetActive(false);
+    }
+
+    public void FloodSolution(SimulateParameters parameters)
+    {
+        parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 5);
+        onParameterUpdateTrigger?.Invoke(parameters);
     }
 }
