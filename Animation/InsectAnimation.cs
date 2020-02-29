@@ -19,14 +19,17 @@ public class InsectAnimation : MonoBehaviour
 
     public static event onInsect onUseInsecticide;
     public delegate void onInsect(bool insecticide);
-    
+
+    public static event OnParameterTrigger onParameterUpdateTrigger;
+    public delegate void OnParameterTrigger(SimulateParameters parameters);
+
     // Start is called before the first frame update
     void Start()
     {
         Insect.SetActive(false);
         questionBox.SetActive(false);
         blackTransparency.SetActive(false);
-        SimulateParameters.onInsectTrigger += enableInsect;
+        MainGame.onInsectTrigger += enableInsect;
     }
 
     // Update is called once per frame
@@ -35,9 +38,10 @@ public class InsectAnimation : MonoBehaviour
         
     }
 
-    private void enableInsect()
+    private void enableInsect(SimulateParameters parameters)
     {        
-        animateInsect();        
+        animateInsect();
+        InsectSolution(parameters);
     }
     private void animateInsect()
     {
@@ -99,7 +103,7 @@ public class InsectAnimation : MonoBehaviour
         insectProtected.SetActive(false);
         insecticide = false;
         onUseInsecticide?.Invoke(insecticide);
-        SimulationManager.onInsectTrigger -= enableInsect;
+        MainGame.onInsectTrigger -= enableInsect;
     }
 
     private void useInsecticide()
@@ -110,7 +114,7 @@ public class InsectAnimation : MonoBehaviour
         insectProtected.SetActive(false);
         insecticide = true;
         onUseInsecticide?.Invoke(insecticide);
-        SimulationManager.onInsectTrigger -= enableInsect;
+        MainGame.onInsectTrigger -= enableInsect;
     }
 
     private void notProtect()
@@ -121,6 +125,22 @@ public class InsectAnimation : MonoBehaviour
         disableInsect();
         blackTransparency.SetActive(false);
         questionBox.SetActive(false);
-        SimulationManager.onInsectTrigger -= enableInsect;
+        MainGame.onInsectTrigger -= enableInsect;
+    }
+
+    public void InsectSolution(SimulateParameters parameters)
+    {
+        if (parameters.useInsecticide)
+        {
+            parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 2);
+        }
+        else if (!parameters.useInsecticide)
+        {
+            parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 5);
+        }
+        else
+            parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 10);
+
+        onParameterUpdateTrigger?.Invoke(parameters);
     }
 }
