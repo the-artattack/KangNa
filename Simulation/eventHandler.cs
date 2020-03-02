@@ -16,12 +16,6 @@ public static class eventHandler
     #endregion
 
     /**
-    public static void ToggleCanal(bool use)
-    {
-        useCanal = use;
-        Debug.Log("Use canel: " + useCanal);
-    }
-
     public static void makeReservior()
     {
         useReservoir = true;

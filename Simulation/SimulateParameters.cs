@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
-public class SimulateParameters : MonoBehaviour
+[Serializable]
+
+public class SimulateParameters
 {
     public static SimulateParameters parameterInstance { get; private set; }
 
@@ -38,9 +39,8 @@ public class SimulateParameters : MonoBehaviour
 
     List<int> chkDuplicate = new List<int>();
 
-    // Start is called before the first frame update
-    void Start()
-    {          
+    public SimulateParameters()
+    {
         foreach (TMD_class.Forecast forecast in WeatherAPI.AllForecast)
         {
             if (forecast.data.cond >= 5 && forecast.data.cond <= 8)
@@ -66,12 +66,6 @@ public class SimulateParameters : MonoBehaviour
         GenerateInsect(limitInsect);
         GenerateDisease(limitDisease);
         GenerateSeaRise(limitSeaRise);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void GenerateInsect(int limit)
@@ -100,10 +94,11 @@ public class SimulateParameters : MonoBehaviour
 
     public int intNotDuplicated(List<int> chkList)
     {
+        Random rnd = new Random();
         int number;
         while (true)
         {
-            number = UnityEngine.Random.Range(0, noRainForecast.Count);
+            number = rnd.Next(0, noRainForecast.Count);
 
             if (!chkList.Any())
                 return number;
@@ -113,7 +108,7 @@ public class SimulateParameters : MonoBehaviour
                 {
                     if (check == number)
                     {
-                        number = UnityEngine.Random.Range(0, noRainForecast.Count);
+                        number = rnd.Next(0, noRainForecast.Count);
                         break;
                     }
                     else
@@ -126,6 +121,12 @@ public class SimulateParameters : MonoBehaviour
 
         }
     }
+
+    public void ToggleCanal(bool use)
+    {
+        useCanal = use;
+    }
+
     #region getter setter
     public double RiceQuantity
     {

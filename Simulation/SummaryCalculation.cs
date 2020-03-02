@@ -43,7 +43,6 @@ public class SummaryCalculation : MonoBehaviour
         RentLandNoti.onVariableChanges += getRentFee;
         RiceTab.onRiceData += getSeedCost;
         RiceTab.onVariableChanges += getArea;
-        RiceTab.onHarvest += createSummary;
 
         bill.SetActive(false);
         bill2.SetActive(false);
@@ -62,7 +61,14 @@ public class SummaryCalculation : MonoBehaviour
         equipmentDepreciationCost = summary.EquipmentDepreciationCost();
         equipmentOpportunityCost = summary.EquipmentOpportunityCost();
         summary.expectedPrice = 14000;
-        summary.expectedYield = SimulateParameters.RiceQuantity;
+
+        MainGame.onSummaryTrigger += enableSummary;
+    }
+
+    private void enableSummary(SimulateParameters parameters)
+    {
+        summary.expectedYield = parameters.RiceQuantity;
+        createSummary();
     }
 
     private void getSeedCost(string price)
