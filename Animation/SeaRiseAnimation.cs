@@ -42,7 +42,7 @@ public class SeaRiseAnimation : MonoBehaviour
         blackTransparency.SetActive(false);
         seaRiseAnimation.SetActive(false);
         seaRise.SetBool("isSea", false);
-        Mai.onSeaRiseTrigger -= enableSeaRise;
+        MainGame.onSeaRiseTrigger -= enableSeaRise;
     }
     private void questionTrigger()
     {
