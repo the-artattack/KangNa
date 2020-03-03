@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
-[System.Serializable]
+[Serializable]
 public class TMD_class
 {
     public List<WeatherForecast> WeatherForecasts { get; set; }
