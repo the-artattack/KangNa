@@ -26,6 +26,8 @@ public class MainGame : MonoBehaviour
     public static event OnEventTrigger onDiseaseTrigger;
     public static event OnEventTrigger onFloodTrigger;
     public static event OnEventTrigger onRainForecastTrigger;
+    public static event OnEventTrigger onSummaryTrigger;
+    public static event OnEventTrigger onWaterTabTrigger;
     public delegate void OnEventTrigger(SimulateParameters parameters);
 
     public static event OnRainTrigger onRainTrigger;
@@ -34,19 +36,27 @@ public class MainGame : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        parameterInstance = SimulateParameters.parameterInstance;
-        if (parameterInstance == null)
-        {            
-            oldTurn = TurnControl.turnInstance.turn;
+        WeatherAPI.onWeatherTrigger += onWeatherComplete;
+    }
 
-            onDateChanges?.Invoke(TurnControl.turnInstance.gameDate);
+    private void onWeatherComplete()
+    {
+        parameterInstance = new SimulateParameters();
 
-            upCommingRaining();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        oldTurn = TurnControl.turnInstance.turn;
+
+        onDateChanges?.Invoke(TurnControl.turnInstance.gameDate);
+
+        Debug.Log("First Rain: " + parameterInstance.rainForecast[0]);
+
+        upCommingRaining();
+        
+        onWaterTabTrigger?.Invoke(parameterInstance);
+        WaterTab.onParameterUpdateTrigger += getParameterUpdate;
+
+        RiceTab.onHarvest += createSummary;
+
+        Debug.Log("MainGame: Created.");
     }
 
     // Update is called once per frame
@@ -182,6 +192,11 @@ public class MainGame : MonoBehaviour
         oldTurn = TurnControl.turnInstance.turn;
     }
 
+    public void createSummary()
+    {
+        onSummaryTrigger?.Invoke(parameterInstance);
+    }
+
     private void UpdateParameters()
     {
         RainAnimation.onParameterUpdateTrigger += getParameterUpdate;
@@ -190,6 +205,8 @@ public class MainGame : MonoBehaviour
         FloodAnimation.onParameterUpdateTrigger += getParameterUpdate;
         SeaRiseAnimation.onParameterUpdateTrigger += getParameterUpdate;
         DiseaseAnimation.onParameterUpdateTrigger += getParameterUpdate;
+
+        WaterTab.onParameterUpdateTrigger += getParameterUpdate;
     }
 
     private void getParameterUpdate(SimulateParameters parameters)

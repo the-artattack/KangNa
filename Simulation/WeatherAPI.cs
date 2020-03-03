@@ -2,6 +2,7 @@
 using Proyecto26;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class WeatherAPI : MonoBehaviour
@@ -15,8 +16,10 @@ public class WeatherAPI : MonoBehaviour
 
     private static List<TMD_class.Forecast> allForecast = new List<TMD_class.Forecast>();
 
-    // Start is called before the first frame update
-    void Start()
+    public static event OnEventTrigger onWeatherTrigger;
+    public delegate void OnEventTrigger();
+
+    public void Start()
     {
         Init();
     }
@@ -60,6 +63,9 @@ public class WeatherAPI : MonoBehaviour
                                     {
                                         allForecast.Add(forecast);
                                     }
+
+                                    Debug.Log("Weather API: Created.");
+                                    onWeatherTrigger?.Invoke();
 
                                 }).Catch(err => Debug.Log(err.Message));
                         }).Catch(err => Debug.Log(err.Message));
