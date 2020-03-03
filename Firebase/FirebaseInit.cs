@@ -13,7 +13,7 @@ public class FirebaseInit : MonoBehaviour
     public static FirebaseInit Instance { get; private set; }
     public UnityEvent OnFirebaseInitialized = new UnityEvent();
     public Firebase.Auth.FirebaseAuth auth;
-    public Firebase.Auth.FirebaseUser user;    
+    public Firebase.Auth.FirebaseUser user;
     public FirebaseDatabase _database;
 
     public int CurrentScene;
@@ -22,7 +22,7 @@ public class FirebaseInit : MonoBehaviour
     //This will set up all initialize
     void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
             CurrentScene = 0;
@@ -30,12 +30,12 @@ public class FirebaseInit : MonoBehaviour
             //Initialize firebase authenticaton
             InitializeFirebaseAuth();
             InitializeFirebaseDatabase();
-            DontDestroyOnLoad(gameObject);            
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
-        }        
+        }
     }
     void InitializeFirebaseDatabase()
     {
@@ -48,7 +48,7 @@ public class FirebaseInit : MonoBehaviour
             {
                 Debug.LogError("Failed to initialize Firebase with {task.Exception}");
                 return;
-            }            
+            }
         });
     }
 
@@ -77,12 +77,30 @@ public class FirebaseInit : MonoBehaviour
                 LoadUser();
             }
         }
-    }       
-   
+    }
+
     public void LoadUser()
     {
+        FirebaseDatabase.DefaultInstance.GetReference("Education").Child(user.UserId)
+            .ValueChanged += LoadData;
         FirebaseDatabase.DefaultInstance.GetReference("Users").Child(user.UserId)
             .ValueChanged += LoadScene;
+    }
+    private void LoadData(object sender, ValueChangedEventArgs e)
+    {
+        if (e.DatabaseError != null)
+        {
+            Debug.LogError(e.DatabaseError.Message);
+            return;
+        }
+        else
+        {
+            DataSnapshot data = e.Snapshot.Child("TypeOfRice");
+            if(data.Value != null)
+            {
+                riceType = data.Value.ToString();
+            }            
+        }
     }
 
     private void LoadScene(object sender, ValueChangedEventArgs e)

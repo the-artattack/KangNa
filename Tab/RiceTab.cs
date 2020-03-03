@@ -122,6 +122,11 @@ public class RiceTab : MonoBehaviour
             .ValueChanged += ReadEducation;
     }
 
+    private void readRiceType()
+    {
+
+    }
+
     public void readRicePrice()
     {
         FirebaseDatabase.DefaultInstance.GetReference("CostLists")

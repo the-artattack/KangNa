@@ -11,14 +11,19 @@ public class CreateCostList : MonoBehaviour
     private List<GameObject> objs = new List<GameObject>();
     private void Start()
     {
+        CostDataManager.onLoadData += LoadData;
+    }
+
+    private void LoadData()
+    {
         objs.Clear();
         Debug.Log(FirebaseInit.Instance.riceType);
         if (FirebaseInit.Instance.riceType.Equals("ข้าวไวแสง"))
         {
             foreach (var key in CostList.CostInstance.sensitivityRice[0].Keys)
-            {                
-                 generateText(RiceName.GetRiceName(key), CostList.CostInstance.sensitivityRice[0][key].ToString());
-                 Debug.Log(key);              
+            {
+                generateText(RiceName.GetRiceName(key), CostList.CostInstance.sensitivityRice[0][key].ToString());
+                Debug.Log(key);
             }
         }
         else
@@ -31,7 +36,7 @@ public class CreateCostList : MonoBehaviour
         }
     }
 
-    public void generateText(string name, string price)
+    private void generateText(string name, string price)
     {
         Debug.Log("GENERATE TEXT!");
         GameObject scrollObj = Instantiate(scrollTextPrefeb);

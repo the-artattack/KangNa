@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 [Serializable]
-
 public class SimulateParameters
 {
     public static SimulateParameters parameterInstance { get; private set; }

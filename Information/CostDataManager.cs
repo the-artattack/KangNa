@@ -1,13 +1,42 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Firebase.Database;
+using System;
 
 /** Managing all cost data by sync with real-time database*/
 public class CostDataManager : MonoBehaviour
 {
+    public static event LoadData onLoadData;
+    public delegate void LoadData();
+
     private void Awake()
     {    
         RaadAllData();
+        ReadRiceType();
+    }
+    
+    private void ReadRiceType()
+    {
+        FirebaseDatabase.DefaultInstance.GetReference("Education")
+            .Child(FirebaseInit.Instance.auth.CurrentUser.UserId)
+            .Child("TypeOfRice").ValueChanged += GetRiceTypeValue;
+
+    }
+
+    private void GetRiceTypeValue(object sender, ValueChangedEventArgs e)
+    {
+        if (e.DatabaseError != null)
+        {
+            Debug.LogError(e.DatabaseError.Message);
+            return;
+        }
+        else
+        {
+            DataSnapshot data = e.Snapshot;
+            Debug.Log("Type of rice:" + data.Value.ToString());
+            FirebaseInit.Instance.riceType = data.Value.ToString();
+            onLoadData?.Invoke();
+        }
     }
 
     public void RaadAllData()
@@ -65,4 +94,6 @@ public class CostDataManager : MonoBehaviour
             CostList.CostInstance.otherCost.Add(dict);      
         }              
     }
+
+    
 }

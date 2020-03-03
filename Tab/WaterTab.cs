@@ -18,17 +18,16 @@ public class WaterTab : MonoBehaviour
 
     private void createWaterTab(SimulateParameters parameters)
     {
-        parameterInstance = parameters;
+        parameterInstance = parameters;        
     }
 
     private void Update()
     {
-        
-        if(Convert.ToInt32(parameterInstance.WaterVolume) > 60)
+       if (Convert.ToInt32(parameterInstance.WaterVolume) > 60)
         {
             waterVolumn.text = "มากเกินไป";
         }
-        else if(Convert.ToInt32(parameterInstance.WaterVolume) < 40)
+        else if (Convert.ToInt32(parameterInstance.WaterVolume) < 40)
         {
             waterVolumn.text = "ไม่เพียงพอต่อการใช้งาน";
         }
@@ -36,7 +35,6 @@ public class WaterTab : MonoBehaviour
         {
             waterVolumn.text = "เพียงพอต่อการใช้งาน";
         }
-        
     }
 
     public void useCanel(bool use)
