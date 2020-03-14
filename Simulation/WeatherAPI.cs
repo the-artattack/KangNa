@@ -12,7 +12,7 @@ public class WeatherAPI : MonoBehaviour
     private string lon = "100.494908";
     private static DateTime date = DateTime.Now;
     private int duration;
-    private string fields = "rain,cond,tc_min,tc_max";
+    private string fields = "rain,cond,tc_min,tc_max,rh,ws10m";
 
     private static List<TMD_class.Forecast> allForecast = new List<TMD_class.Forecast>();
 
