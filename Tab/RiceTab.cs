@@ -11,7 +11,7 @@ public class RiceTab : MonoBehaviour
     /** Tab1 : Rice */
     public string riceName;
     public string area;
-    public string ricePhase;    
+    public static string ricePhase;    
     public int harvestTimeRemaining = 120;
     public int harvestDay = 120;
     private string price;
@@ -66,11 +66,11 @@ public class RiceTab : MonoBehaviour
             }
             else if (day > 40 && day <= 60)
             {
-                ricePhase = "ระยะสร้างรวงอ่อน";
+                ricePhase = "ระยะตั้งท้อง";
             }
             else if (day > 60 && day <= 90)
             {
-                ricePhase = "ระยะออกดอก";
+                ricePhase = "ระยะออกรวง";
             }
             else if (day > 90 && day <= 120)
             {
@@ -89,11 +89,11 @@ public class RiceTab : MonoBehaviour
             }
             else if (day > 21 && day <= 25)
             {
-                ricePhase = "ระยะสร้างรวงอ่อน";
+                ricePhase = "ระยะตั้งท้อง";
             }
             else if (day > 25 && day <= 55)
             {
-                ricePhase = "ระยะออกดอก";
+                ricePhase = "ระยะออกรวง";
             }
             else if (day > 55 && day <= 80)
             {
@@ -120,6 +120,11 @@ public class RiceTab : MonoBehaviour
         FirebaseDatabase.DefaultInstance.GetReference("Education")
             .Child(FirebaseInit.Instance.auth.CurrentUser.UserId)   
             .ValueChanged += ReadEducation;
+    }
+
+    private void readRiceType()
+    {
+
     }
 
     public void readRicePrice()
@@ -172,5 +177,10 @@ public class RiceTab : MonoBehaviour
             onVariableChanges?.Invoke(area);
             readRicePrice();
         }
+    }
+
+    public static string RicePhase
+    {
+        get { return ricePhase; }
     }
 }
