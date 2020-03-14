@@ -68,8 +68,8 @@ public class MainGame : MonoBehaviour
             if (TurnControl.turnInstance.turn % 24 == 0)
             {
                 onDateChanges?.Invoke(TurnControl.turnInstance.gameDate);
-                Debug.Log("Water: " + parameterInstance.WaterVolume);
-                Debug.Log("Rice: " + parameterInstance.RiceQuantity);
+                //Debug.Log("Water: " + parameterInstance.WaterVolume);
+                //Debug.Log("Rice: " + parameterInstance.RiceQuantity);
 
                 foreach (TMD_class.Forecast forecast in WeatherAPI.AllForecast)
                 {
@@ -116,7 +116,7 @@ public class MainGame : MonoBehaviour
         {
             //Trigger Rain
             Rainning(forecast);
-            Debug.Log("Rainning");
+            //Debug.Log("Rainning");
         }
         else
         {
@@ -137,7 +137,7 @@ public class MainGame : MonoBehaviour
             {
                 //Trigger Sea rise
                 SeaRise();
-                Debug.Log("Sea rise");
+                //Debug.Log("Sea rise");
             }
             
         }
@@ -178,7 +178,7 @@ public class MainGame : MonoBehaviour
 
             if (parameterInstance.day7Count > 4)
             {
-                Debug.Log("Flooding");
+                //Debug.Log("Flooding");
                 Flooding();
             }
             parameterInstance.day7Count++;
@@ -218,15 +218,18 @@ public class MainGame : MonoBehaviour
         System.Random rnd = new System.Random();
         int number;
 
-        if (forecast.data.cond >= 7 && forecast.data.cond <= 8)
+        if (RiceTab.RicePhase == "ระยะต้นกล้า" || RiceTab.RicePhase == "ระยะแตกกอ" || RiceTab.RicePhase == "ระยะตั้งท้อง")
         {
-            number = rnd.Next(0, 3);
-            if (number == 1)
+            if (forecast.data.cond >= 7 && forecast.data.cond <= 8)
             {
-                //Trigger Bacterial Blight
-                Debug.Log("Bacterial Blight");
+                number = rnd.Next(0, 3);
+                if (number == 1)
+                {
+                    //Trigger Bacterial Blight
+                    Debug.Log("Bacterial Blight");
+                }
             }
-        }
+        }        
     }
 
     void RiceBlast(TMD_class.Forecast forecast)
@@ -238,8 +241,8 @@ public class MainGame : MonoBehaviour
         {
             if (forecast.data.rh >= 80)
             {
-                number = rnd.Next(0, 3);
-                if (number == 1)
+                number = rnd.Next(0, 24);
+                if (number == 4)
                 {
                     //Trigger Rice Blast
                     Debug.Log("Rice Blast");
@@ -253,24 +256,30 @@ public class MainGame : MonoBehaviour
         System.Random rnd = new System.Random();
         int number;
 
-        double temperature = (forecast.data.tc_max + forecast.data.tc_min) / 2;
-        if (temperature >= 28 && temperature <= 32)
+        if (RiceTab.RicePhase == "ระยะแตกกอ" || RiceTab.RicePhase == "ระยะตั้งท้อง")
         {
-            if (forecast.data.cond >= 3 && forecast.data.cond <= 4)
+            double temperature = (forecast.data.tc_max + forecast.data.tc_min) / 2;
+            if (temperature >= 28 && temperature <= 32)
             {
-                number = rnd.Next(0, 3);
-                if (number == 1)
+                if (forecast.data.cond >= 3 && forecast.data.cond <= 4)
                 {
-                    //Trigger Sheath Blight
-                    Debug.Log("Sheath Blight");
+                    number = rnd.Next(0, 14);
+                    if (number == 6)
+                    {
+                        //Trigger Sheath Blight
+                        Debug.Log("Sheath Blight");
+                    }
                 }
             }
-        }
+        }            
     }
 
     void RaggedStunt()
-    {
-        //After Brown hopper occur
+    {        
+        if (RiceTab.RicePhase == "ระยะแตกกอ")
+        {
+            //After Brown hopper occur
+        }
     }
 
     void DirtyPanicle(TMD_class.Forecast forecast)
@@ -278,22 +287,37 @@ public class MainGame : MonoBehaviour
         System.Random rnd = new System.Random();
         int number;
 
-        if (forecast.data.ws10m >= 6)
+        if (RiceTab.RicePhase == "ระยะออกรวง")
         {
-            number = rnd.Next(0, 3);
-            if (number == 1)
+            if (forecast.data.ws10m >= 6)
             {
-                //Trigger Dirty Panicle
-                Debug.Log("Dirty Panicle");
+                number = rnd.Next(0, 24);
+                if (number == 3)
+                {
+                    //Trigger Dirty Panicle
+                    Debug.Log("Dirty Panicle");
+                }
             }
-        }
+        }        
     }
 
     void BrownSpot(TMD_class.Forecast forecast)
     {
-        DirtyPanicle(forecast);
-        //Trigger Brown Spot
-        Debug.Log("Brown Spot");
+        System.Random rnd = new System.Random();
+        int number;
+
+        if (RiceTab.RicePhase == "ระยะเก็บเก็ยว")
+        {
+            if (forecast.data.ws10m >= 6)
+            {
+                number = rnd.Next(0, 24);
+                if (number == 8)
+                {
+                    //Trigger Brown Spot
+                    Debug.Log("Brown Spot");
+                }
+            }
+        }               
     }
 
     void Thrips(TMD_class.Forecast forecast)
@@ -301,13 +325,13 @@ public class MainGame : MonoBehaviour
         System.Random rnd = new System.Random();
         int number;
 
-        if (TurnControl.turnInstance.day >= 14 && TurnControl.turnInstance.day <= 20)
+        if (RiceTab.RicePhase == "ระยะต้นกล้า" && TurnControl.turnInstance.day >= 14)
         {
             if (forecast.data.cond == 1 || forecast.data.cond == 12)
             {
                 if (droughtTrigger)
                 {
-                    number = rnd.Next(0, 3);
+                    number = rnd.Next(0, 14);
                     if (number == 1)
                     {
                         //Trigger Thrips
@@ -315,7 +339,7 @@ public class MainGame : MonoBehaviour
                     }
                 }
             }
-        }
+        }        
     }
 
     void WhiteBackedPlantHopper()
@@ -323,15 +347,15 @@ public class MainGame : MonoBehaviour
         System.Random rnd = new System.Random();
         int number;
 
-        if (TurnControl.turnInstance.day >= 20 && TurnControl.turnInstance.day <= 30)
+        if (RiceTab.RicePhase != "ระยะต้นกล้า" && TurnControl.turnInstance.day <= 30)
         {
-            number = rnd.Next(0, 7);
+            number = rnd.Next(0, 24);
             if (number == 3)
             {
                 //Trigger White Backed Plant Hopper
                 Debug.Log("White Backed Plant Hopper");
             }
-        }
+        }        
     }
 
     void WhiteLeafHopper()
@@ -339,20 +363,26 @@ public class MainGame : MonoBehaviour
         System.Random rnd = new System.Random();
         int number;
 
-        if (TurnControl.turnInstance.gameDate.Month >= 6 && TurnControl.turnInstance.gameDate.Month <= 9)
+        if (RiceTab.RicePhase == "ระยะแตกกอ")
         {
-            number = rnd.Next(0, 7);
-            if (number == 3)
+            if (TurnControl.turnInstance.gameDate.Month >= 6 && TurnControl.turnInstance.gameDate.Month <= 9)
             {
-                //Trigger White Leaf Hopper
-                Debug.Log("White Leaf Hopper");
+                number = rnd.Next(0, 24);
+                if (number == 9)
+                {
+                    //Trigger White Leaf Hopper
+                    Debug.Log("White Leaf Hopper");
+                }
             }
-        }
+        }        
     }
 
     void LeafFolder()
-    {
-        //After Brown Hopper occur
+    {        
+        if (RiceTab.RicePhase == "ระยะแตกกอ")
+        {
+            //After Brown Hopper occur
+        }
     }
 
     void BrownPlantHopper(TMD_class.Forecast forecast)
@@ -360,17 +390,20 @@ public class MainGame : MonoBehaviour
         System.Random rnd = new System.Random();
         int number;
 
-        if (!droughtTrigger)
+        if (RiceTab.RicePhase == "ระยะแตกกอ" || RiceTab.RicePhase == "ระยะออกรวง")
         {
-            if (forecast.data.rh >= 60)
+            if (!droughtTrigger)
             {
-                number = rnd.Next(0, 7);
-                if (number == 3)
+                if (forecast.data.rh >= 60)
                 {
-                    //Trigger Brown Plant Hopper
-                    Debug.Log("Brown Plant Hopper");
+                    number = rnd.Next(0, 24);
+                    if (number == 11)
+                    {
+                        //Trigger Brown Plant Hopper
+                        Debug.Log("Brown Plant Hopper");
+                    }
                 }
-            }            
+            }
         }
     }
 
@@ -379,19 +412,22 @@ public class MainGame : MonoBehaviour
         System.Random rnd = new System.Random();
         int number;
 
-        double temperature = (forecast.data.tc_max + forecast.data.tc_min) / 2;
-        if (temperature <= 29)
+        if (RiceTab.RicePhase != "ระยะต้นกล้า")
         {
-            if (forecast.data.cond >= 2 && forecast.data.cond <= 4)
+            double temperature = (forecast.data.tc_max + forecast.data.tc_min) / 2;
+            if (temperature <= 29)
             {
-                number = rnd.Next(0, 7);
-                if (number == 3)
+                if (forecast.data.cond >= 2 && forecast.data.cond <= 4)
                 {
-                    //Trigger Rice Black Bug
-                    Debug.Log("Rice Black Bug");
+                    number = rnd.Next(0, 14);
+                    if (number == 2)
+                    {
+                        //Trigger Rice Black Bug
+                        Debug.Log("Rice Black Bug");
+                    }
                 }
             }
-        }
+        }        
     }
 
     void RiceGallMidges(TMD_class.Forecast forecast)
@@ -399,21 +435,24 @@ public class MainGame : MonoBehaviour
         System.Random rnd = new System.Random();
         int number;
 
-        if (TurnControl.turnInstance.gameDate.Month >= 6 && TurnControl.turnInstance.gameDate.Month <= 9)
+        if (RiceTab.RicePhase == "ระยะแตกกอ")
         {
-            if (forecast.data.rh >= 80)
+            if (TurnControl.turnInstance.gameDate.Month >= 6 && TurnControl.turnInstance.gameDate.Month <= 9)
             {
-                if (forecast.data.cond >= 3 && forecast.data.cond <= 4)
+                if (forecast.data.rh >= 80)
                 {
-                    number = rnd.Next(0, 7);
-                    if (number == 3)
+                    if (forecast.data.cond >= 3 && forecast.data.cond <= 4)
                     {
-                        //Trigger Rice Gall Midges
-                        Debug.Log("Rice Gall Midges");
+                        number = rnd.Next(0, 14);
+                        if (number == 13)
+                        {
+                            //Trigger Rice Gall Midges
+                            Debug.Log("Rice Gall Midges");
+                        }
                     }
                 }
             }
-        }
+        }        
     }
 
     void RiceCaseWorm()
@@ -421,15 +460,18 @@ public class MainGame : MonoBehaviour
         System.Random rnd = new System.Random();
         int number;
 
-        if (!droughtTrigger)
+        if (RiceTab.RicePhase == "ระยะแตกกอ")
         {
-            number = rnd.Next(0, 7);
-            if (number == 3)
+            if (!droughtTrigger)
             {
-                //Trigger Rice Case Worm
-                Debug.Log("Rice Case Worm");
+                number = rnd.Next(0, 24);
+                if (number == 14)
+                {
+                    //Trigger Rice Case Worm
+                    Debug.Log("Rice Case Worm");
+                }
             }
-        }
+        }        
     }
 
     void PossessedBug()
@@ -437,15 +479,18 @@ public class MainGame : MonoBehaviour
         System.Random rnd = new System.Random();
         int number;
 
-        if (TurnControl.turnInstance.gameDate.Month >= 6 && TurnControl.turnInstance.gameDate.Month <= 7)
+        if (RiceTab.RicePhase == "ระยะออกรวง")
         {
-            number = rnd.Next(0, 7);
-            if (number == 3)
+            if (TurnControl.turnInstance.gameDate.Month >= 6 && TurnControl.turnInstance.gameDate.Month <= 7)
             {
-                //Trigger Possessed Bug
-                Debug.Log("Possessed Bug");
+                number = rnd.Next(0, 24);
+                if (number == 16)
+                {
+                    //Trigger Possessed Bug
+                    Debug.Log("Possessed Bug");
+                }
             }
-        }
+        }        
     }
     #endregion
 
