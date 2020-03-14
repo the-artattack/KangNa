@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
-[System.Serializable]
+[Serializable]
 public class TMD_class
 {
     public List<WeatherForecast> WeatherForecasts { get; set; }
@@ -19,6 +18,8 @@ public class TMD_class
         public double rain { get; set; }
         public double tc_max { get; set; }
         public double tc_min { get; set; }
+        public double rh { get; set; }
+        public double ws10m { get; set; }
     }
 
     public class Forecast

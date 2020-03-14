@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Linq;
 
-public class TMD_api : MonoBehaviour
+public class CalendarActivity : MonoBehaviour
 {
     public Text month;
 
