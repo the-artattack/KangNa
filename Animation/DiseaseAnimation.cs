@@ -35,7 +35,7 @@ public class DiseaseAnimation : MonoBehaviour
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 5);
         }
         else
-            parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 10);]
+            parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 10);
 
         onParameterUpdateTrigger?.Invoke(parameters);
     }

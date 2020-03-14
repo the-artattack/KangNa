@@ -30,7 +30,7 @@ public class WeatherTab : MonoBehaviour
 
     void Start()
     {
-        SimulateParameters.onDateChanges += getWeatherForecast;
+        MainGame.onDateChanges += getWeatherForecast;
     }
 
     // Update is called once per frame
@@ -41,11 +41,11 @@ public class WeatherTab : MonoBehaviour
 
     public void getTodayWeather()
     {
-        foreach (TMD_class.Forecast forecast in SimulateParameters.allForecast)
+        foreach (TMD_class.Forecast forecast in WeatherAPI.AllForecast)
         {
             if (TurnControl.turnInstance.gameDate.Date == forecast.time)
             {
-                todayCondition.text = TMD_api.Conditions(forecast.data.cond);
+                todayCondition.text = WeatherAPI.Conditions(forecast.data.cond);
                 todayTemp.text = string.Format("{0} ํC", Convert.ToInt32((forecast.data.tc_max + forecast.data.tc_min) / 2).ToString());
                 todayWeatherIcon.sprite = GetWeatherIcon(forecast.data.cond);
             }            
@@ -67,7 +67,7 @@ public class WeatherTab : MonoBehaviour
     {
         int count = 0;
 
-        foreach (TMD_class.Forecast forecast in SimulateParameters.allForecast)
+        foreach (TMD_class.Forecast forecast in WeatherAPI.AllForecast)
         {
             //Debug.Log(forecast.time);
             if (count == 7) break;
