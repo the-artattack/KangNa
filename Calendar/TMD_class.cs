@@ -18,6 +18,8 @@ public class TMD_class
         public double rain { get; set; }
         public double tc_max { get; set; }
         public double tc_min { get; set; }
+        public double rh { get; set; }
+        public double ws10m { get; set; }
     }
 
     public class Forecast
