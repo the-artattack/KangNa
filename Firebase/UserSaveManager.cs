@@ -6,7 +6,7 @@ public class UserSaveManager : MonoBehaviour
 {
     void Start()
     {
-        SceneChanger.onSceneChanged += SavePlayer; 
+        SceneChanger.onSceneChanged += SavePlayer;
     }
 
     public void writeNewUser(string userId, string username, string loginType)
@@ -25,7 +25,7 @@ public class UserSaveManager : MonoBehaviour
     public void SavePlayer()
     {
         Debug.Log("Saved scene!!!");
-        int balance = 100000;
+        int balance = FirebaseInit.Instance.CurrentMoney;
         int scene = FirebaseInit.Instance.CurrentScene;
         UserBoard entry = new UserBoard(balance, scene);
         Dictionary<string, System.Object> entryValues = entry.ToDictionary();
@@ -40,26 +40,5 @@ public class UserSaveManager : MonoBehaviour
         Debug.Log("Save player: " + FirebaseInit.Instance.auth.CurrentUser.UserId);
         Debug.Log("With current scene: " + scene + " and balance " + balance);
     }
-
-    private void SaveScene(int scene)
-    {
-        FirebaseDatabase.DefaultInstance.GetReference("Users").Child(FirebaseInit.Instance.user.UserId)
-            .ValueChanged += HandleValueChanged;
-    }
-
-    private void HandleValueChanged(object sender, ValueChangedEventArgs e)
-    {
-        if (e.DatabaseError != null)
-        {
-            Debug.LogError(e.DatabaseError.Message);
-            return;
-        }
-        else
-        {
-            FirebaseInit.Instance._database.RootReference
-                .Child("Users").Child(FirebaseInit.Instance.user.UserId).SetValueAsync(FirebaseInit.Instance.CurrentScene);
-            Debug.Log("Write current scene");
-        }
-    }
-
+    
 }

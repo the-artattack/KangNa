@@ -7,7 +7,6 @@ using Firebase.Database;
 
 public class RentLandNoti : MonoBehaviour
 {
-    public Text balanceText;
     private int balance;
     private int area;
     public GameObject rentLandNoti;
@@ -15,21 +14,23 @@ public class RentLandNoti : MonoBehaviour
 
     public static event onVariableChange onVariableChanges;
     public delegate void onVariableChange(int balance);
+
+    private MoneyInterface moneySystem;
+
     // Start is called before the first frame update
     void Start()
     {
         rentLandNoti.SetActive(false);
         blackTransparency.SetActive(false);
+        moneySystem = FindObjectOfType<PlayerCurrency>().GetComponent<MoneyInterface>();
         RiceTab.onVariableChanges += getArea;
-        balance = 100000;
-        balanceText.text = balance.ToString();
         checkArea();        
     }
 
     // Update is called once per frame
     void Update()
     {
-        balanceText.text = balance.ToString();
+        
     }
 
     public void checkArea()
@@ -60,13 +61,13 @@ public class RentLandNoti : MonoBehaviour
                 }
             }
         }
-        balanceText.text = balance.ToString();
     }
 
     public void onOk()
     {
         int rentFee = 1000 * area;
         balance -= rentFee;
+        moneySystem.updateCurrentMoney(balance);
         Debug.Log("Current balance: " + balance);
         onVariableChanges?.Invoke(rentFee);
         rentLandNoti.SetActive(false);

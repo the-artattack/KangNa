@@ -10,7 +10,7 @@ public class CostDataManager : MonoBehaviour
     public delegate void LoadData();
 
     private void Awake()
-    {    
+    {
         RaadAllData();
         ReadRiceType();
     }
@@ -20,7 +20,6 @@ public class CostDataManager : MonoBehaviour
         FirebaseDatabase.DefaultInstance.GetReference("Education")
             .Child(FirebaseInit.Instance.auth.CurrentUser.UserId)
             .Child("TypeOfRice").ValueChanged += GetRiceTypeValue;
-
     }
 
     private void GetRiceTypeValue(object sender, ValueChangedEventArgs e)
@@ -34,15 +33,14 @@ public class CostDataManager : MonoBehaviour
         {
             DataSnapshot data = e.Snapshot;
             Debug.Log("Type of rice:" + data.Value.ToString());
-            FirebaseInit.Instance.riceType = data.Value.ToString();
-            onLoadData?.Invoke();
+            FirebaseInit.Instance.riceType = data.Value.ToString();            
         }
     }
 
     public void RaadAllData()
     {
         FirebaseDatabase.DefaultInstance.GetReference("CostLists")
-            .ValueChanged += HandleValueChanged;
+            .ValueChanged += HandleValueChanged;        
     }
     
     private void HandleValueChanged(object sender, ValueChangedEventArgs args)
@@ -56,6 +54,7 @@ public class CostDataManager : MonoBehaviour
         {
             DataSnapshot data = args.Snapshot;            
             DisplayData(data);
+            onLoadData?.Invoke();
         }       
     }
 

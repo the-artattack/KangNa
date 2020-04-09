@@ -101,7 +101,7 @@ public class EducationManager : MonoBehaviour
         //Set parameter : area on scene Simulation
         //Parameters.variableInstance.area = landSize.text;
 
-        SceneChanger.nextScene(7);
+        SceneChanger.nextScene(5);
     }
     void IncreaseCurrentLandSize()
     {
@@ -145,7 +145,7 @@ public class EducationManager : MonoBehaviour
         shopBox.SetActive(true);
         Button goShop = shopBox.transform.GetComponent<Button>();
         goShop.onClick.AddListener(() => {
-            SceneChanger.nextScene(9);
+            SceneChanger.nextScene(7);
         });
     }
 

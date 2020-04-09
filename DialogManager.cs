@@ -77,25 +77,39 @@ public class DialogManager : MonoBehaviour
     }
     void EndDialogue()
     {
-        if (currentSceneName.Equals("5RiceIntroduction"))
+        if (currentSceneName.Equals("3RiceIntroduction"))
         {
             //animator.SetBool("isEndConversation", true);
             //animator.SetBool("isBook", true);
             SceneChanger.nextScene(SceneIndex);
         }
-        else if (currentSceneName.Equals("6SelectArea"))
+        else if (currentSceneName.Equals("4SelectArea"))
         {
             animator.SetBool("isEnd", true);
         }
-        else if (currentSceneName.Equals("7SelectRice"))
+        else if (currentSceneName.Equals("5SelectRice"))
         {
             animator.SetBool("isEnd", true);
+        }
+        else if(currentSceneName.Equals("8StartPlant"))
+        {
+            updateBalance();
+            SceneChanger.nextScene(SceneIndex);
         }
         else
         {
             Debug.Log("next scene");
             SceneChanger.nextScene(SceneIndex);
-
         }
+    }
+    private void updateBalance()
+    {
+        FirebaseInit.Instance._database.RootReference
+        .Child("Users").Child(FirebaseInit.Instance.auth.CurrentUser.UserId)
+        .Child("State")
+        .Child("balance")
+        .SetValueAsync(FirebaseInit.Instance.CurrentMoney);
+        Debug.Log(FirebaseInit.Instance.auth.CurrentUser.UserId);
+        Debug.Log("save new balance");
     }
 }

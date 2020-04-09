@@ -17,7 +17,9 @@ public class FirebaseInit : MonoBehaviour
     public FirebaseDatabase _database;
 
     public int CurrentScene;
+    public int CurrentMoney;
     public string riceType;
+    public string area;
 
     //This will set up all initialize
     void Awake()
@@ -85,6 +87,8 @@ public class FirebaseInit : MonoBehaviour
             .ValueChanged += LoadData;
         FirebaseDatabase.DefaultInstance.GetReference("Users").Child(user.UserId)
             .ValueChanged += LoadScene;
+        /*FirebaseDatabase.DefaultInstance.GetReference("Users").Child(user.UserId)
+            .ValueChanged += LoadBalance;*/
     }
     private void LoadData(object sender, ValueChangedEventArgs e)
     {
@@ -95,11 +99,15 @@ public class FirebaseInit : MonoBehaviour
         }
         else
         {
-            DataSnapshot data = e.Snapshot.Child("TypeOfRice");
-            if(data.Value != null)
+            DataSnapshot data = e.Snapshot;
+            if (data.Child("TypeOfRice").Value != null)
             {
                 riceType = data.Value.ToString();
-            }            
+            }
+            foreach (var child in data.Child("TypeOfLand").Children)
+            {
+                area = child.Value.ToString();
+            }
         }
     }
 
@@ -112,19 +120,22 @@ public class FirebaseInit : MonoBehaviour
         }
         else
         {
-            DataSnapshot data = e.Snapshot.Child("State").Child("scene");
-            if (data.Value != null)
+            DataSnapshot data = e.Snapshot.Child("State");
+            CurrentMoney = Int32.Parse(data.Child("balance").Value.ToString());
+            Debug.Log("balance: " + CurrentMoney);
+            if (data.Child("scene").Value != null)
             {
-                int scene = Int32.Parse(data.Value.ToString());
+                int scene = Int32.Parse(data.Child("scene").Value.ToString());
                 Debug.Log("scene : " + scene);
                 SceneChanger.nextScene(scene);
             }
             else
             { 
                 SceneChanger.nextScene(2); 
-            }
+            }           
         }
-    }
+    }    
+
     void OnDestroy()
     {
         auth.StateChanged -= AuthStateChanged;

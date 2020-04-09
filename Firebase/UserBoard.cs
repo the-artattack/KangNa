@@ -11,7 +11,7 @@ public class UserBoard
     {
         this.balance = balance;
         this.scene = scene;
-    }
+    }    
 
     public Dictionary<string, Object> ToDictionary()
     {
@@ -20,5 +20,5 @@ public class UserBoard
         result["scene"] = scene;
 
         return result;
-    }
+    }   
 }
