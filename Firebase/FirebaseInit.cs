@@ -86,9 +86,7 @@ public class FirebaseInit : MonoBehaviour
         FirebaseDatabase.DefaultInstance.GetReference("Education").Child(user.UserId)
             .ValueChanged += LoadData;
         FirebaseDatabase.DefaultInstance.GetReference("Users").Child(user.UserId)
-            .ValueChanged += LoadScene;
-        /*FirebaseDatabase.DefaultInstance.GetReference("Users").Child(user.UserId)
-            .ValueChanged += LoadBalance;*/
+            .ValueChanged += LoadScene;       
     }
     private void LoadData(object sender, ValueChangedEventArgs e)
     {
@@ -102,12 +100,12 @@ public class FirebaseInit : MonoBehaviour
             DataSnapshot data = e.Snapshot;
             if (data.Child("TypeOfRice").Value != null)
             {
-                riceType = data.Value.ToString();
+                riceType = data.Child("TypeOfRice").Value.ToString();                
             }
             foreach (var child in data.Child("TypeOfLand").Children)
             {
                 area = child.Value.ToString();
-            }
+            }            
         }
     }
 

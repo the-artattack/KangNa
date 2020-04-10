@@ -11,8 +11,7 @@ public class PlayerCurrency : MonoBehaviour, MoneyInterface
     // Start is called before the first frame update
     private void Awake()
     {
-        ShowCurrentMoney();
-        getArea();
+        ShowCurrentMoney();       
     }
 
     // Update is called once per frame
@@ -22,7 +21,8 @@ public class PlayerCurrency : MonoBehaviour, MoneyInterface
     }
 
     public void BuyRice(int price)
-    {   
+    {
+        getArea();
         currentMoney -= (area * price);
         Debug.Log("Current money: " + currentMoney);
         updateCurrentMoney(currentMoney);
@@ -31,7 +31,7 @@ public class PlayerCurrency : MonoBehaviour, MoneyInterface
     private void getArea()
     {
         area = Int32.Parse(FirebaseInit.Instance.area);
-
+        Debug.Log("Area: " + area);
     }
 
     /* update current money to FirebaseInit.Instance.CurrentMoney when done something */

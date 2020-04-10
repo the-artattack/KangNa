@@ -71,7 +71,8 @@ public class RiceShop : MonoBehaviour
     {
         Debug.Log("Yes button pressed!");
         BuyItem(riceName, price);
-        confirmationBox.SetActive(false);        
+        confirmationBox.SetActive(false);
+        //OnDestroy();
     }
 
     private void onNoBtnPressed()
@@ -93,5 +94,9 @@ public class RiceShop : MonoBehaviour
                         .Child("RiceName").SetValueAsync(riceName);
         Debug.Log("Current scene: " + FirebaseInit.Instance.CurrentScene);
         SceneChanger.nextScene(FirebaseInit.Instance.CurrentScene + 1);
-    }     
+    }
+    private void OnDestroy()
+    {
+        CostDataManager.onLoadData -= LoadData;
+    }
 }
