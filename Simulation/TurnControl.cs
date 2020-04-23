@@ -94,4 +94,8 @@ public class TurnControl : MonoBehaviour
                 return "Error";
         }
     }
+    public int Day
+    {
+        get { return day; }
+    }
 }

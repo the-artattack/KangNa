@@ -29,6 +29,7 @@ public class TimeControl : MonoBehaviour
         playButton.GetComponent<Image>().sprite = playImg;
         advanceTimer = turnDuration;
         SummaryCalculation.onSummary += Pause;
+        EventTrigger.OnTimeControl += Pause;
     }
 
     // Update is called once per frame
