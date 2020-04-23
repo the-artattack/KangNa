@@ -30,6 +30,7 @@ public class TimeControl : MonoBehaviour
         advanceTimer = turnDuration;
         SummaryCalculation.onSummary += Pause;
         EventTrigger.OnTimeControl += Pause;
+        QuestionDisplay.OnTimeControl += Play;
     }
 
     // Update is called once per frame
