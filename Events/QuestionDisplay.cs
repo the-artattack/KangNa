@@ -18,6 +18,9 @@ public class QuestionDisplay : MonoBehaviour
     private DiseaseQuestion diseaseQuestion;
     private InsectQuestion insectQuestion;
 
+    public delegate void onTimeControl();
+    public static event onTimeControl OnTimeControl;
+
     private void Start()
     {
         choiceA.onClick.AddListener(SelectChoiceA);
@@ -54,13 +57,16 @@ public class QuestionDisplay : MonoBehaviour
         {
             selectedChoice = activeQuestion.choiceB;
         }
-        Debug.Log(activeQuestion.topic + ": " + selectedChoice);
-
+        Debug.Log(activeQuestion.topic + ": " + selectedChoice);        
     }
 
     public void SelectChoiceA()
     {
         printSelectedChoice();
+        questionWindow.SetActive(false);
+        blackTransparency.SetActive(false);
+        OnTimeControl?.Invoke(); //Resume 
+
         if (activeQuestion.topic == "SeaRise") //ปิดทางน้ำเข้านา
         {
             //Do something
@@ -89,6 +95,10 @@ public class QuestionDisplay : MonoBehaviour
     public void SelectChoiceB()
     {
         printSelectedChoice();
+        questionWindow.SetActive(false);
+        blackTransparency.SetActive(false);
+        OnTimeControl?.Invoke(); //Resume 
+
         if (activeQuestion.topic == "SeaRise") //ไม่ปิดทางน้ำเข้านา
         {
             //Do something

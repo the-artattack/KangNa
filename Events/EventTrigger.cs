@@ -63,7 +63,8 @@ public class EventTrigger : MonoBehaviour
     private void RainingTrigger(SimulateParameters parameters, TMD_class.Forecast forecast)
     {
         Debug.Log("Raining");
-        OnTimeControl?.Invoke();
+        OnTimeControl?.Invoke(); //pause
+
         rainingQuestion.isActive = true;
         animation.RainEnable(parameters, forecast);
         header = "ฝนตก";
@@ -73,7 +74,7 @@ public class EventTrigger : MonoBehaviour
 
     private void FloodingTrigger(SimulateParameters parameters)
     {
-        OnTimeControl?.Invoke();
+        OnTimeControl?.Invoke(); //pause
         floodQuestion.isActive = true;
         header = "น้ำท่วม";
         instructionObject = flood;
