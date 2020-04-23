@@ -28,8 +28,7 @@ public class InsectAnimation : MonoBehaviour
     {
         Insect.SetActive(false);
         questionBox.SetActive(false);
-        blackTransparency.SetActive(false);
-        MainGame.onInsectTrigger += enableInsect;
+        blackTransparency.SetActive(false);        
     }
 
     // Update is called once per frame
@@ -38,7 +37,7 @@ public class InsectAnimation : MonoBehaviour
         
     }
 
-    private void enableInsect(SimulateParameters parameters)
+    public void enable(SimulateParameters parameters)
     {        
         animateInsect();
         InsectSolution(parameters);
@@ -103,7 +102,7 @@ public class InsectAnimation : MonoBehaviour
         insectProtected.SetActive(false);
         insecticide = false;
         onUseInsecticide?.Invoke(insecticide);
-        MainGame.onInsectTrigger -= enableInsect;
+        MainGame.onInsectTrigger -= enable;
     }
 
     private void useInsecticide()
@@ -114,7 +113,7 @@ public class InsectAnimation : MonoBehaviour
         insectProtected.SetActive(false);
         insecticide = true;
         onUseInsecticide?.Invoke(insecticide);
-        MainGame.onInsectTrigger -= enableInsect;
+        MainGame.onInsectTrigger -= enable;
     }
 
     private void notProtect()
@@ -125,7 +124,7 @@ public class InsectAnimation : MonoBehaviour
         disableInsect();
         blackTransparency.SetActive(false);
         questionBox.SetActive(false);
-        MainGame.onInsectTrigger -= enableInsect;
+        MainGame.onInsectTrigger -= enable;
     }
 
     public void InsectSolution(SimulateParameters parameters)

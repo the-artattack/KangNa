@@ -11,13 +11,7 @@ public class RainAnimation : MonoBehaviour
     public static event OnParameterTrigger onParameterUpdateTrigger;
     public delegate void OnParameterTrigger(SimulateParameters parameters);
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        MainGame.onRainTrigger += onRaining;
-    }
-
-    private void onRaining(SimulateParameters parameters, TMD_class.Forecast forecast)
+    public void enable(SimulateParameters parameters, TMD_class.Forecast forecast)
     {
         backgroundImage.sprite = rainBackground;
         parameters.WaterVolume = Rainning(parameters.WaterVolume, forecast.data.cond);
@@ -27,7 +21,6 @@ public class RainAnimation : MonoBehaviour
         }
 
         parameters.IsRain = true;
-
         onParameterUpdateTrigger?.Invoke(parameters);
     }
 
