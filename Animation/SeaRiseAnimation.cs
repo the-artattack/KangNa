@@ -6,9 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class SeaRiseAnimation : MonoBehaviour
-{
-    public GameObject questionBox;
-    public GameObject blackTransparency;
+{        
     public GameObject seaRiseAnimation;
     public Animator seaRise;
     public bool close;
@@ -21,10 +19,8 @@ public class SeaRiseAnimation : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-        questionBox.SetActive(false);
-        seaRiseAnimation.SetActive(false);
-        blackTransparency.SetActive(false);
+    {       
+        seaRiseAnimation.SetActive(false);        
         MainGame.onSeaRiseTrigger += enableSeaRise;
     }
 
@@ -32,37 +28,22 @@ public class SeaRiseAnimation : MonoBehaviour
     {
         seaRiseAnimation.SetActive(true);
         seaRise.SetBool("isSea", true);
-        questionTrigger();
         seaRiseSolution(parameters);
     }
 
     private void disableSeaRise()
-    {
-        questionBox.SetActive(false);
-        blackTransparency.SetActive(false);
+    {       
         seaRiseAnimation.SetActive(false);
         seaRise.SetBool("isSea", false);
         MainGame.onSeaRiseTrigger -= enableSeaRise;
-    }
-    private void questionTrigger()
-    {
-        questionBox.SetActive(true);
-        blackTransparency.SetActive(true);
-
-        Button btnA1 = questionBox.transform.Find("btnA1").GetComponent<Button>();
-        Button btnA2 = questionBox.transform.Find("btnA2").GetComponent<Button>();
-        btnA1.onClick.AddListener(closeWay);
-        btnA2.onClick.AddListener(notCloseWay);
-    }
+    }    
 
     private void notCloseWay()
     {
         string buttonValue = EventSystem.current.currentSelectedGameObject.name;
         close = true;
         onSeaRise?.Invoke(close);
-        disableSeaRise();
-        questionBox.SetActive(false);
-        blackTransparency.SetActive(false);
+        disableSeaRise();        
     }
 
     private void closeWay()
@@ -70,9 +51,7 @@ public class SeaRiseAnimation : MonoBehaviour
         string buttonValue = EventSystem.current.currentSelectedGameObject.name;
         close = false;
         onSeaRise?.Invoke(close);
-        disableSeaRise();
-        questionBox.SetActive(false);
-        blackTransparency.SetActive(false);
+        disableSeaRise();        
     }
 
     public void seaRiseSolution(SimulateParameters parameters)
