@@ -6,9 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class FloodAnimation : MonoBehaviour
-{
-    public GameObject questionBox;
-    public GameObject blackTransparency;
+{        
     public GameObject floodAnimation;
     public Animator flood;
     public bool isDrain;
@@ -21,49 +19,31 @@ public class FloodAnimation : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-        questionBox.SetActive(false);
-        floodAnimation.SetActive(false);
-        blackTransparency.SetActive(false);
+    {        
+        floodAnimation.SetActive(false);        
         MainGame.onFloodTrigger += enableFlood;
     }
 
     private void enableFlood(SimulateParameters parameters)
     {
         floodAnimation.SetActive(true);
-        flood.SetBool("isFlood", true);        
-        questionTrigger();
+        flood.SetBool("isFlood", true);   
         FloodSolution(parameters);
     }
 
     private void disableFlood()
-    {
-        questionBox.SetActive(false);
-        blackTransparency.SetActive(false);
+    {                
         floodAnimation.SetActive(false);
         flood.SetBool("isFlood", false);
         MainGame.onSeaRiseTrigger -= enableFlood;
-    }
-
-    private void questionTrigger()
-    {        
-        questionBox.SetActive(true);
-        blackTransparency.SetActive(true);
-
-        Button btnA1 = questionBox.transform.Find("btnA1").GetComponent<Button>();
-        Button btnA2 = questionBox.transform.Find("btnA2").GetComponent<Button>();
-        btnA1.onClick.AddListener(drain);
-        btnA2.onClick.AddListener(notDrain);
-    }
+    }    
 
     private void drain()
     {
         string buttonValue = EventSystem.current.currentSelectedGameObject.name;
         isDrain = true;
         onFlooding?.Invoke(isDrain);
-        disableFlood();
-        questionBox.SetActive(false);
-        blackTransparency.SetActive(false);
+        disableFlood();               
     }
 
     private void notDrain()
@@ -71,9 +51,7 @@ public class FloodAnimation : MonoBehaviour
         string buttonValue = EventSystem.current.currentSelectedGameObject.name;
         isDrain = false;
         onFlooding?.Invoke(isDrain);
-        disableFlood();
-        questionBox.SetActive(false);
-        blackTransparency.SetActive(false);
+        disableFlood();        
     }
 
     public void FloodSolution(SimulateParameters parameters)

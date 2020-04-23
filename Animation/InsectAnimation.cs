@@ -5,9 +5,7 @@ using UnityEngine.UI;
 public class InsectAnimation : MonoBehaviour
 {
     public GameObject Insect;
-    public GameObject questionBox;
     public GameObject insectProtected;
-    public GameObject blackTransparency;
     public Animator insect1;
     public Animator insect2;
     public Animator insect3;
@@ -26,9 +24,7 @@ public class InsectAnimation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Insect.SetActive(false);
-        questionBox.SetActive(false);
-        blackTransparency.SetActive(false);        
+        Insect.SetActive(false);     
     }
 
     // Update is called once per frame
@@ -52,8 +48,6 @@ public class InsectAnimation : MonoBehaviour
         insect5.SetBool("isInsect", true);
         insect6.SetBool("isInsect", true);
         insect7.SetBool("isInsect", true);
-        
-        questionTrigger();
     }
 
     private void disableInsect()
@@ -67,26 +61,14 @@ public class InsectAnimation : MonoBehaviour
         insect6.SetBool("isInsect", false);
         insect7.SetBool("isInsect", false);
     }
-
-    private void questionTrigger()
-    {
-        blackTransparency.SetActive(true);
-        questionBox.SetActive(true);
-                  
-        Button btnA1 = questionBox.transform.Find("btnA1").GetComponent<Button>();
-        Button btnA2 = questionBox.transform.Find("btnA2").GetComponent<Button>();
-        btnA1.onClick.AddListener(protect);
-        btnA2.onClick.AddListener(notProtect);
-       
-    }
+   
 
     private void protect()
     {
         string buttonValue = EventSystem.current.currentSelectedGameObject.name;
         Debug.Log("button value: " + buttonValue);
 
-        disableInsect();
-        questionBox.SetActive(false);
+        disableInsect();        
         insectProtected.SetActive(true);
         Button btnA1 = insectProtected.transform.Find("btnA1").GetComponent<Button>();
         Button btnA2 = insectProtected.transform.Find("btnA2").GetComponent<Button>();
@@ -96,9 +78,7 @@ public class InsectAnimation : MonoBehaviour
 
     private void notUseInsecticide()
     {
-        disableInsect();
-        questionBox.SetActive(false);
-        blackTransparency.SetActive(false);
+        disableInsect();        
         insectProtected.SetActive(false);
         insecticide = false;
         onUseInsecticide?.Invoke(insecticide);
@@ -107,9 +87,7 @@ public class InsectAnimation : MonoBehaviour
 
     private void useInsecticide()
     {
-        disableInsect();
-        questionBox.SetActive(false);
-        blackTransparency.SetActive(false);
+        disableInsect();        
         insectProtected.SetActive(false);
         insecticide = true;
         onUseInsecticide?.Invoke(insecticide);
@@ -121,9 +99,7 @@ public class InsectAnimation : MonoBehaviour
         string buttonValue = EventSystem.current.currentSelectedGameObject.name;
         Debug.Log("button value: " + buttonValue);
 
-        disableInsect();
-        blackTransparency.SetActive(false);
-        questionBox.SetActive(false);
+        disableInsect();       
         MainGame.onInsectTrigger -= enable;
     }
 
