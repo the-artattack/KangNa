@@ -183,4 +183,9 @@ public class RiceTab : MonoBehaviour
     {
         get { return ricePhase; }
     }
+
+    public int getHarvestDay
+    {
+        get { return harvestDay; }
+    }
 }

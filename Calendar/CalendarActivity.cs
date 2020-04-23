@@ -18,6 +18,22 @@ public class CalendarActivity : MonoBehaviour
     private List<TMD_class.Forecast> next2MonthForecast = new List<TMD_class.Forecast>();
 
     const string pluginName = "com.example.androidlibrary.MyPlugin";
+
+    class DatepickerCallback : AndroidJavaProxy
+    {
+        private System.Action<int> datepickerHandler;
+
+        public DatepickerCallback(System.Action<int> datepickerHandlerIn) : base (pluginName + "$DatepickerCallback")
+        {
+            datepickerHandler = datepickerHandlerIn;
+        }
+
+        public void onDateSelected(int day)
+        {
+            Debug.Log("Unity Date Selected: " + day);
+        }
+    }
+
     static AndroidJavaClass _pluginClass;
     static AndroidJavaObject _pluginInstance;
 
@@ -32,6 +48,10 @@ public class CalendarActivity : MonoBehaviour
     void Start()
     {
         Init();
+        CalendarTrigger((int obj) =>
+        {
+            Debug.Log("Local Handler called: " + obj);
+        });
         CurrentMonth();
     }
 
@@ -250,10 +270,10 @@ public class CalendarActivity : MonoBehaviour
         }
     }
 
-    public void CalendarTrigger()
+    public void CalendarTrigger(System.Action<int> handler = null)
     {
         if (Application.platform == RuntimePlatform.Android)
-            PluginInstance.Call("showCalendar");
+            PluginInstance.Call("showCalendar", new object[] { new DatepickerCallback(handler) });
     }
 
 }
