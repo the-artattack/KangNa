@@ -14,10 +14,10 @@ public class NotRainAnimation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MainGame.onNotRainTrigger += onNotRaining;
+        
     }
 
-    private void onNotRaining(SimulateParameters parameters)
+    public void enable(SimulateParameters parameters)
     {
         backgroundImage.sprite = normalBackground;
         parameters.IsRain = false;

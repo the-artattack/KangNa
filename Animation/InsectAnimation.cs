@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class InsectAnimation : MonoBehaviour
 {
     public GameObject Insect;
-    public GameObject insectProtected;
+    public GameObject Insecticide;
     public Animator insect1;
     public Animator insect2;
     public Animator insect3;
@@ -33,7 +33,7 @@ public class InsectAnimation : MonoBehaviour
         
     }
 
-    public void enable(SimulateParameters parameters)
+    public void enable(string insectType, SimulateParameters parameters)
     {        
         animateInsect();
         InsectSolution(parameters);
@@ -68,30 +68,28 @@ public class InsectAnimation : MonoBehaviour
         string buttonValue = EventSystem.current.currentSelectedGameObject.name;
         Debug.Log("button value: " + buttonValue);
 
-        disableInsect();        
-        insectProtected.SetActive(true);
-        Button btnA1 = insectProtected.transform.Find("btnA1").GetComponent<Button>();
-        Button btnA2 = insectProtected.transform.Find("btnA2").GetComponent<Button>();
+        disableInsect();
+        Insecticide.SetActive(true);
+        Button btnA1 = Insecticide.transform.Find("btnA1").GetComponent<Button>();
+        Button btnA2 = Insecticide.transform.Find("btnA2").GetComponent<Button>();
         btnA1.onClick.AddListener(useInsecticide);
         btnA2.onClick.AddListener(notUseInsecticide);        
     }
 
     private void notUseInsecticide()
     {
-        disableInsect();        
-        insectProtected.SetActive(false);
+        disableInsect();
+        Insecticide.SetActive(false);
         insecticide = false;
         onUseInsecticide?.Invoke(insecticide);
-        MainGame.onInsectTrigger -= enable;
     }
 
     private void useInsecticide()
     {
-        disableInsect();        
-        insectProtected.SetActive(false);
+        disableInsect();
+        Insecticide.SetActive(false);
         insecticide = true;
         onUseInsecticide?.Invoke(insecticide);
-        MainGame.onInsectTrigger -= enable;
     }
 
     private void notProtect()
@@ -100,7 +98,6 @@ public class InsectAnimation : MonoBehaviour
         Debug.Log("button value: " + buttonValue);
 
         disableInsect();       
-        MainGame.onInsectTrigger -= enable;
     }
 
     public void InsectSolution(SimulateParameters parameters)

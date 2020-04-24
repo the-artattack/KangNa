@@ -11,9 +11,9 @@ public class DiseaseAnimation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MainGame.onDiseaseTrigger += enableDisease;
+        
     }
-    private void enableDisease(SimulateParameters parameters)
+    public void enable(string diseaseType, SimulateParameters parameters)
     {
         diseaseSolution(parameters);
     }

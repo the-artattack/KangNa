@@ -20,11 +20,10 @@ public class FloodAnimation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {        
-        floodAnimation.SetActive(false);        
-        MainGame.onFloodTrigger += enableFlood;
+        floodAnimation.SetActive(false);  
     }
 
-    private void enableFlood(SimulateParameters parameters)
+    public void enable(SimulateParameters parameters)
     {
         floodAnimation.SetActive(true);
         flood.SetBool("isFlood", true);   
@@ -34,8 +33,7 @@ public class FloodAnimation : MonoBehaviour
     private void disableFlood()
     {                
         floodAnimation.SetActive(false);
-        flood.SetBool("isFlood", false);
-        MainGame.onSeaRiseTrigger -= enableFlood;
+        flood.SetBool("isFlood", false);        
     }    
 
     private void drain()
