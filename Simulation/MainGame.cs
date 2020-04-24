@@ -18,17 +18,21 @@ public class MainGame : MonoBehaviour
 
     public static event onWeatherHandler onDateChanges;
     public delegate void onWeatherHandler(DateTime dateChanged);
-
-    public static event OnEventTrigger onInsectTrigger;
+    
     public static event OnEventTrigger onNotRainTrigger;
     public static event OnEventTrigger onSeaRiseTrigger;
-    public static event OnEventTrigger onDroughtTrigger;
-    public static event OnEventTrigger onDiseaseTrigger;
+    public static event OnEventTrigger onDroughtTrigger;    
     public static event OnEventTrigger onFloodTrigger;
     public static event OnEventTrigger onRainForecastTrigger;
     public static event OnEventTrigger onSummaryTrigger;
     public static event OnEventTrigger onWaterTabTrigger;
     public delegate void OnEventTrigger(SimulateParameters parameters);
+
+    public static event OnInsectTrigger onInsectTrigger;
+    public delegate void OnInsectTrigger(string insect, SimulateParameters parameters);
+
+    public static event OnDiseaseTrigger onDiseaseTrigger;
+    public delegate void OnDiseaseTrigger(string disease, SimulateParameters parameters);
 
     public static event OnRainTrigger onRainTrigger;
     public delegate void OnRainTrigger(SimulateParameters parameters, TMD_class.Forecast forecast);
@@ -47,7 +51,7 @@ public class MainGame : MonoBehaviour
 
         onDateChanges?.Invoke(TurnControl.turnInstance.gameDate);
 
-        Debug.Log("First Rain: " + parameterInstance.rainForecast[0]);
+        //Debug.Log("First Rain: " + parameterInstance.rainForecast[0].time);
 
         upCommingRaining();
         
@@ -89,7 +93,7 @@ public class MainGame : MonoBehaviour
                         DirtyPanicle(forecast);
                         BrownSpot(forecast);
 
-                        //Bug
+                        //Insect
                         Thrips(forecast);
                         WhiteBackedPlantHopper();
                         WhiteLeafHopper();
@@ -98,7 +102,7 @@ public class MainGame : MonoBehaviour
                         RiceBlackBug(forecast);
                         RiceGallMidges(forecast);
                         RiceCaseWorm();
-                        PossessedBug();
+                        StinkBug();
                     }
                 }
 
@@ -137,7 +141,7 @@ public class MainGame : MonoBehaviour
             {
                 //Trigger Sea rise
                 SeaRise();
-                //Debug.Log("Sea rise");
+                Debug.Log("Sea rise");
             }
             
         }
@@ -187,7 +191,6 @@ public class MainGame : MonoBehaviour
         else if (parameterInstance.WaterVolume < parameterInstance.WaterBaseLine - 10)
         {
             //Trigger low water
-
             if (parameterInstance.UseReservoir)
             {
                 if (parameterInstance.ReservoirVolume >= 0)
@@ -201,7 +204,7 @@ public class MainGame : MonoBehaviour
 
             if (parameterInstance.day7Count > 4)
             {
-                Debug.Log("Lack of Water");
+                //Debug.Log("Lack of Water");
                 LackOfWater();
             }
             parameterInstance.day7Count++;
@@ -212,7 +215,9 @@ public class MainGame : MonoBehaviour
             parameterInstance.day7Count = 0;
         }
     }
+    #endregion
 
+    #region Disease
     void BacterialBlight(TMD_class.Forecast forecast)
     {
         System.Random rnd = new System.Random();
@@ -226,7 +231,8 @@ public class MainGame : MonoBehaviour
                 if (number == 1)
                 {
                     //Trigger Bacterial Blight
-                    Debug.Log("Bacterial Blight");
+                    Debug.Log("โรคขอบใบแห้ง");
+                    onDiseaseTrigger?.Invoke("โรคขอบใบแห้ง", parameterInstance);
                 }
             }
         }        
@@ -245,7 +251,8 @@ public class MainGame : MonoBehaviour
                 if (number == 4)
                 {
                     //Trigger Rice Blast
-                    Debug.Log("Rice Blast");
+                    Debug.Log("โรคไหม้");
+                    onDiseaseTrigger?.Invoke("โรคไหม้", parameterInstance);
                 }
             }
         }
@@ -267,7 +274,8 @@ public class MainGame : MonoBehaviour
                     if (number == 6)
                     {
                         //Trigger Sheath Blight
-                        Debug.Log("Sheath Blight");
+                        Debug.Log("โรคกาบใบแห้ง");
+                        onDiseaseTrigger?.Invoke("โรคกาบใบแห้ง", parameterInstance);
                     }
                 }
             }
@@ -278,6 +286,8 @@ public class MainGame : MonoBehaviour
     {        
         if (RiceTab.RicePhase == "ระยะแตกกอ")
         {
+            Debug.Log("โรคใบหงิก");
+            onDiseaseTrigger?.Invoke("โรคใบหงิก", parameterInstance);
             //After Brown hopper occur
         }
     }
@@ -295,7 +305,8 @@ public class MainGame : MonoBehaviour
                 if (number == 3)
                 {
                     //Trigger Dirty Panicle
-                    Debug.Log("Dirty Panicle");
+                    Debug.Log("โรคเมล็ดด่าง");
+                    onDiseaseTrigger?.Invoke("โรคเมล็ดด่าง", parameterInstance);
                 }
             }
         }        
@@ -314,12 +325,15 @@ public class MainGame : MonoBehaviour
                 if (number == 8)
                 {
                     //Trigger Brown Spot
-                    Debug.Log("Brown Spot");
+                    Debug.Log("โรคใบจุดสีน้ำตาล");
+                    onDiseaseTrigger?.Invoke("โรคใบจุดสีน้ำตาล", parameterInstance);
                 }
             }
         }               
     }
+    #endregion
 
+    #region Insect
     void Thrips(TMD_class.Forecast forecast)
     {
         System.Random rnd = new System.Random();
@@ -335,7 +349,8 @@ public class MainGame : MonoBehaviour
                     if (number == 1)
                     {
                         //Trigger Thrips
-                        Debug.Log("Thrips");
+                        Debug.Log("เพลี้ยไฟ");
+                        onInsectTrigger?.Invoke("เพลี้ยไฟ", parameterInstance);
                     }
                 }
             }
@@ -353,7 +368,8 @@ public class MainGame : MonoBehaviour
             if (number == 3)
             {
                 //Trigger White Backed Plant Hopper
-                Debug.Log("White Backed Plant Hopper");
+                Debug.Log("เพลี้ยกระโดดหลังขาว");
+                onInsectTrigger?.Invoke("เพลี้ยกระโดดหลังขาว", parameterInstance);
             }
         }        
     }
@@ -371,7 +387,8 @@ public class MainGame : MonoBehaviour
                 if (number == 9)
                 {
                     //Trigger White Leaf Hopper
-                    Debug.Log("White Leaf Hopper");
+                    Debug.Log("เพลี้ยจักจั่นสีเขียว");
+                    onInsectTrigger?.Invoke("เพลี้ยจักจั่นสีเขียว", parameterInstance);
                 }
             }
         }        
@@ -382,6 +399,8 @@ public class MainGame : MonoBehaviour
         if (RiceTab.RicePhase == "ระยะแตกกอ")
         {
             //After Brown Hopper occur
+            Debug.Log("หนอนห่อใบข้าว");
+            onInsectTrigger?.Invoke("หนอนห่อใบข้าว", parameterInstance);
         }
     }
 
@@ -400,7 +419,8 @@ public class MainGame : MonoBehaviour
                     if (number == 11)
                     {
                         //Trigger Brown Plant Hopper
-                        Debug.Log("Brown Plant Hopper");
+                        Debug.Log("เพลี้ยกระโดดสีน้ำตาล");
+                        onInsectTrigger?.Invoke("เพลี้ยกระโดดสีน้ำตาล", parameterInstance);
                     }
                 }
             }
@@ -423,7 +443,8 @@ public class MainGame : MonoBehaviour
                     if (number == 2)
                     {
                         //Trigger Rice Black Bug
-                        Debug.Log("Rice Black Bug");
+                        Debug.Log("แมลงหล่า");
+                        onInsectTrigger?.Invoke("แมลงหล่า", parameterInstance);
                     }
                 }
             }
@@ -447,7 +468,8 @@ public class MainGame : MonoBehaviour
                         if (number == 13)
                         {
                             //Trigger Rice Gall Midges
-                            Debug.Log("Rice Gall Midges");
+                            Debug.Log("แมลงบั่ว");
+                            onInsectTrigger?.Invoke("แมลงบั่ว", parameterInstance);
                         }
                     }
                 }
@@ -468,13 +490,14 @@ public class MainGame : MonoBehaviour
                 if (number == 14)
                 {
                     //Trigger Rice Case Worm
-                    Debug.Log("Rice Case Worm");
+                    Debug.Log("หนอนปลอกข้าว");
+                    onInsectTrigger?.Invoke("หนอนปลอกข้าว", parameterInstance);
                 }
             }
         }        
     }
 
-    void PossessedBug()
+    void StinkBug()
     {
         System.Random rnd = new System.Random();
         int number;
@@ -487,13 +510,15 @@ public class MainGame : MonoBehaviour
                 if (number == 16)
                 {
                     //Trigger Possessed Bug
-                    Debug.Log("Possessed Bug");
+                    Debug.Log("แมลงสิง");
+                    onInsectTrigger?.Invoke("แมลงสิง", parameterInstance);
                 }
             }
         }        
     }
     #endregion
 
+    #region Summary
     public void createSummary()
     {
         onSummaryTrigger?.Invoke(parameterInstance);
@@ -515,30 +540,21 @@ public class MainGame : MonoBehaviour
     {
         parameterInstance = parameters;
     }
+    #endregion
 
+    #region Events
     public void upCommingRaining()
     {
         upCommingRain = true;
         onRainForecastTrigger?.Invoke(parameterInstance);
-    }
-    public void Insect()
-    {
-        insectTrigger = true;
-        onInsectTrigger?.Invoke(parameterInstance);
-        //Trigger Insect        
-    }
-
-    public void Disease()
-    {
-        diseaseTrigger = true;
-        onDiseaseTrigger?.Invoke(parameterInstance);
-    }
+    }            
 
     public void Flooding()
     {
         floodTrigger = true;
         onFloodTrigger?.Invoke(parameterInstance);
         //Trigger Flooding        
+        Debug.Log("Flooding");
     }
 
     public void SeaRise()
@@ -546,12 +562,14 @@ public class MainGame : MonoBehaviour
         seaRiseTrigger = true;
         onSeaRiseTrigger?.Invoke(parameterInstance);
         //Trigger Sea rise
+        Debug.Log("Sea rise");
     }
 
     public void Rainning(TMD_class.Forecast forecast)
     {
         rainTrigger = true;
         onRainTrigger?.Invoke(parameterInstance, forecast);
+        Debug.Log("Raining");
     }
 
     public void notRaining()
@@ -563,7 +581,9 @@ public class MainGame : MonoBehaviour
     {
         droughtTrigger = true;
         onDroughtTrigger?.Invoke(parameterInstance);
+        Debug.Log("Drought");
         //Trigger Low water
         parameterInstance.RiceQuantity = eventHandler.RiceReduction(parameterInstance.RiceQuantity, 8);
     }
 }
+#endregion
