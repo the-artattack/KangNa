@@ -98,4 +98,9 @@ public class TurnControl : MonoBehaviour
     {
         get { return day; }
     }
+    
+    public DateTime getGameDate
+    {
+        get { return gameDate; }
+    }
 }
