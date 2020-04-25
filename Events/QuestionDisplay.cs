@@ -15,8 +15,10 @@ public class QuestionDisplay : MonoBehaviour
     public Instruction instructionDisplay;
 
     private Question activeQuestion;
-    private DiseaseQuestion diseaseQuestion;
-    private InsectQuestion insectQuestion;
+    private DiseaseSolution diseaseSolution;
+    private InsectSolution insectSolution;
+    public DiseaseQuestion diseaseQuestion;
+    public InsectQuestion insectQuestion;
 
     public delegate void onTimeControl();
     public static event onTimeControl OnTimeControl;
@@ -37,6 +39,22 @@ public class QuestionDisplay : MonoBehaviour
         choiceA.GetComponentInChildren<Text>().text = question.choiceA;
         choiceB.GetComponentInChildren<Text>().text = question.choiceB;
         question.Print();
+    }
+    
+    public void OpenQuestionWindow(bool isInsect, string question)
+    {
+        if(isInsect)
+        {
+            activeQuestion = insectQuestion.getQuestion(question);
+            Events.InsectTrigger(activeQuestion.topic);
+            OpenQuestionWindow(activeQuestion);
+        }
+        else
+        {
+            activeQuestion = diseaseQuestion.getQuestion(question);
+            Events.DiseaseTrigger(activeQuestion.topic);
+            OpenQuestionWindow(activeQuestion);
+        }
     }
 
     public void CloseQuestionWindow()
@@ -83,11 +101,11 @@ public class QuestionDisplay : MonoBehaviour
         {
             if (activeQuestion.topic.StartsWith("Disease"))
             {
-                diseaseQuestion.solutionA(activeQuestion);
+                diseaseSolution.solutionA(activeQuestion);
             }
             else if(activeQuestion.topic.StartsWith("Insect"))
             {
-                insectQuestion.solutionA(activeQuestion);
+                insectSolution.solutionA(activeQuestion);
             }
         }
     }
@@ -115,11 +133,11 @@ public class QuestionDisplay : MonoBehaviour
         {
             if (activeQuestion.topic.StartsWith("Disease"))
             {
-                diseaseQuestion.solutionB(activeQuestion);
+                diseaseSolution.solutionB(activeQuestion);
             }
             else if (activeQuestion.topic.StartsWith("Insect"))
             {
-                insectQuestion.solutionB(activeQuestion);
+                insectSolution.solutionB(activeQuestion);
             }
         }
     }

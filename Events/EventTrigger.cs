@@ -18,15 +18,15 @@ public class EventTrigger : MonoBehaviour
     public GameObject seaRise;
     public GameObject drought;
 
-    /** question in each events*/
-    public Question insectQuestion;
-    public Question diseaseQuestion;    
-    //public Question rainingQuestion;    
+    /** question in each events*/      
     public Question floodQuestion;
-    public Question notRainQuestion;
     public Question seaRiseQuestion;
     public Question droughtQuestion;
 
+    private bool isInsect;
+    private bool isDisease;
+    private string insectName;
+    private string diseaseName;
     public new Animation animation;
 
     public delegate void onTimeControl();
@@ -34,6 +34,8 @@ public class EventTrigger : MonoBehaviour
 
     public void Start()
     {
+        isInsect = false;
+        isDisease = false;
         MainGame.onInsectTrigger += InsectTrigger;
         MainGame.onDiseaseTrigger += DiseaseTrigger;
         MainGame.onRainForecastTrigger += UpCommingRainTrigger;
@@ -46,7 +48,8 @@ public class EventTrigger : MonoBehaviour
 
     private void InsectTrigger(string insect, SimulateParameters parameters)
     {
-        insectQuestion.isActive = true;
+        isInsect = true;
+        insectName = insect;
         GameObject temp = insects.Where(obj => obj.name == insect).SingleOrDefault();
         instructionDisplay.createInstruction(insect, temp);        
         animation.InsectEnable(insect, parameters);
@@ -54,28 +57,31 @@ public class EventTrigger : MonoBehaviour
 
     private void DiseaseTrigger(string disease, SimulateParameters parameters)
     {
+        isDisease = true;
+        diseaseName = disease;
         GameObject temp = diseases.Where(obj => obj.name == disease).SingleOrDefault();
-        diseaseQuestion.isActive = true;
         instructionDisplay.createInstruction(disease, temp);
         animation.DiseaseEnable(disease, parameters);
     }
 
     private void UpCommingRainTrigger(SimulateParameters parameters)
-    {               
+    {
+        Events.UpCommingRain = true;
         animation.UpCommingRainEnable(parameters);        
     }
 
     private void RainingTrigger(SimulateParameters parameters, TMD_class.Forecast forecast)
-    {     
-        //rainingQuestion.isActive = true;
+    {
+        Events.Rain = true;
         animation.RainEnable(parameters, forecast);
         header = "ฝนตก";
         instructionObject = raining;
-        Invoke("showInstruction", 3.0f);                
+        //Invoke("showInstruction", 3.0f);                
     }    
 
     private void FloodingTrigger(SimulateParameters parameters)
-    {        
+    {
+        Events.Flood = true;
         floodQuestion.isActive = true;
         animation.FloodEnable(parameters);
         header = "น้ำท่วม";
@@ -84,12 +90,14 @@ public class EventTrigger : MonoBehaviour
     }
 
     private void NotRainTrigger(SimulateParameters parameters)
-    {        
-        notRainQuestion.isActive = true;        
+    {
+        Events.Rain = false;
+        animation.NotRainEnable(parameters);
     }
 
     private void SeaRiseTrigger(SimulateParameters parameters)
-    {        
+    {
+        Events.SeaRise = true;
         seaRiseQuestion.isActive = true;
         animation.SeaRiseEnable(parameters);
         header = "น้ำทะเลหนุน";
@@ -99,6 +107,7 @@ public class EventTrigger : MonoBehaviour
 
     private void DroughtTrigger(SimulateParameters parameters)
     {
+        Events.Drought = true;
         droughtQuestion.isActive = true;
         animation.DroughtEnable(parameters);
         header = "แห้งแล้ง";
@@ -115,33 +124,30 @@ public class EventTrigger : MonoBehaviour
     /** Trigger question when user complete read the instruction and click solve button */
     public void QuestionTrigger()
     {
-        if (insectQuestion.isActive)
+        if (isInsect)
         {
-            questionDisplay.OpenQuestionWindow(insectQuestion);
+            questionDisplay.OpenQuestionWindow(isInsect, insectName);
+            isInsect = false;
         }
-        else if (diseaseQuestion.isActive)
+        else if (isDisease)
         {
-            questionDisplay.OpenQuestionWindow(diseaseQuestion);
-        }
-        /*else if (upCommingRainQuestion.isActive) //maybe not necessary to have question?
-        {
-            questionDisplay.OpenQuestionWindow(upCommingRainQuestion);
-        }
-        else if (rainingQuestion.isActive) //maybe not necessary to have question?
-        {
-            questionDisplay.OpenQuestionWindow(rainingQuestion);
-        }*/
-        else if (floodQuestion.isActive)
-        {
-            questionDisplay.OpenQuestionWindow(floodQuestion);
-        }
-        else if (notRainQuestion.isActive)
-        {
-            questionDisplay.OpenQuestionWindow(notRainQuestion);
+            questionDisplay.OpenQuestionWindow(!isInsect, diseaseName);
+            isDisease = false;
         }
         else
         {
-            questionDisplay.OpenQuestionWindow(seaRiseQuestion);
+            if (floodQuestion.isActive)
+            {
+                questionDisplay.OpenQuestionWindow(floodQuestion);
+            }            
+            else if(seaRiseQuestion.isActive)
+            {
+                questionDisplay.OpenQuestionWindow(seaRiseQuestion);
+            }
+            else
+            {
+                //do nothing
+            }
         }
     }
 }

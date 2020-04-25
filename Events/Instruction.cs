@@ -8,10 +8,6 @@ public class Instruction : MonoBehaviour
     public GameObject instructionWindow;
     private GameObject itemObject;
     private bool isCreated = false;
-    private void Start()
-    {
-        
-    }
 
     public void createInstruction(string header, GameObject instructionObj)
     {

@@ -1,88 +1,46 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DiseaseQuestion : MonoBehaviour
 {
+    public List<Question> diseases;
 
-    // Start is called before the first frame update
-    void Start()
+    private new string name;
+    public string getDiseaseName(string thaiName)
     {
-        
+        if (thaiName.Equals("โรคขอบใบแห้ง"))
+        {
+            name = "BacterialBlight";
+        }
+        else if (thaiName.Equals("โรคไหม้"))
+        {
+            name = "RiceBlast";
+        }
+        else if (thaiName.Equals("โรคกาบใบแห้ง"))
+        {
+            name = "SheathBlight";
+        }
+        else if (thaiName.Equals("โรคใบหงิก"))
+        {
+            name = "RaggedStunt";
+        }
+        else if (thaiName.Equals("โรคเมล็ดด่าง"))
+        {
+            name = "DirtyPanicle";
+        }
+        else if (thaiName.Equals("โรคใบจุดสีน้ำตาล"))
+        {
+            name = "BrownSpot";
+        }       
+        return name;
     }
 
-    // Update is called once per frame
-    void Update()
+    public Question getQuestion(string str)
     {
-        
-    }
-
-    public void solutionA(Question activeQuestion)
-    {
-        //ใส่ปุ๋ยที่มีไนโตรเจนที่เหมาะสม +1
-        if (activeQuestion.topic == "โรคขอบใบแห้ง") 
-        {            
-            //Do something
-        }
-        //ใส่ปุ๋ยโปแตสเซียมคลอไรด์ +1
-        else if (activeQuestion.topic == "โรคใบจุดสีน้ำตาล")
-        {
-            //
-            //Do something
-        }
-        //ฉีดพ่นสารป้องกันกำจัดเชื้อรา +1
-        else if (activeQuestion.topic == "โรคเมล็ดด่าง")
-        {
-            //Do something
-        }
-        //ใส่ปุ๋ยที่มีไนโตรเจนเยอะๆ +0
-        else if (activeQuestion.topic == "โรคไหม้")
-        {
-            //Do something
-        }
-        //กำจัดวัชพืชใกล้แหล่งน้ำ +1
-        else if (activeQuestion.topic == "โรคใบหงิก")
-        {
-            //Do something
-        }
-        //ใช้สารป้องกันกำจัดเชื้อรา +1
-        else if (activeQuestion.topic == "โรคกาบใบแห้ง")
-        {
-            //Do something
-        }
-    }
-
-    public void solutionB(Question activeQuestion)
-    {
-        //ระบายน้ำออกจากแปลง +0
-        if (activeQuestion.topic == "โรคขอบใบแห้ง")
-        {
-            //Do something
-        }
-        //ปล่อยให้หายเองตามธรรมชาติ +0
-        else if (activeQuestion.topic == "โรคใบจุดสีน้ำตาล")
-        {
-            //Do something
-        }
-        //กำจัดวัชพืช +0
-        else if (activeQuestion.topic == "โรคเมล็ดด่าง")
-        {
-            //Do something
-        }
-        //ฉีดพ่นสารป้องกันกำจัดเชื้อรา +1
-        else if (activeQuestion.topic == "โรคไหม้")
-        {
-            //Do something
-        }
-        //ฉีดยาป้องกันโรค +0
-        else if (activeQuestion.topic == "โรคใบหงิก")
-        {
-            //Do something
-        }
-        //กำจัดวัชพืช +1
-        else if (activeQuestion.topic == "โรคกาบใบแห้ง")
-        {
-            //Do something
-        }
+        string disease = "Disease_" + getDiseaseName(str);
+        Question question = diseases.Where(obj => obj.name == disease).SingleOrDefault();
+        return question;
     }
 }

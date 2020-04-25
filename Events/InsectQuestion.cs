@@ -1,98 +1,57 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class InsectQuestion : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public List<Question> insects;
+
+    private new string name;
+    public string getInsectName(string thaiName)
     {
-        
+        if(thaiName.Equals("เพลี้ยไฟ"))
+        {
+            name = "Thrips";
+        }
+        else if(thaiName.Equals("เพลี้ยกระโดดหลังขาว"))
+        {
+            name = "WhiteBackedPlantHopper";
+        }
+        else if (thaiName.Equals("เพลี้ยจักจั่นสีเขียว"))
+        {
+            name = "GreenLeafHopper";
+        }
+        else if (thaiName.Equals("หนอนห่อใบข้าว"))
+        {
+            name = "LeafFolder";
+        }
+        else if (thaiName.Equals("เพลี้ยกระโดดสีน้ำตาล"))
+        {
+            name = "BrownPlantHopper";
+        }
+        else if (thaiName.Equals("แมลงหล่า"))
+        {
+            name = "RiceBlackBug";
+        }
+        else if (thaiName.Equals("แมลงบั่ว"))
+        {
+            name = "RiceGallMidges";
+        }
+        else if (thaiName.Equals("หนอนปลอกข้าว"))
+        {
+            name = "RiceCaseWorm";
+        }
+        else if (thaiName.Equals("แมลงสิง"))
+        {
+            name = "StinkBug";
+        }
+        return name;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void solutionA(Question activeQuestion)
-    {
-        if(activeQuestion.topic == "แมลงหล่า")
-        {
-            //Do something
-        }
-        else if (activeQuestion.topic == "เพลี้ยกระโดดสีน้ำตาล")
-        {
-            //Do something
-        }
-        else if (activeQuestion.topic == "เพลี้ยจักจั่นสีเขียว")
-        {
-            //Do something
-        }
-        else if (activeQuestion.topic == "หนอนห่อใบข้าว")
-        {
-            //Do something
-        }
-        else if (activeQuestion.topic == "แมลงบั่ว")
-        {
-            //Do something
-        }
-        else if (activeQuestion.topic == "หนอนปลอกข้าว")
-        {
-            //Do something
-        }
-        else if (activeQuestion.topic == "เพลี้ยไฟ")
-        {
-            //Do something
-        }
-        else if (activeQuestion.topic == "แมลงสิง")
-        {
-            //Do something
-        }
-        else if (activeQuestion.topic == "เพลี้ยกระโดดหลังขาว")
-        {
-            //Do something
-        }
-    }
-
-    public void solutionB(Question activeQuestion)
-    {
-        if (activeQuestion.topic == "แมลงหล่า")
-        {
-            //Do something
-        }
-        else if (activeQuestion.topic == "เพลี้ยกระโดดสีน้ำตาล")
-        {
-            //Do something
-        }
-        else if (activeQuestion.topic == "เพลี้ยจักจั่นสีเขียว")
-        {
-            //Do something
-        }
-        else if (activeQuestion.topic == "หนอนห่อใบข้าว")
-        {
-            //Do something
-        }
-        else if (activeQuestion.topic == "แมลงบั่ว")
-        {
-            //Do something
-        }
-        else if (activeQuestion.topic == "หนอนปลอกข้าว")
-        {
-            //Do something
-        }
-        else if (activeQuestion.topic == "เพลี้ยไฟ")
-        {
-            //Do something
-        }
-        else if (activeQuestion.topic == "แมลงสิง")
-        {
-            //Do something
-        }
-        else if (activeQuestion.topic == "เพลี้ยกระโดดหลังขาว")
-        {
-            //Do something
-        }
+    public Question getQuestion(string str)
+    {        
+        string insect = "Insect_" + getInsectName(str);
+        Question question = insects.Where(obj => obj.name == insect).SingleOrDefault();
+        return question;
     }
 }

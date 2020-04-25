@@ -6,14 +6,6 @@ using UnityEngine;
 public class MainGame : MonoBehaviour
 {
     private SimulateParameters parameterInstance;
-    public bool insectTrigger = false;
-    public bool rainTrigger = false;
-    public bool upCommingRain = false;
-    public bool diseaseTrigger = false;
-    public bool floodTrigger = false;
-    public bool seaRiseTrigger = false;
-    public bool droughtTrigger = false;
-
     private int oldTurn;
 
     public static event onWeatherHandler onDateChanges;
@@ -96,7 +88,7 @@ public class MainGame : MonoBehaviour
                         //Insect
                         Thrips(forecast);
                         WhiteBackedPlantHopper();
-                        WhiteLeafHopper();
+                        GreenLeafHopper();
                         LeafFolder();
                         BrownPlantHopper(forecast);
                         RiceBlackBug(forecast);
@@ -132,8 +124,7 @@ public class MainGame : MonoBehaviour
     {
         System.Random rnd = new System.Random();
         int number;
-
-        seaRiseTrigger = false;
+        
         if (parameterInstance.UseCanal)
         {
             number = rnd.Next(0, 7);
@@ -166,9 +157,7 @@ public class MainGame : MonoBehaviour
     void WaterMonitor()
     {
         if (parameterInstance.WaterVolume > parameterInstance.WaterBaseLine + 10)
-        {
-            //Trigger Flooding
-            floodTrigger = false;
+        {         
             if (parameterInstance.UseReservoir)
             {
                 if (parameterInstance.ReservoirVolume <= 2000)
@@ -343,7 +332,7 @@ public class MainGame : MonoBehaviour
         {
             if (forecast.data.cond == 1 || forecast.data.cond == 12)
             {
-                if (droughtTrigger)
+                if (Events.Drought)
                 {
                     number = rnd.Next(0, 14);
                     if (number == 1)
@@ -374,7 +363,7 @@ public class MainGame : MonoBehaviour
         }        
     }
 
-    void WhiteLeafHopper()
+    void GreenLeafHopper()
     {
         System.Random rnd = new System.Random();
         int number;
@@ -411,7 +400,7 @@ public class MainGame : MonoBehaviour
 
         if (RiceTab.RicePhase == "ระยะแตกกอ" || RiceTab.RicePhase == "ระยะออกรวง")
         {
-            if (!droughtTrigger)
+            if (!Events.Drought)
             {
                 if (forecast.data.rh >= 60)
                 {
@@ -484,7 +473,7 @@ public class MainGame : MonoBehaviour
 
         if (RiceTab.RicePhase == "ระยะแตกกอ")
         {
-            if (!droughtTrigger)
+            if (!Events.Drought)
             {
                 number = rnd.Next(0, 24);
                 if (number == 14)
@@ -545,13 +534,11 @@ public class MainGame : MonoBehaviour
     #region Events
     public void upCommingRaining()
     {
-        upCommingRain = true;
         onRainForecastTrigger?.Invoke(parameterInstance);
     }            
 
     public void Flooding()
     {
-        floodTrigger = true;
         onFloodTrigger?.Invoke(parameterInstance);
         //Trigger Flooding        
         Debug.Log("Flooding");
@@ -559,7 +546,6 @@ public class MainGame : MonoBehaviour
 
     public void SeaRise()
     {
-        seaRiseTrigger = true;
         onSeaRiseTrigger?.Invoke(parameterInstance);
         //Trigger Sea rise
         Debug.Log("Sea rise");
@@ -567,7 +553,6 @@ public class MainGame : MonoBehaviour
 
     public void Rainning(TMD_class.Forecast forecast)
     {
-        rainTrigger = true;
         onRainTrigger?.Invoke(parameterInstance, forecast);
         Debug.Log("Raining");
     }
@@ -575,11 +560,11 @@ public class MainGame : MonoBehaviour
     public void notRaining()
     {
         onNotRainTrigger?.Invoke(parameterInstance);
+        Debug.Log("Not raining");
     }
 
     public void LackOfWater()
     {
-        droughtTrigger = true;
         onDroughtTrigger?.Invoke(parameterInstance);
         Debug.Log("Drought");
         //Trigger Low water
