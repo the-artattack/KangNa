@@ -13,7 +13,6 @@ public class InsectAnimation : MonoBehaviour
     public Animator insect5;
     public Animator insect6;
     public Animator insect7;
-    public bool insecticide;
 
     public static event onInsect onUseInsecticide;
     public delegate void onInsect(bool insecticide);
@@ -61,45 +60,7 @@ public class InsectAnimation : MonoBehaviour
         insect6.SetBool("isInsect", false);
         insect7.SetBool("isInsect", false);
     }
-   
-
-    private void protect()
-    {
-        string buttonValue = EventSystem.current.currentSelectedGameObject.name;
-        Debug.Log("button value: " + buttonValue);
-
-        disableInsect();
-        Insecticide.SetActive(true);
-        Button btnA1 = Insecticide.transform.Find("btnA1").GetComponent<Button>();
-        Button btnA2 = Insecticide.transform.Find("btnA2").GetComponent<Button>();
-        btnA1.onClick.AddListener(useInsecticide);
-        btnA2.onClick.AddListener(notUseInsecticide);        
-    }
-
-    private void notUseInsecticide()
-    {
-        disableInsect();
-        Insecticide.SetActive(false);
-        insecticide = false;
-        onUseInsecticide?.Invoke(insecticide);
-    }
-
-    private void useInsecticide()
-    {
-        disableInsect();
-        Insecticide.SetActive(false);
-        insecticide = true;
-        onUseInsecticide?.Invoke(insecticide);
-    }
-
-    private void notProtect()
-    {
-        string buttonValue = EventSystem.current.currentSelectedGameObject.name;
-        Debug.Log("button value: " + buttonValue);
-
-        disableInsect();       
-    }
-
+    
     public void InsectSolution(SimulateParameters parameters)
     {
         if (parameters.useInsecticide)
