@@ -18,6 +18,23 @@ public class CalendarActivity : MonoBehaviour
     private List<TMD_class.Forecast> next2MonthForecast = new List<TMD_class.Forecast>();
 
     const string pluginName = "com.example.androidlibrary.MyPlugin";
+
+    class DatepickerCallback : AndroidJavaProxy
+    {
+        private System.Action<int> datepickerHandler;
+
+        public DatepickerCallback(System.Action<int> datepickerHandlerIn) : base(pluginName + "$DatepickerCallback")
+        {
+            datepickerHandler = datepickerHandlerIn;
+        }
+
+        public void onDateSelected(int day, int month, int year)
+        {
+            Debug.Log("Unity Date Selected: " + day + "-" + month + "-" + year);
+            WeatherAPI.CurrentDate = new DateTime(year, month, day);
+        }
+    }
+
     static AndroidJavaClass _pluginClass;
     static AndroidJavaObject _pluginInstance;
 
@@ -32,6 +49,10 @@ public class CalendarActivity : MonoBehaviour
     void Start()
     {
         Init();
+        CalendarTrigger((int obj) =>
+        {
+            Debug.Log("Local Handler called: " + obj);
+        });
         CurrentMonth();
     }
 
@@ -78,7 +99,7 @@ public class CalendarActivity : MonoBehaviour
                 return "สิงหาคม";
             case 9:
                 return "กันยายน";
-           case 10:
+            case 10:
                 return "ตุลาคม";
             case 11:
                 return "พฤศจิกายน";
@@ -148,7 +169,7 @@ public class CalendarActivity : MonoBehaviour
                 else
                     generateText("เดือนนี้ไม่มีฝนตก ดีจังเลย~");
             }
-        }       
+        }
     }
 
     public void prevMonth()
@@ -195,7 +216,7 @@ public class CalendarActivity : MonoBehaviour
                 else
                     generateText("เดือนนี้ไม่มีฝนตก ดีจังเลย~");
             }
-        }            
+        }
     }
 
     public void generateText(string forecast)
@@ -216,11 +237,11 @@ public class CalendarActivity : MonoBehaviour
         Debug.Log("cur count: " + next2MonthCount);
         while (objs.Count > currentMonthCount)
         {
-            if(objs[0]!=null)
+            if (objs[0] != null)
                 Destroy(objs[0].gameObject);
 
             objs.RemoveAt(0);
-        }        
+        }
     }
 
     public static AndroidJavaClass PluginClass
@@ -250,10 +271,10 @@ public class CalendarActivity : MonoBehaviour
         }
     }
 
-    public void CalendarTrigger()
+    public void CalendarTrigger(System.Action<int> handler = null)
     {
         if (Application.platform == RuntimePlatform.Android)
-            PluginInstance.Call("showCalendar");
+            PluginInstance.Call("showCalendar", new object[] { new DatepickerCallback(handler) });
     }
 
 }
