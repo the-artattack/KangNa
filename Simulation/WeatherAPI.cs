@@ -2,7 +2,6 @@
 using Proyecto26;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class WeatherAPI : MonoBehaviour
@@ -12,22 +11,20 @@ public class WeatherAPI : MonoBehaviour
     private string lon = "100.494908";
     private static DateTime date = DateTime.Now;
     private int duration;
-    private string fields = "rain,cond,tc_min,tc_max,rh,ws10m";
+    private string fields = "rain,cond,tc_min,tc_max";
 
     private static List<TMD_class.Forecast> allForecast = new List<TMD_class.Forecast>();
 
-    public static event OnEventTrigger onWeatherTrigger;
-    public delegate void OnEventTrigger();
-
-    public WeatherAPI(int day, int month, int year)
+    // Start is called before the first frame update
+    void Start()
     {
-        date = new DateTime(year, month, day);
-        duration = 30 - date.Day;
         Init();
     }
 
     private void Init()
-    {     
+    {
+        duration = 30 - date.Day;
+
         RestClient.DefaultRequestHeaders["Authorization"] = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImUzMzlkYTEzZWQ0ZDc3NTZjZDM2YmNmZGI0MDVhZTI0OGMwZmUzZGVhOTI0NjVjZjMyYmY1MTQ1OGI4NWNjYmZlN2VhOWNmNDE4YTVhZmRhIn0.eyJhdWQiOiIyIiwianRpIjoiZTMzOWRhMTNlZDRkNzc1NmNkMzZiY2ZkYjQwNWFlMjQ4YzBmZTNkZWE5MjQ2NWNmMzJiZjUxNDU4Yjg1Y2NiZmU3ZWE5Y2Y0MThhNWFmZGEiLCJpYXQiOjE1ODA5Nzg5NDUsIm5iZiI6MTU4MDk3ODk0NSwiZXhwIjoxNjEyNjAxMzQ1LCJzdWIiOiI3MDEiLCJzY29wZXMiOltdfQ.nFSWISVdU7QPGjgL4FVUam0tQfo1s5Sm287mnYUPrNgss8asxGWKj1jIUsn840BDzVgOfdhpgQcAQ7ynxbCFz9BvmuvQnWcZ1_JeC7LJ29bye9TIg4BZ9z3mEXYdk4QwXYIBSuiVW4bY1lFO9LvThbdyrQuISOI43pon69qUzeL7x06WjoAl0EOetCg1OG15uSiZFUYowNOFr7jDF4_fx-6ftb0EKT9gsrPCkEVyo5VG-O6rfjoBZYx-rzJBSrWKGldzunMUua38T71ZVfuuGZn_7paqOZd4Dn_OZvN7EbE56jeC2GvFJEGaJqJmCwJB3I9RlG06BvkiLX5YV9C8f08IlON2smGufW-N_-rSJ2sX0pFsKvESwWJeicdQQb_byY0M2IVVdjIno_rV8nQIpqJztx3WLSZAnjunmVvDJnQ1m7dP1RZqXaM9osYa_JWgqFrSdp-A8u-BoiyFd_OIaxgdXn928L6AnYmIm9dWwEaokZHcUIxpviP-P1ruaM4-GrwmXCEcRZ7sqepRcgnGwkJxENolgWYJxEF0A4QpOSUUvHYk_I0414PX1Tmrktb9Ynzz5RrFHrZTmBEmEYNdRi31PLoWdAYWHeVMmog6vJ79Agscv4Iv90hjk-jsQ3eu9-NJbMwvUcQwuKF2rVs6DVX6g9d_qc2vpMfh6dPbMjU";
         RestClient.DefaultRequestParams["ContentType"] = "application/json";
 
@@ -63,9 +60,6 @@ public class WeatherAPI : MonoBehaviour
                                     {
                                         allForecast.Add(forecast);
                                     }
-
-                                    Debug.Log("Weather API: Created.");
-                                    onWeatherTrigger?.Invoke();
 
                                 }).Catch(err => Debug.Log(err.Message));
                         }).Catch(err => Debug.Log(err.Message));
