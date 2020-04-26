@@ -23,14 +23,25 @@ public class CalendarActivity : MonoBehaviour
     {
         private System.Action<int> datepickerHandler;
 
+<<<<<<< HEAD
         public DatepickerCallback(System.Action<int> datepickerHandlerIn) : base (pluginName + "$DatepickerCallback")
+=======
+        public DatepickerCallback(System.Action<int> datepickerHandlerIn) : base(pluginName + "$DatepickerCallback")
+>>>>>>> feature/calendar
         {
             datepickerHandler = datepickerHandlerIn;
         }
 
+<<<<<<< HEAD
         public void onDateSelected(int day)
         {
             Debug.Log("Unity Date Selected: " + day);
+=======
+        public void onDateSelected(int day, int month, int year)
+        {
+            Debug.Log("Unity Date Selected: " + day + "-" + month + "-" + year);
+            WeatherAPI.CurrentDate = new DateTime(year, month, day);
+>>>>>>> feature/calendar
         }
     }
 
@@ -98,7 +109,7 @@ public class CalendarActivity : MonoBehaviour
                 return "สิงหาคม";
             case 9:
                 return "กันยายน";
-           case 10:
+            case 10:
                 return "ตุลาคม";
             case 11:
                 return "พฤศจิกายน";
@@ -168,7 +179,7 @@ public class CalendarActivity : MonoBehaviour
                 else
                     generateText("เดือนนี้ไม่มีฝนตก ดีจังเลย~");
             }
-        }       
+        }
     }
 
     public void prevMonth()
@@ -215,7 +226,7 @@ public class CalendarActivity : MonoBehaviour
                 else
                     generateText("เดือนนี้ไม่มีฝนตก ดีจังเลย~");
             }
-        }            
+        }
     }
 
     public void generateText(string forecast)
@@ -236,11 +247,11 @@ public class CalendarActivity : MonoBehaviour
         Debug.Log("cur count: " + next2MonthCount);
         while (objs.Count > currentMonthCount)
         {
-            if(objs[0]!=null)
+            if (objs[0] != null)
                 Destroy(objs[0].gameObject);
 
             objs.RemoveAt(0);
-        }        
+        }
     }
 
     public static AndroidJavaClass PluginClass

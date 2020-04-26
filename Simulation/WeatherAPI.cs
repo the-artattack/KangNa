@@ -113,5 +113,6 @@ public class WeatherAPI : MonoBehaviour
     public static DateTime CurrentDate
     {
         get { return date; }
+        set { date = value; }
     }
 }
