@@ -83,11 +83,6 @@ public class QuestionDisplay : MonoBehaviour
     public void SelectChoiceA()
     {
         printSelectedChoice();
-<<<<<<< HEAD
-        questionWindow.SetActive(false);
-        blackTransparency.SetActive(false);
-=======
->>>>>>> feature/simulation
         OnTimeControl?.Invoke(); //Resume 
 
         if (activeQuestion.topic == "SeaRise") //ปิดทางน้ำเข้านา
@@ -125,11 +120,6 @@ public class QuestionDisplay : MonoBehaviour
     public void SelectChoiceB()
     {
         printSelectedChoice();
-<<<<<<< HEAD
-        questionWindow.SetActive(false);
-        blackTransparency.SetActive(false);
-=======
->>>>>>> feature/simulation
         OnTimeControl?.Invoke(); //Resume 
 
         if (activeQuestion.topic == "SeaRise") //ไม่ปิดทางน้ำเข้านา
