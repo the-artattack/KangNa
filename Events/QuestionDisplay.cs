@@ -59,13 +59,13 @@ public class QuestionDisplay : MonoBehaviour
         }
     }
 
-    public void CloseQuestionWindow()
+    private void CloseQuestionWindow()
     {
         questionWindow.SetActive(false);
         blackTransparency.SetActive(false);
     }
 
-    public void printSelectedChoice()
+    private void printSelectedChoice()
     {
         string buttonValue = EventSystem.current.currentSelectedGameObject.name;
         string selectedChoice;
@@ -83,8 +83,11 @@ public class QuestionDisplay : MonoBehaviour
     public void SelectChoiceA()
     {
         printSelectedChoice();
+<<<<<<< HEAD
         questionWindow.SetActive(false);
         blackTransparency.SetActive(false);
+=======
+>>>>>>> feature/simulation
         OnTimeControl?.Invoke(); //Resume 
 
         if (activeQuestion.topic == "SeaRise") //ปิดทางน้ำเข้านา
@@ -116,13 +119,17 @@ public class QuestionDisplay : MonoBehaviour
                 insectSolution.solutionA(activeQuestion, parameters);
             }
         }
+        CloseQuestionWindow();
     }
 
     public void SelectChoiceB()
     {
         printSelectedChoice();
+<<<<<<< HEAD
         questionWindow.SetActive(false);
         blackTransparency.SetActive(false);
+=======
+>>>>>>> feature/simulation
         OnTimeControl?.Invoke(); //Resume 
 
         if (activeQuestion.topic == "SeaRise") //ไม่ปิดทางน้ำเข้านา
@@ -151,5 +158,6 @@ public class QuestionDisplay : MonoBehaviour
                 insectSolution.solutionB(activeQuestion, parameters);
             }
         }
+        CloseQuestionWindow();
     }
 }
