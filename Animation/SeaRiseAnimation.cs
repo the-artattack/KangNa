@@ -20,11 +20,10 @@ public class SeaRiseAnimation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {       
-        seaRiseAnimation.SetActive(false);        
-        MainGame.onSeaRiseTrigger += enableSeaRise;
+        seaRiseAnimation.SetActive(false); 
     }
 
-    private void enableSeaRise(SimulateParameters parameters)
+    public void enable(SimulateParameters parameters)
     {
         seaRiseAnimation.SetActive(true);
         seaRise.SetBool("isSea", true);
@@ -34,8 +33,7 @@ public class SeaRiseAnimation : MonoBehaviour
     private void disableSeaRise()
     {       
         seaRiseAnimation.SetActive(false);
-        seaRise.SetBool("isSea", false);
-        MainGame.onSeaRiseTrigger -= enableSeaRise;
+        seaRise.SetBool("isSea", false);        
     }    
 
     private void notCloseWay()
@@ -55,8 +53,7 @@ public class SeaRiseAnimation : MonoBehaviour
     }
 
     public void seaRiseSolution(SimulateParameters parameters)
-    {
-        parameters.closeWaterWay = close;
+    {        
         if (!close)
         {
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 2);
