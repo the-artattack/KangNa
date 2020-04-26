@@ -53,8 +53,7 @@ public class SeaRiseAnimation : MonoBehaviour
     }
 
     public void seaRiseSolution(SimulateParameters parameters)
-    {
-        parameters.closeWaterWay = close;
+    {        
         if (!close)
         {
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 2);
