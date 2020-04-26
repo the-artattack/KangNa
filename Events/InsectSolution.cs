@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InsectSolution : MonoBehaviour
 { 
-    public void solutionA(Question activeQuestion)
+    public void solutionA(Question activeQuestion, SimulateParameters parameters)
     {
         //ใช้แสงไฟฟ้าล่อแมลงและกำจัด +1
         if (activeQuestion.topic == "แมลงหล่า")
@@ -62,7 +62,7 @@ public class InsectSolution : MonoBehaviour
         }
     }
 
-    public void solutionB(Question activeQuestion)
+    public void solutionB(Question activeQuestion, SimulateParameters parameters)
     {
         //ปล่อยน้ำเข้าแปลง +0
         if (activeQuestion.topic == "แมลงหล่า")

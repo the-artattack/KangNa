@@ -32,6 +32,7 @@ public class EventTrigger : MonoBehaviour
     public delegate void onTimeControl();
     public static event onTimeControl OnTimeControl;
 
+    private SimulateParameters parameters;
     public void Start()
     {
         isInsect = false;
@@ -50,6 +51,7 @@ public class EventTrigger : MonoBehaviour
     {
         isInsect = true;
         insectName = insect;
+        this.parameters = parameters;
         GameObject temp = insects.Where(obj => obj.name == insect).SingleOrDefault();
         instructionDisplay.createInstruction(insect, temp);        
         animation.InsectEnable(insect, parameters);
@@ -59,6 +61,7 @@ public class EventTrigger : MonoBehaviour
     {
         isDisease = true;
         diseaseName = disease;
+        this.parameters = parameters;
         GameObject temp = diseases.Where(obj => obj.name == disease).SingleOrDefault();
         instructionDisplay.createInstruction(disease, temp);
         animation.DiseaseEnable(disease, parameters);
@@ -67,6 +70,7 @@ public class EventTrigger : MonoBehaviour
     private void UpCommingRainTrigger(SimulateParameters parameters)
     {
         Events.UpCommingRain = true;
+        this.parameters = parameters;
         animation.UpCommingRainEnable(parameters);        
     }
 
@@ -83,6 +87,7 @@ public class EventTrigger : MonoBehaviour
     {
         Events.Flood = true;
         floodQuestion.isActive = true;
+        this.parameters = parameters;
         animation.FloodEnable(parameters);
         header = "น้ำท่วม";
         instructionObject = flood;
@@ -92,6 +97,7 @@ public class EventTrigger : MonoBehaviour
     private void NotRainTrigger(SimulateParameters parameters)
     {
         Events.Rain = false;
+        this.parameters = parameters;
         animation.NotRainEnable(parameters);
     }
 
@@ -99,6 +105,7 @@ public class EventTrigger : MonoBehaviour
     {
         Events.SeaRise = true;
         seaRiseQuestion.isActive = true;
+        this.parameters = parameters;
         animation.SeaRiseEnable(parameters);
         header = "น้ำทะเลหนุน";
         instructionObject = seaRise;
@@ -109,6 +116,7 @@ public class EventTrigger : MonoBehaviour
     {
         Events.Drought = true;
         droughtQuestion.isActive = true;
+        this.parameters = parameters;
         animation.DroughtEnable(parameters);
         header = "แห้งแล้ง";
         instructionObject = drought;
@@ -126,23 +134,23 @@ public class EventTrigger : MonoBehaviour
     {
         if (isInsect)
         {
-            questionDisplay.OpenQuestionWindow(isInsect, insectName);
+            questionDisplay.OpenQuestionWindow(isInsect, insectName, parameters);
             isInsect = false;
         }
         else if (isDisease)
         {
-            questionDisplay.OpenQuestionWindow(!isInsect, diseaseName);
+            questionDisplay.OpenQuestionWindow(!isInsect, diseaseName, parameters);
             isDisease = false;
         }
         else
         {
             if (floodQuestion.isActive)
             {
-                questionDisplay.OpenQuestionWindow(floodQuestion);
+                questionDisplay.OpenQuestionWindow(floodQuestion, parameters);
             }            
             else if(seaRiseQuestion.isActive)
             {
-                questionDisplay.OpenQuestionWindow(seaRiseQuestion);
+                questionDisplay.OpenQuestionWindow(seaRiseQuestion, parameters);
             }
             else
             {

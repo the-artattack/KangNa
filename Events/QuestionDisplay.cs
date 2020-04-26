@@ -23,37 +23,39 @@ public class QuestionDisplay : MonoBehaviour
     public delegate void onTimeControl();
     public static event onTimeControl OnTimeControl;
 
+    private SimulateParameters parameters;
     private void Start()
     {
         choiceA.onClick.AddListener(SelectChoiceA);
         choiceB.onClick.AddListener(SelectChoiceB);
     }
     /** Trigger question when event occur */
-    public void OpenQuestionWindow(Question question)
+    public void OpenQuestionWindow(Question question, SimulateParameters parameters)
     {
         activeQuestion = question;
         questionWindow.SetActive(true);
         blackTransparency.SetActive(true);
         instructionDisplay.disable();
         desciptionText.text = question.description;
+        this.parameters = parameters;
         choiceA.GetComponentInChildren<Text>().text = question.choiceA;
         choiceB.GetComponentInChildren<Text>().text = question.choiceB;
         question.Print();
     }
     
-    public void OpenQuestionWindow(bool isInsect, string question)
+    public void OpenQuestionWindow(bool isInsect, string question, SimulateParameters parameters)
     {
         if(isInsect)
         {
             activeQuestion = insectQuestion.getQuestion(question);
             Events.InsectTrigger(activeQuestion.topic);
-            OpenQuestionWindow(activeQuestion);
+            OpenQuestionWindow(activeQuestion, parameters);
         }
         else
         {
             activeQuestion = diseaseQuestion.getQuestion(question);
             Events.DiseaseTrigger(activeQuestion.topic);
-            OpenQuestionWindow(activeQuestion);
+            OpenQuestionWindow(activeQuestion, parameters);
         }
     }
 
@@ -101,11 +103,11 @@ public class QuestionDisplay : MonoBehaviour
         {
             if (activeQuestion.topic.StartsWith("Disease"))
             {
-                diseaseSolution.solutionA(activeQuestion);
+                diseaseSolution.solutionA(activeQuestion, parameters);
             }
             else if(activeQuestion.topic.StartsWith("Insect"))
             {
-                insectSolution.solutionA(activeQuestion);
+                insectSolution.solutionA(activeQuestion, parameters);
             }
         }
     }
@@ -133,11 +135,11 @@ public class QuestionDisplay : MonoBehaviour
         {
             if (activeQuestion.topic.StartsWith("Disease"))
             {
-                diseaseSolution.solutionB(activeQuestion);
+                diseaseSolution.solutionB(activeQuestion, parameters);
             }
             else if (activeQuestion.topic.StartsWith("Insect"))
             {
-                insectSolution.solutionB(activeQuestion);
+                insectSolution.solutionB(activeQuestion, parameters);
             }
         }
     }

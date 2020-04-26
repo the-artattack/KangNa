@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DiseaseSolution : MonoBehaviour
-{  
-    public void solutionA(Question activeQuestion)
+{
+    public void solutionA(Question activeQuestion, SimulateParameters parameters)
     {
         //ใส่ปุ๋ยที่มีไนโตรเจนที่เหมาะสม +1
         if (activeQuestion.topic == "โรคขอบใบแห้ง") 
@@ -44,7 +44,7 @@ public class DiseaseSolution : MonoBehaviour
         }
     }
 
-    public void solutionB(Question activeQuestion)
+    public void solutionB(Question activeQuestion, SimulateParameters parameters)
     {
         //ระบายน้ำออกจากแปลง +0
         if (activeQuestion.topic == "โรคขอบใบแห้ง")
