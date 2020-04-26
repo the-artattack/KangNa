@@ -23,25 +23,14 @@ public class CalendarActivity : MonoBehaviour
     {
         private System.Action<int> datepickerHandler;
 
-<<<<<<< HEAD
-        public DatepickerCallback(System.Action<int> datepickerHandlerIn) : base (pluginName + "$DatepickerCallback")
-=======
         public DatepickerCallback(System.Action<int> datepickerHandlerIn) : base(pluginName + "$DatepickerCallback")
->>>>>>> feature/calendar
         {
             datepickerHandler = datepickerHandlerIn;
         }
-
-<<<<<<< HEAD
-        public void onDateSelected(int day)
-        {
-            Debug.Log("Unity Date Selected: " + day);
-=======
         public void onDateSelected(int day, int month, int year)
         {
             Debug.Log("Unity Date Selected: " + day + "-" + month + "-" + year);
             WeatherAPI.CurrentDate = new DateTime(year, month, day);
->>>>>>> feature/calendar
         }
     }
 
