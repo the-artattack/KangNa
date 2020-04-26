@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using Firebase.Database;
 using System.Collections.Generic;
-using System;
-using System.Threading.Tasks;
 
 public class UserSaveManager : MonoBehaviour
 {
     void Start()
     {
-        
+        SceneChanger.onSceneChanged += SavePlayer;
     }
 
     public void writeNewUser(string userId, string username, string loginType)
@@ -26,7 +24,8 @@ public class UserSaveManager : MonoBehaviour
 
     public void SavePlayer()
     {
-        int balance = 100000;
+        Debug.Log("Saved scene!!!");
+        float balance = FirebaseInit.Instance.CurrentMoney;
         int scene = FirebaseInit.Instance.CurrentScene;
         UserBoard entry = new UserBoard(balance, scene);
         Dictionary<string, System.Object> entryValues = entry.ToDictionary();
@@ -41,27 +40,5 @@ public class UserSaveManager : MonoBehaviour
         Debug.Log("Save player: " + FirebaseInit.Instance.auth.CurrentUser.UserId);
         Debug.Log("With current scene: " + scene + " and balance " + balance);
     }
-
-    public void LoadPlayer()
-    {
-        FirebaseInit.Instance._database.RootReference.GetValueAsync().ContinueWith((task =>
-        {
-            if (task.IsFaulted)
-            {
-                // Handle the error...
-            }
-            else if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
-                string playerData = snapshot.GetRawJsonValue();
-
-                //Player m = JsonUtility.FromJson<Player>(playerData);
-                foreach (var child in snapshot.Children)
-                {
-                    string t = child.GetRawJsonValue();
-                    print("Data is: " + t);
-                }
-            }
-        }));
-    }
+    
 }

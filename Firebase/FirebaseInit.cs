@@ -6,23 +6,25 @@ using Firebase;
 using Firebase.Database;
 using Firebase.Extensions;
 using Firebase.Unity.Editor;
+using System;
 
 public class FirebaseInit : MonoBehaviour
 {
     public static FirebaseInit Instance { get; private set; }
     public UnityEvent OnFirebaseInitialized = new UnityEvent();
     public Firebase.Auth.FirebaseAuth auth;
-    public Firebase.Auth.FirebaseUser user;    
+    public Firebase.Auth.FirebaseUser user;
     public FirebaseDatabase _database;
-    public UserSaveManager usereHandler;
 
     public int CurrentScene;
+    public float CurrentMoney;
     public string riceType;
+    public string area;
 
     //This will set up all initialize
     void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
             CurrentScene = 0;
@@ -30,12 +32,12 @@ public class FirebaseInit : MonoBehaviour
             //Initialize firebase authenticaton
             InitializeFirebaseAuth();
             InitializeFirebaseDatabase();
-            DontDestroyOnLoad(gameObject);            
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
-        }        
+        }
     }
     void InitializeFirebaseDatabase()
     {
@@ -49,8 +51,6 @@ public class FirebaseInit : MonoBehaviour
                 Debug.LogError("Failed to initialize Firebase with {task.Exception}");
                 return;
             }
-            //if firebase have initialized then do something...
-            OnFirebaseInitialized.Invoke();
         });
     }
 
@@ -76,17 +76,67 @@ public class FirebaseInit : MonoBehaviour
             user = auth.CurrentUser;
             if (signedIn)
             {
-                SceneChanger.nextScene(2);
-                Debug.Log("Signed in " + user.UserId);
+                LoadUser();
             }
         }
     }
-        
+
+    public void LoadUser()
+    {
+        FirebaseDatabase.DefaultInstance.GetReference("Education").Child(user.UserId)
+            .ValueChanged += LoadData;
+        FirebaseDatabase.DefaultInstance.GetReference("Users").Child(user.UserId)
+            .ValueChanged += LoadScene;       
+    }
+    private void LoadData(object sender, ValueChangedEventArgs e)
+    {
+        if (e.DatabaseError != null)
+        {
+            Debug.LogError(e.DatabaseError.Message);
+            return;
+        }
+        else
+        {
+            DataSnapshot data = e.Snapshot;
+            if (data.Child("TypeOfRice").Value != null)
+            {
+                riceType = data.Child("TypeOfRice").Value.ToString();                
+            }
+            foreach (var child in data.Child("TypeOfLand").Children)
+            {
+                area = child.Value.ToString();
+            }            
+        }
+    }
+
+    private void LoadScene(object sender, ValueChangedEventArgs e)
+    {
+        if (e.DatabaseError != null)
+        {
+            Debug.LogError(e.DatabaseError.Message);
+            return;
+        }
+        else
+        {
+            DataSnapshot data = e.Snapshot.Child("State");
+            CurrentMoney = Int32.Parse(data.Child("balance").Value.ToString());
+            Debug.Log("balance: " + CurrentMoney);
+            if (data.Child("scene").Value != null)
+            {
+                int scene = Int32.Parse(data.Child("scene").Value.ToString());
+                Debug.Log("scene : " + scene);
+                SceneChanger.nextScene(scene);
+            }
+            else
+            { 
+                SceneChanger.nextScene(2); 
+            }           
+        }
+    }    
+
     void OnDestroy()
     {
         auth.StateChanged -= AuthStateChanged;
         auth = null;
-    }  
-
-
+    }
 }
