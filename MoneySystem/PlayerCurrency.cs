@@ -4,13 +4,14 @@ using UnityEngine.UI;
 
 public class PlayerCurrency : MonoBehaviour, MoneyInterface
 {
-    private int currentMoney = 100000;
+    private float currentMoney = 100000;
     private int area;
 
     public Text money;
     // Start is called before the first frame update
     private void Awake()
     {
+        getArea();
         ShowCurrentMoney();       
     }
 
@@ -22,11 +23,11 @@ public class PlayerCurrency : MonoBehaviour, MoneyInterface
 
     public void BuyRice(int price)
     {
-        getArea();
         currentMoney -= (area * price);
         Debug.Log("Current money: " + currentMoney);
         updateCurrentMoney(currentMoney);
     }
+
 
     private void getArea()
     {
@@ -35,9 +36,10 @@ public class PlayerCurrency : MonoBehaviour, MoneyInterface
     }
 
     /* update current money to FirebaseInit.Instance.CurrentMoney when done something */
-    public void updateCurrentMoney(int money)
+    public void updateCurrentMoney(float money)
     {
         FirebaseInit.Instance.CurrentMoney = money;
+        this.money.text = currentMoney.ToString();
     }
 
     /* use this function except shop rice */
@@ -53,7 +55,22 @@ public class PlayerCurrency : MonoBehaviour, MoneyInterface
 
     public void ShowCurrentMoney()
     {
-        money.text = FirebaseInit.Instance.CurrentMoney.ToString();
+        currentMoney = FirebaseInit.Instance.CurrentMoney;
+        money.text = currentMoney.ToString();
         Debug.Log("Current balance: " + FirebaseInit.Instance.CurrentMoney);
-    }    
+    }
+
+    public void DeductMoney(float amount)
+    {
+        currentMoney -= (area * amount);
+        Debug.Log("Current money: " + currentMoney);
+        updateCurrentMoney(currentMoney);
+    }
+    public void DeductMoney(float amount, bool includeArea)
+    {
+        if(!includeArea)
+            currentMoney -= amount;
+        Debug.Log("Current money: " + currentMoney);
+        updateCurrentMoney(currentMoney);
+    }
 }
