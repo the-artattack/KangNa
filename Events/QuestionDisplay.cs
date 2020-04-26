@@ -90,14 +90,20 @@ public class QuestionDisplay : MonoBehaviour
         if (activeQuestion.topic == "SeaRise") //ปิดทางน้ำเข้านา
         {
             //Do something
+            parameters.UseCanal = false;
         }      
         else if(activeQuestion.topic == "Flood") //ต้องการระบายน้ำ
         {
             //Do something
+            parameters.UseCanal = true;
         }
         else if (activeQuestion.topic == "Drought") //ใช้น้ำคลอง
         {
             //Do something
+            if (parameters.UseReservoir != true)
+            {
+                parameters.UseCanal = true;
+            }            
         }
         else //For insect and disease case
         {
@@ -122,14 +128,17 @@ public class QuestionDisplay : MonoBehaviour
         if (activeQuestion.topic == "SeaRise") //ไม่ปิดทางน้ำเข้านา
         {
             //Do something
+            parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 2);
         }
         else if (activeQuestion.topic == "Flood") //ไม่ต้องการระบายน้ำ
         {
             //Do something
+            parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 4);
         }
         else if (activeQuestion.topic == "Drought") //ใช้น้ำฝนต่อ
         {
             //Do something
+            parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 5);
         }
         else  //For insect and disease case
         {
