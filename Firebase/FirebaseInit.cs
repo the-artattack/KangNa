@@ -17,7 +17,8 @@ public class FirebaseInit : MonoBehaviour
     public FirebaseDatabase _database;
 
     public int CurrentScene;
-    public int CurrentMoney;
+    public float CurrentMoney;
+
     public string riceType;
     public string area;
 

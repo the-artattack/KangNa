@@ -4,10 +4,10 @@ using System.Collections.Generic;
 [Serializable]
 public class UserBoard
 {
-    public int balance;
+    public float balance;
     public int scene;
 
-    public UserBoard(int balance, int scene)
+    public UserBoard(float balance, int scene)
     {
         this.balance = balance;
         this.scene = scene;

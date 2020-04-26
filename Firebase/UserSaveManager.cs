@@ -25,7 +25,7 @@ public class UserSaveManager : MonoBehaviour
     public void SavePlayer()
     {
         Debug.Log("Saved scene!!!");
-        int balance = FirebaseInit.Instance.CurrentMoney;
+        float balance = FirebaseInit.Instance.CurrentMoney;
         int scene = FirebaseInit.Instance.CurrentScene;
         UserBoard entry = new UserBoard(balance, scene);
         Dictionary<string, System.Object> entryValues = entry.ToDictionary();
