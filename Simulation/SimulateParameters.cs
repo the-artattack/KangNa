@@ -25,7 +25,6 @@ public class SimulateParameters
     private bool useCanal = false;
     public bool useInsecticide = false;
     public bool useHerbicide = false;
-    public bool closeWaterWay = false; //for sea rise event
     public bool useDrain = false;
 
     //Situation Forecast

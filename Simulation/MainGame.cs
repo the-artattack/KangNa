@@ -156,7 +156,7 @@ public class MainGame : MonoBehaviour
 
     void WaterMonitor()
     {
-        if (parameterInstance.WaterVolume > parameterInstance.WaterBaseLine + 10)
+        if (parameterInstance.WaterVolume > parameterInstance.WaterBaseLine + 30)
         {         
             if (parameterInstance.UseReservoir)
             {
@@ -177,7 +177,7 @@ public class MainGame : MonoBehaviour
             parameterInstance.day7Count++;
         }
 
-        else if (parameterInstance.WaterVolume < parameterInstance.WaterBaseLine - 10)
+        else if (parameterInstance.WaterVolume < parameterInstance.WaterBaseLine - 30)
         {
             //Trigger low water
             if (parameterInstance.UseReservoir)
@@ -273,12 +273,14 @@ public class MainGame : MonoBehaviour
 
     void RaggedStunt()
     {        
-        if (RiceTab.RicePhase == "ระยะแตกกอ")
+        if (Events.BrownPlantHopper == true)
         {
-            Debug.Log("โรคใบหงิก");
-            onDiseaseTrigger?.Invoke("โรคใบหงิก", parameterInstance);
-            //After Brown hopper occur
-        }
+            if (RiceTab.RicePhase == "ระยะต้นกล้า" || RiceTab.RicePhase == "ระยะแตกกอ" || RiceTab.RicePhase == "ระยะตั้งท้อง")
+            {
+                Debug.Log("โรคใบหงิก");
+                onDiseaseTrigger?.Invoke("โรคใบหงิก", parameterInstance);
+            }
+        }        
     }
 
     void DirtyPanicle(TMD_class.Forecast forecast)
@@ -385,12 +387,14 @@ public class MainGame : MonoBehaviour
 
     void LeafFolder()
     {        
-        if (RiceTab.RicePhase == "ระยะแตกกอ")
+        if (Events.BrownPlantHopper == true)
         {
-            //After Brown Hopper occur
-            Debug.Log("หนอนห่อใบข้าว");
-            onInsectTrigger?.Invoke("หนอนห่อใบข้าว", parameterInstance);
-        }
+            if (RiceTab.RicePhase == "ระยะแตกกอ")
+            {
+                Debug.Log("หนอนห่อใบข้าว");
+                onInsectTrigger?.Invoke("หนอนห่อใบข้าว", parameterInstance);
+            }
+        }        
     }
 
     void BrownPlantHopper(TMD_class.Forecast forecast)
