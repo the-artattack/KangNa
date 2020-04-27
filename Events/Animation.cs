@@ -13,7 +13,8 @@ public class Animation : MonoBehaviour
     public DroughtAnimation drought;
     public NotRainAnimation notRain;
     public UpCommingRainAnimation upCommingRain;
-
+    public PlantingAnimation planting;
+    public HarvestAnimation harvest;
     public void InsectEnable(string insect, SimulateParameters parameter)
     {
         this.insect.enable(insect, parameter);
@@ -46,5 +47,15 @@ public class Animation : MonoBehaviour
     public void UpCommingRainEnable(SimulateParameters parameters)
     {
         upCommingRain.enable(parameters);
+    }
+
+    public void PlantingEnable(string selectedChoice)
+    {
+        planting.enable(selectedChoice);
+    }
+
+    public void HarvestEnable(string selectedChoice)
+    {
+        harvest.enable(selectedChoice);
     }
 }
