@@ -17,6 +17,11 @@ public class CardDisplay : MonoBehaviour
     private MoneyInterface moneySystem;
     public MoneyList moneyList;
 
+    public new Animation animation;
+    private string selectedChoice;
+
+    public TimeControl timeControl;
+
     private void Start()
     {
         choiceA.onClick.AddListener(SelectChoiceA);
@@ -41,11 +46,26 @@ public class CardDisplay : MonoBehaviour
     {
         cardWindow.SetActive(false);
         blackTransparency.SetActive(false);
+        EnableAnimation();
+    }
+
+    /** trigger animation */
+    private void EnableAnimation()
+    {
+        if(activeCard.topic == "PlantingMethod")
+        {
+            animation.PlantingEnable(selectedChoice);
+        }
+        else
+        {
+            animation.HarvestEnable(selectedChoice);
+        }
     }
 
     private void SelectChoiceA()
     {
         printSelectedChoice();
+        timeControl.Play();
         //หว่านเอง
         if (activeCard.topic == "PlantingMethod")
         {
@@ -64,6 +84,7 @@ public class CardDisplay : MonoBehaviour
     private void SelectChoiceB()
     {
         printSelectedChoice();
+        timeControl.Play(); //Resume 
         //รถหว่านเมล็ด
         if (activeCard.topic == "PlantingMethod")
         {
@@ -83,8 +104,7 @@ public class CardDisplay : MonoBehaviour
 
     private void printSelectedChoice()
     {
-        string buttonValue = EventSystem.current.currentSelectedGameObject.name;
-        string selectedChoice;
+        string buttonValue = EventSystem.current.currentSelectedGameObject.name;        
         if (buttonValue == "methodA")
         {
             selectedChoice = activeCard.choiceA;

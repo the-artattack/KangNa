@@ -11,6 +11,12 @@ public class MethodManager : MonoBehaviour
     public Card plantingCard;
     public Card harvestCard;
 
+    public TimeControl timeControl;
+
+    private void Start()
+    {
+        RiceTab.onHarvest += HarvestMethods;
+    }
     void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -22,7 +28,7 @@ public class MethodManager : MonoBehaviour
         Debug.Log("OnSceneLoaded: " + scene.name);
         Debug.Log(mode);
         if(scene.name == "10Simulation")
-        {
+        {            
             PlantingMethods();
         }
     }
@@ -30,12 +36,14 @@ public class MethodManager : MonoBehaviour
     public void PlantingMethods()
     {
         Debug.Log("planting method showed");
+        timeControl.Pause();
         cardDisplay.OpenCardWindow(plantingCard);
     }
 
     public void HarvestMethods()
     {
         Debug.Log("planting method showed");
+        timeControl.Pause();
         cardDisplay.OpenCardWindow(harvestCard);
     }
 

@@ -50,7 +50,7 @@ public class MainGame : MonoBehaviour
         onWaterTabTrigger?.Invoke(parameterInstance);
         WaterTab.onParameterUpdateTrigger += getParameterUpdate;
 
-        RiceTab.onHarvest += createSummary;
+        //RiceTab.onHarvest += createSummary;
 
         Debug.Log("MainGame: Created.");
     }

@@ -26,7 +26,7 @@ public class TimeControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playButton.GetComponent<Image>().sprite = playImg;
+        pauseButton.GetComponent<Image>().sprite = pauseImg;
         advanceTimer = turnDuration;
         SummaryCalculation.onSummary += Pause;
         EventTrigger.OnTimeControl += Pause;
