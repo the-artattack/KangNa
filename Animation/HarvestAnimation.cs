@@ -25,5 +25,6 @@ public class HarvestAnimation : MonoBehaviour
     {
         scythe.SetActive(false);
         truck.SetActive(false);
+        SceneChanger.nextScene(FirebaseInit.Instance.CurrentScene+1); //go to next scene
     }
 }
