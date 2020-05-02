@@ -6,9 +6,13 @@ using UnityEngine.UI;
 public class SummaryCalculation : MonoBehaviour
 {
     public Summary summary = new Summary();
+    public SimulateParameters simulateParameters;
+    public GameObject millBoard;
+    public GameObject IncomeBoard;
     public GameObject bill;
     public GameObject bill2;
     public GameObject blackTransparency;
+    public Animator animator;
     private double opportunityCost;
     private double equipmentDepreciationCost;
     private double equipmentOpportunityCost;
@@ -46,6 +50,8 @@ public class SummaryCalculation : MonoBehaviour
 
         bill.SetActive(false);
         bill2.SetActive(false);
+        millBoard.SetActive(false);
+        IncomeBoard.SetActive(false);
         blackTransparency.SetActive(false);
         summary.prepFieldCost = 1500;
         summary.plantingCost = 1570;
@@ -61,13 +67,32 @@ public class SummaryCalculation : MonoBehaviour
         equipmentDepreciationCost = summary.EquipmentDepreciationCost();
         equipmentOpportunityCost = summary.EquipmentOpportunityCost();
         summary.expectedPrice = 14000;
-
-        MainGame.onSummaryTrigger += enableSummary;
+        summary.expectedYield = simulateParameters.RiceQuantity;
+        showMillBoard();
     }
 
-    private void enableSummary(SimulateParameters parameters)
+    private void showMillBoard()
     {
-        summary.expectedYield = parameters.RiceQuantity;
+        millBoard.SetActive(true);
+        blackTransparency.SetActive(true);
+        Invoke("playAnimation", 10.0f);
+    }
+
+    private void playAnimation()
+    {
+        millBoard.SetActive(false);
+        blackTransparency.SetActive(false);
+        animator.SetBool("isMove", true);         
+    }
+
+    private void showIncomeBoard()
+    {
+        IncomeBoard.SetActive(true);
+        Invoke("enableSummary", 10.0f);
+    }
+
+    public void enableSummary()
+    {
         createSummary();
     }
 
