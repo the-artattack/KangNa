@@ -119,17 +119,22 @@ public class FirebaseInit : MonoBehaviour
         }
         else
         {
-            DataSnapshot data = e.Snapshot.Child("State");
-            CurrentMoney = Int32.Parse(data.Child("balance").Value.ToString());
-            Debug.Log("balance: " + CurrentMoney);
+            DataSnapshot data = e.Snapshot.Child("State");            
+            if(data.Child("balance").Value != null)
+            {
+                CurrentMoney = Int32.Parse(data.Child("balance").Value.ToString());
+                Debug.Log("balance: " + CurrentMoney);
+            }
+            
             if (data.Child("scene").Value != null)
             {
-                int scene = Int32.Parse(data.Child("scene").Value.ToString());
+                int scene = Int32.Parse(data.Child("scene").Value.ToString());                
                 Debug.Log("scene : " + scene);
                 SceneChanger.nextScene(scene);
             }
             else
-            { 
+            {
+                CurrentMoney = 100000;
                 SceneChanger.nextScene(2); 
             }           
         }

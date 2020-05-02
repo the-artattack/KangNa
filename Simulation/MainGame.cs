@@ -50,8 +50,6 @@ public class MainGame : MonoBehaviour
         onWaterTabTrigger?.Invoke(parameterInstance);
         WaterTab.onParameterUpdateTrigger += getParameterUpdate;
 
-        //RiceTab.onHarvest += createSummary;
-
         Debug.Log("MainGame: Created.");
     }
 
@@ -511,12 +509,7 @@ public class MainGame : MonoBehaviour
     }
     #endregion
 
-    #region Summary
-    public void createSummary()
-    {
-        onSummaryTrigger?.Invoke(parameterInstance);
-    }
-
+    #region Summary    
     private void UpdateParameters()
     {
         RainAnimation.onParameterUpdateTrigger += getParameterUpdate;

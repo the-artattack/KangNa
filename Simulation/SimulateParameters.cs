@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+using Random = System.Random;
 
-[Serializable]
-public class SimulateParameters
+public class SimulateParameters : MonoBehaviour
 {
     public static SimulateParameters parameterInstance { get; private set; }
 

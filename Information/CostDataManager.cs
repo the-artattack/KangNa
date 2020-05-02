@@ -32,8 +32,11 @@ public class CostDataManager : MonoBehaviour
         else
         {
             DataSnapshot data = e.Snapshot;
-            Debug.Log("Type of rice:" + data.Value.ToString());
-            FirebaseInit.Instance.riceType = data.Value.ToString();            
+            if (data.Value != null)
+            {
+                Debug.Log("Type of rice:" + data.Value.ToString());
+                FirebaseInit.Instance.riceType = data.Value.ToString();
+            }
         }
     }
 

@@ -5,23 +5,23 @@ using UnityEngine;
 /** This class is main class for handle question/animation on main game */
 public class EventTrigger : MonoBehaviour
 {
-    public QuestionDisplay questionDisplay;
-    public Instruction instructionDisplay;
+    public InstructionDisplay instructionDisplay;
     private string header;
-    private GameObject instructionObject;
-
+    private Instruction instruction;
+    public InstructionList instructionList;
     /** List of disease and insect instruction*/
-    public List<GameObject> diseases;
-    public List<GameObject> insects;
-    public GameObject flood;
-    public GameObject raining;
-    public GameObject seaRise;
-    public GameObject drought;
+    public List<Instruction> diseases;
+    public List<Instruction> insects;
+    public Instruction flood;
+    public Instruction raining;
+    public Instruction seaRise;
+    public Instruction drought;
 
     /** question in each events*/      
     public Question floodQuestion;
     public Question seaRiseQuestion;
     public Question droughtQuestion;
+    public QuestionList questionList;
 
     private bool isInsect;
     private bool isDisease;
@@ -50,20 +50,22 @@ public class EventTrigger : MonoBehaviour
     private void InsectTrigger(string insect, SimulateParameters parameters)
     {
         isInsect = true;
+        isDisease = false;
         insectName = insect;
         this.parameters = parameters;
-        GameObject temp = insects.Where(obj => obj.name == insect).SingleOrDefault();
-        instructionDisplay.createInstruction(insect, temp);        
+        Instruction temp = insects.Where(obj => obj.name == insect).SingleOrDefault();
+        InstructionTrigger(temp);
         animation.InsectEnable(insect, parameters);
     }
 
     private void DiseaseTrigger(string disease, SimulateParameters parameters)
     {
         isDisease = true;
+        isInsect = false;
         diseaseName = disease;
         this.parameters = parameters;
-        GameObject temp = diseases.Where(obj => obj.name == disease).SingleOrDefault();
-        instructionDisplay.createInstruction(disease, temp);
+        Instruction temp = diseases.Where(obj => obj.name == disease).SingleOrDefault();
+        InstructionTrigger(temp);
         animation.DiseaseEnable(disease, parameters);
     }
 
@@ -79,19 +81,15 @@ public class EventTrigger : MonoBehaviour
         Events.Rain = true;
         animation.RainEnable(parameters, forecast);
         header = "ฝนตก";
-        instructionObject = raining;
-        //Invoke("showInstruction", 3.0f);                
+        instruction = raining;
     }    
 
     private void FloodingTrigger(SimulateParameters parameters)
     {
         Events.Flood = true;
-        floodQuestion.isActive = true;
         this.parameters = parameters;
         animation.FloodEnable(parameters);
-        header = "น้ำท่วม";
-        instructionObject = flood;
-        Invoke("showInstruction", 3.0f);
+        InstructionTrigger(flood);        
     }
 
     private void NotRainTrigger(SimulateParameters parameters)
@@ -104,29 +102,23 @@ public class EventTrigger : MonoBehaviour
     private void SeaRiseTrigger(SimulateParameters parameters)
     {
         Events.SeaRise = true;
-        seaRiseQuestion.isActive = true;
         this.parameters = parameters;
         animation.SeaRiseEnable(parameters);
-        header = "น้ำทะเลหนุน";
-        instructionObject = seaRise;
-        Invoke("showInstruction", 3.0f);
+        InstructionTrigger(seaRise);
     }
 
     private void DroughtTrigger(SimulateParameters parameters)
     {
         Events.Drought = true;
-        droughtQuestion.isActive = true;
         this.parameters = parameters;
         animation.DroughtEnable(parameters);
-        header = "แห้งแล้ง";
-        instructionObject = drought;
-        Invoke("showInstruction", 3.0f);
+        InstructionTrigger(drought);
     }
 
-    private void showInstruction()
+    private void InstructionTrigger(Instruction instruction)
     {
-        OnTimeControl?.Invoke(); //pause
-        instructionDisplay.createInstruction(header, instructionObject);
+        OnTimeControl?.Invoke(); //pause        
+        instructionList.addInstruction(instruction);
     }
 
     /** Trigger question when user complete read the instruction and click solve button */
@@ -134,23 +126,23 @@ public class EventTrigger : MonoBehaviour
     {
         if (isInsect)
         {
-            questionDisplay.OpenQuestionWindow(isInsect, insectName, parameters);
+            questionList.addQuestion(isInsect, insectName, parameters);
             isInsect = false;
         }
         else if (isDisease)
         {
-            questionDisplay.OpenQuestionWindow(!isInsect, diseaseName, parameters);
+            questionList.addQuestion(!isInsect, diseaseName, parameters);
             isDisease = false;
         }
         else
         {
             if (floodQuestion.isActive)
             {
-                questionDisplay.OpenQuestionWindow(floodQuestion, parameters);
+                questionList.addQuestion(floodQuestion, parameters);
             }            
             else if(seaRiseQuestion.isActive)
             {
-                questionDisplay.OpenQuestionWindow(seaRiseQuestion, parameters);
+                questionList.addQuestion(seaRiseQuestion, parameters);
             }
             else
             {

@@ -44,7 +44,7 @@ public class MethodManager : MonoBehaviour
     {
         Debug.Log("planting method showed");
         timeControl.Pause();
-        cardDisplay.OpenCardWindow(harvestCard);
+        cardDisplay.OpenCardWindow(harvestCard);        
     }
 
     void OnDisable()
