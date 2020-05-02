@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /** Template for event pop-up to make decision for solution*/
 [CreateAssetMenu(fileName = "New Question", menuName = "Question")]
