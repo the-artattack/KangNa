@@ -15,7 +15,7 @@ public class QuestionList : MonoBehaviour
 
     private Question activeQuestion;
     public QuestionDisplay questionDisplay;
-    private float waitTime = 3.0f;
+    private float waitTime = 1.0f;
     private Coroutine trainingCoroutine = null;
 
     public void addQuestion(Question question, SimulateParameters parameters)

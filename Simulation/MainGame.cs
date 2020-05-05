@@ -62,8 +62,8 @@ public class MainGame : MonoBehaviour
             if (TurnControl.turnInstance.turn % 24 == 0)
             {
                 onDateChanges?.Invoke(TurnControl.turnInstance.gameDate);
-                //Debug.Log("Water: " + parameterInstance.WaterVolume);
-                //Debug.Log("Rice: " + parameterInstance.RiceQuantity);
+                Debug.Log("Water: " + parameterInstance.WaterVolume);
+                Debug.Log("Rice: " + parameterInstance.RiceQuantity);
 
                 foreach (TMD_class.Forecast forecast in WeatherAPI.AllForecast)
                 {

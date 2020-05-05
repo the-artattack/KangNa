@@ -13,8 +13,8 @@ public class QuestionDisplay : MonoBehaviour
     public InstructionDisplay instructionDisplay;
 
     private Question activeQuestion;
-    private DiseaseSolution diseaseSolution;
-    private InsectSolution insectSolution;
+    public DiseaseSolution diseaseSolution;
+    public InsectSolution insectSolution;
 
     public delegate void onTimeControl();
     public static event onTimeControl OnTimeControl;
@@ -44,6 +44,7 @@ public class QuestionDisplay : MonoBehaviour
     {
         questionWindow.SetActive(false);
         blackTransparency.SetActive(false);
+        activeQuestion.isActive = false;
     }
 
     private void printSelectedChoice()
@@ -70,13 +71,13 @@ public class QuestionDisplay : MonoBehaviour
         {
             //Do something
             parameters.UseCanal = false;
-            Evaluation.increaseScore(1);
+            Evaluation.score++;
         }      
         else if(activeQuestion.topic == "Flood") //ต้องการระบายน้ำ +1
         {
             //Do something
             parameters.UseCanal = true;
-            Evaluation.increaseScore(1);
+            Evaluation.score++;
         }
         else if (activeQuestion.topic == "Drought") //ใช้น้ำคลอง +1
         {
@@ -84,16 +85,16 @@ public class QuestionDisplay : MonoBehaviour
             if (parameters.UseReservoir != true)
             {
                 parameters.UseCanal = true;
-                Evaluation.increaseScore(1);
+                Evaluation.score++;
             }            
         }
         else //For insect and disease case
         {
-            if (activeQuestion.topic.StartsWith("Disease"))
+            if (activeQuestion.topic.StartsWith("โรค"))
             {
                 diseaseSolution.solutionA(activeQuestion, parameters);
             }
-            else if(activeQuestion.topic.StartsWith("Insect"))
+            else
             {
                 insectSolution.solutionA(activeQuestion, parameters);
             }
@@ -123,11 +124,11 @@ public class QuestionDisplay : MonoBehaviour
         }
         else  //For insect and disease case
         {
-            if (activeQuestion.topic.StartsWith("Disease"))
+            if (activeQuestion.topic.StartsWith("โรค"))
             {
                 diseaseSolution.solutionB(activeQuestion, parameters);
             }
-            else if (activeQuestion.topic.StartsWith("Insect"))
+            else
             {
                 insectSolution.solutionB(activeQuestion, parameters);
             }

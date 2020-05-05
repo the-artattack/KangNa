@@ -2,13 +2,8 @@
 
 public class Evaluation : MonoBehaviour
 {
-    public int score = 0;
+    public static int score = 0;
     public int level;
-
-    public static void increaseScore(int num)
-    {
-        score += num;
-    }
 
     /** Return level from evaluation
      * Level 1: แย่ (0-4 points)
