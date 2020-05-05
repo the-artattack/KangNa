@@ -8,7 +8,6 @@ public class DiseaseSolution : MonoBehaviour
   
     public void solutionA(Question activeQuestion, SimulateParameters parameters)
     {
-        Debug.Log("*");
         //ใส่ปุ๋ยที่มีไนโตรเจนที่เหมาะสม +1
         if (activeQuestion.topic == "โรคขอบใบแห้ง") 
         {
@@ -84,7 +83,6 @@ public class DiseaseSolution : MonoBehaviour
 
     public void solutionB(Question activeQuestion, SimulateParameters parameters)
     {
-        Debug.Log("*");
         //ระบายน้ำออกจากแปลง +0
         if (activeQuestion.topic == "โรคขอบใบแห้ง")
         {

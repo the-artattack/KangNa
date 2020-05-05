@@ -50,9 +50,8 @@ public class InsectQuestion : MonoBehaviour
 
     public Question getQuestion(string str)
     {        
-        string insect = "Insect_" + getInsectName(str);
-        Question question = insects.Where(obj => obj.name == insect).SingleOrDefault();
-        Debug.Log("Get question from: " + insect);
+        Question question = insects.Where(obj => obj.topic == str).SingleOrDefault();
+        Debug.Log("Get question from: " + str);
         Debug.Log("result: " + question.topic);
         return question;
     }

@@ -38,9 +38,8 @@ public class DiseaseQuestion : MonoBehaviour
     }
 
     public Question getQuestion(string str)
-    {
-        string disease = "Disease_" + getDiseaseName(str);
-        Question question = diseases.Where(obj => obj.name == disease).SingleOrDefault();
+    {        
+        Question question = diseases.Where(obj => obj.topic == str).SingleOrDefault();
         return question;
     }
 }

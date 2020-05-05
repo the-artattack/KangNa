@@ -126,11 +126,13 @@ public class EventTrigger : MonoBehaviour
     {
         if (isInsect)
         {
+            Debug.Log("EventTrigger: insect triggered");
             questionList.addQuestion(isInsect, insectName, parameters);
             isInsect = false;
         }
         else if (isDisease)
         {
+            Debug.Log("EventTrigger: disease triggered");
             questionList.addQuestion(!isInsect, diseaseName, parameters);
             isDisease = false;
         }

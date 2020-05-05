@@ -8,7 +8,6 @@ public class InsectSolution : MonoBehaviour
 
     public void solutionA(Question activeQuestion, SimulateParameters parameters)
     {
-        Debug.Log("*");
         //ใช้แสงไฟฟ้าล่อแมลงและกำจัด +1
         if (activeQuestion.topic == "แมลงหล่า")
         {
@@ -110,7 +109,6 @@ public class InsectSolution : MonoBehaviour
 
     public void solutionB(Question activeQuestion, SimulateParameters parameters)
     {
-        Debug.Log("*");
         //ปล่อยน้ำเข้าแปลง +0
         if (activeQuestion.topic == "แมลงหล่า")
         {

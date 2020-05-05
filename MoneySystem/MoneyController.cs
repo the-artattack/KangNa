@@ -31,7 +31,7 @@ public class MoneyController : MonoBehaviour
         {
             //increase cost
             moneyList.Where(i => i.name == item.name).ToList().ForEach(s => s.cost += item.cost);
-            temp = moneyList.Where(i => i.name == item.name).FirstOrDefault();
+            temp = moneyList.Where(i => i.name == item.name).SingleOrDefault();
             Debug.Log("Updated '" + temp.name + "' with total money: " + temp.cost);
         }
         else
@@ -48,7 +48,7 @@ public class MoneyController : MonoBehaviour
     {
         Money temp;
         bool isContains;
-        temp = moneyList.Where(i => i.name == item.name).FirstOrDefault();
+        temp = moneyList.Where(i => i.name == item.name).SingleOrDefault();
         if (temp != null)
         {            
             isContains = true;

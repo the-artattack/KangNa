@@ -36,13 +36,13 @@ public class QuestionList : MonoBehaviour
     {
         if (isInsect)
         {
-            Debug.Log("insect triggered");
+            Debug.Log("QuestionList: insect triggered");
             activeQuestion = insectQuestion.getQuestion(questionName);
             Events.InsectTrigger(activeQuestion.topic);
         }
         else
         {
-            Debug.Log("disease triggered");
+            Debug.Log("QuestionList: disease triggered");
             activeQuestion = diseaseQuestion.getQuestion(questionName);
             Events.DiseaseTrigger(activeQuestion.topic);
         }

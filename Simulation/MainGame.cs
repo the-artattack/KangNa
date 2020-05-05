@@ -33,6 +33,7 @@ public class MainGame : MonoBehaviour
     void Start()
     {
         WeatherAPI.onWeatherTrigger += onWeatherComplete;
+        UpdateParameters();
     }
 
     private void onWeatherComplete()
@@ -55,8 +56,7 @@ public class MainGame : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        UpdateParameters();
+    {        
         if (oldTurn != TurnControl.turnInstance.turn)
         {
             if (TurnControl.turnInstance.turn % 24 == 0)
