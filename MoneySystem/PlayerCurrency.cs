@@ -15,12 +15,6 @@ public class PlayerCurrency : MonoBehaviour, MoneyInterface
         ShowCurrentMoney();       
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void BuyRice(int price)
     {
         currentMoney -= (area * price);
@@ -65,12 +59,5 @@ public class PlayerCurrency : MonoBehaviour, MoneyInterface
         currentMoney -= (area * amount);
         Debug.Log("Current money: " + currentMoney);
         updateCurrentMoney(currentMoney);
-    }
-    public void DeductMoney(float amount, bool includeArea)
-    {
-        if(!includeArea)
-            currentMoney -= amount;
-        Debug.Log("Current money: " + currentMoney);
-        updateCurrentMoney(currentMoney);
-    }
+    }    
 }

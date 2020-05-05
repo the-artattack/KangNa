@@ -12,35 +12,53 @@ public class MoneyList : MonoBehaviour
     public Money opportunityEquipment;
     public Money straw;
 
-    public Money getLabor(string name)
+    public Money getMoney(string type, string name)
+    {
+        Money money = null;
+        if (type.Equals("ค่าแรงงาน"))
+        {
+            money = getLabor(name);
+        }
+        else if (type.Equals("ค่าวัสดุ"))
+        {
+            money = getMeterial(name);
+        }
+        else if (type.Equals("ค่ารถ"))
+        {
+            money = getTruck(name);
+        }
+        else if (type.Equals("ค่าเช่าที่ดิน"))
+        {
+            money = rentLand;
+        }
+        else if (type.Equals("ค่าเสื่อมอุปกรณ์"))
+        {
+            money = equipmentDepreciation;
+        }
+        else if (type.Equals("ค่าเสียโอกาสอุปกรณ์"))
+        {
+            money = opportunityEquipment;
+        }
+        else if (type.Equals("ค่าฟาง"))
+        {
+            money = straw;
+        }
+        return money;
+    }
+
+    private Money getLabor(string name)
     {
         Money temp = labor.Where(obj => obj.name == name).SingleOrDefault();
         return temp;
     }
-    public Money getMeterial(string name)
+    private Money getMeterial(string name)
     {
         Money temp = meterial.Where(obj => obj.name == name).SingleOrDefault();
         return temp;
     }
-    public Money getTruck(string name)
+    private Money getTruck(string name)
     {
         Money temp = truck.Where(obj => obj.name == name).SingleOrDefault();
         return temp;
-    }
-    public Money getRentLand
-    {
-        get { return rentLand; }
-    }
-    public Money getEquipmentDepreciation
-    {
-        get { return equipmentDepreciation; }
-    }
-    public Money getOpportunityEquipment
-    {
-        get { return rentLand; }
-    }
-    public Money getStraw
-    {
-        get { return straw; }
-    }
+    }    
 }

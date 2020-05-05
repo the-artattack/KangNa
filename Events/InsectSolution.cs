@@ -3,23 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InsectSolution : MonoBehaviour
-{ 
+{
+    public MoneyController moneyController;    
+
     public void solutionA(Question activeQuestion, SimulateParameters parameters)
     {
+        Debug.Log("*");
         //ใช้แสงไฟฟ้าล่อแมลงและกำจัด +1
         if (activeQuestion.topic == "แมลงหล่า")
         {
             //Do something
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 2);
-            Evaluation.increaseScore(1);
+            Evaluation.score++;
             Events.RiceBlackBug = false;
+            moneyController.bill("ค่าแรงงาน", "ค่าดูแลรักษา");
         }
         //ปล่อยให้ตัวมวนเขียวดูดไข่จัดการ +1
         else if (activeQuestion.topic == "เพลี้ยกระโดดสีน้ำตาล")
         {
             //Do something
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 2);
-            Evaluation.increaseScore(1);
+            Evaluation.score++;
             Events.BrownPlantHopper = false;
         }
         //จับโดยกับดักแสงไฟ +1
@@ -27,8 +31,9 @@ public class InsectSolution : MonoBehaviour
         {
             //Do something
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 1);
-            Evaluation.increaseScore(1);
+            Evaluation.score++;
             Events.GreenLeafHopper = false;
+            moneyController.bill("ค่าแรงงาน", "ค่าดูแลรักษา");
         }
         //ใส่ปุ๋ยไนโตรเจน 10 กก./ไร่ +0
         else if (activeQuestion.topic == "หนอนห่อใบข้าว")
@@ -37,14 +42,18 @@ public class InsectSolution : MonoBehaviour
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 4);
 
             Events.LeafFolder = false;
+            moneyController.bill("ค่าวัสดุ", "ค่าปุ๋ย");
+            moneyController.bill("ค่าแรงงาน", "ค่าดูแลรักษา");
         }
         //กำจัดวัชพืช +1
         else if (activeQuestion.topic == "แมลงบั่ว")
         {
             //Do something
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 3);
-            Evaluation.increaseScore(1);
+            Evaluation.score++;
             Events.RiceGallMidges = false;
+            moneyController.bill("ค่าวัสดุ", "ยากำจัดวัชพืช");
+            moneyController.bill("ค่าแรงงาน", "ค่าดูแลรักษา");
         }
         //ปล่อยน้ำเข้าแปลงนา +0
         else if (activeQuestion.topic == "หนอนปลอกข้าว")
@@ -58,7 +67,7 @@ public class InsectSolution : MonoBehaviour
         else if (activeQuestion.topic == "เพลี้ยไฟ")
         {
             //Do something
-            Evaluation.increaseScore(1);
+            Evaluation.score++;
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 3);
             //Force open canal
             if (parameters.UseCanal == false)
@@ -78,8 +87,11 @@ public class InsectSolution : MonoBehaviour
         {
             //Do something
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 2);
-            Evaluation.increaseScore(1);
+            Evaluation.score++;
             Events.StinkBug = false;
+
+            moneyController.bill("ค่าวัสดุ", "ยากำจัดแมลง");
+            moneyController.bill("ค่าแรงงาน", "ค่าคนฉีดยาฆ่าแมลง");
         }
         //ไขน้ำเข้าแปลงนา +0
         else if (activeQuestion.topic == "เพลี้ยกระโดดหลังขาว")
@@ -98,6 +110,7 @@ public class InsectSolution : MonoBehaviour
 
     public void solutionB(Question activeQuestion, SimulateParameters parameters)
     {
+        Debug.Log("*");
         //ปล่อยน้ำเข้าแปลง +0
         if (activeQuestion.topic == "แมลงหล่า")
         {
@@ -118,6 +131,8 @@ public class InsectSolution : MonoBehaviour
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 6);
 
             Events.BrownPlantHopper = false;
+            moneyController.bill("ค่าวัสดุ", "ยากำจัดแมลง");
+            moneyController.bill("ค่าแรงงาน", "ค่าคนฉีดยาฆ่าแมลง");
         }
         //ใชยาฆ่าแมลง +0
         else if (activeQuestion.topic == "เพลี้ยจักจั่นสีเขียว")
@@ -126,14 +141,18 @@ public class InsectSolution : MonoBehaviour
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 4);
 
             Events.GreenLeafHopper = false;
+            moneyController.bill("ค่าวัสดุ", "ยากำจัดแมลง");
+            moneyController.bill("ค่าแรงงาน", "ค่าคนฉีดยาฆ่าแมลง");
         }
         //กำจัดพืชอาศัย +1
         else if (activeQuestion.topic == "หนอนห่อใบข้าว")
         {
             //Do something
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 1);
-            Evaluation.increaseScore(1);
+            Evaluation.score++;
             Events.LeafFolder = false;
+            moneyController.bill("ค่าวัสดุ", "ยากำจัดวัชพืช");
+            moneyController.bill("ค่าแรงงาน", "ค่าดูแลรักษา");
         }
         //ใช้ยาฆ่าแมลง +0
         else if (activeQuestion.topic == "แมลงบั่ว")
@@ -142,12 +161,14 @@ public class InsectSolution : MonoBehaviour
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 7);
 
             Events.RiceGallMidges = false;
+            moneyController.bill("ค่าวัสดุ", "ยากำจัดแมลง");
+            moneyController.bill("ค่าแรงงาน", "ค่าคนฉีดยาฆ่าแมลง");
         }
         //ระบายน้ำออกจากแปลงนา +1
         else if (activeQuestion.topic == "หนอนปลอกข้าว")
         {
             //Do something
-            Evaluation.increaseScore(1);
+            Evaluation.score++;
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 4); //only this line for +0 case
             parameters.WaterVolume = 0;
             //Force open canal
@@ -165,6 +186,8 @@ public class InsectSolution : MonoBehaviour
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 10);
 
             Events.Thrips = false;
+            moneyController.bill("ค่าวัสดุ", "ยากำจัดแมลง");
+            moneyController.bill("ค่าแรงงาน", "ค่าคนฉีดยาฆ่าแมลง");
         }
         //ไขน้ำเข้าแปลงนา  +0
         else if (activeQuestion.topic == "แมลงสิง")
@@ -177,7 +200,7 @@ public class InsectSolution : MonoBehaviour
         else if (activeQuestion.topic == "เพลี้ยกระโดดหลังขาว")
         {
             //Do something
-            Evaluation.increaseScore(1);
+            Evaluation.score++;
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 6); //only this line for +0 case
             parameters.WaterVolume = 0;
             //Force open canal
@@ -185,7 +208,6 @@ public class InsectSolution : MonoBehaviour
             {
                 parameters.UseCanal = true;
             }
-
             Events.WhiteBackedPlantHopper = false;
         }
     }

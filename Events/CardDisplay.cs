@@ -13,9 +13,7 @@ public class CardDisplay : MonoBehaviour
     public Image bImage;
 
     private Card activeCard;
-
-    private MoneyInterface moneySystem;
-    public MoneyList moneyList;
+    public MoneyController moneyController;
 
     public new Animation animation;
     private string selectedChoice;
@@ -26,8 +24,7 @@ public class CardDisplay : MonoBehaviour
     {
         choiceA.onClick.AddListener(SelectChoiceA);
         choiceB.onClick.AddListener(SelectChoiceB);
-        moneySystem = FindObjectOfType<PlayerCurrency>().GetComponent<MoneyInterface>();
-    }
+    }        
 
     public void OpenCardWindow(Card card)
     {
@@ -70,13 +67,13 @@ public class CardDisplay : MonoBehaviour
         if (activeCard.topic == "PlantingMethod")
         {
             //Spend money
-            moneySystem.DeductMoney(moneyList.getLabor("ค่าจ้างคน").cost);
+            moneyController.bill("ค่าแรงงาน", "ค่าจ้างคน");            
         }
         //เก็บเกียวเอง
         else if (activeCard.topic == "HarvestMethod")
         {
             //Spend money
-            moneySystem.DeductMoney(moneyList.getLabor("ค่าจ้างคน").cost);
+            moneyController.bill("ค่าแรงงาน", "ค่าจ้างคน");
         }
         CloseCardWindow();
     }
@@ -89,15 +86,15 @@ public class CardDisplay : MonoBehaviour
         if (activeCard.topic == "PlantingMethod")
         {
             //Spend money
-            moneySystem.DeductMoney(moneyList.getTruck("รถหว่านเมล็ด").cost, false);
-            moneySystem.DeductMoney(moneyList.getMeterial("ค่าน้ำมัน").cost);
+            moneyController.bill("ค่ารถ", "รถหว่านเมล็ด");
+            moneyController.bill("ค่าวัสดุ", "ค่าน้ำมัน");
         }
         //รถเก็บเกี่ยว
         else if (activeCard.topic == "HarvestMethod")
         {
             //Spend money
-            moneySystem.DeductMoney(moneyList.getTruck("รถเก็บเกี่ยว").cost);
-            moneySystem.DeductMoney(moneyList.getMeterial("ค่าน้ำมัน").cost);
+            moneyController.bill("ค่ารถ", "รถเก็บเกี่ยว");
+            moneyController.bill("ค่าวัสดุ", "ค่าน้ำมัน");
         }
         CloseCardWindow();
     }
