@@ -11,7 +11,7 @@ public static class eventHandler
 
     public static double WaterReduction(double volume, double reductRatio)
     {
-        return volume - (volume * reductRatio / 100);
+        return volume - (reductRatio/10);
     }
     #endregion
 

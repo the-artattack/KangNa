@@ -14,10 +14,10 @@ public class RainAnimation : MonoBehaviour
     public void enable(SimulateParameters parameters, TMD_class.Forecast forecast)
     {
         backgroundImage.sprite = rainBackground;
-        parameters.WaterVolume = Rainning(parameters.WaterVolume, forecast.data.cond);
+        parameters.WaterVolume = Rainning(parameters.WaterVolume, forecast.data.rain);
         if (parameters.UseReservoir)
         {
-            parameters.ReservoirVolume = Rainning(parameters.ReservoirVolume, forecast.data.cond) / 100 * 40 * 20;
+            parameters.ReservoirVolume = Rainning(parameters.ReservoirVolume, forecast.data.rain) / 100 * 40 * 20;
         }
 
         parameters.IsRain = true;
@@ -30,20 +30,8 @@ public class RainAnimation : MonoBehaviour
         
     }
 
-    public double Rainning(double volume, int rainVolume)
+    public double Rainning(double volume, double rainVolume)
     {
-        switch (rainVolume)
-        {
-            case 5:
-                return volume + 2;
-            case 6:
-                return volume + 4;
-            case 7:
-                return volume + 8;
-            case 8:
-                return volume + 12;
-            default:
-                return 0;
-        }
+        return volume + (rainVolume/10);
     }
 }

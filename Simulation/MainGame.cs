@@ -97,7 +97,45 @@ public class MainGame : MonoBehaviour
                 }
 
                 //Normal Situation
-                parameterInstance.WaterVolume = eventHandler.WaterReduction(parameterInstance.WaterVolume, 1);
+                switch (TurnControl.turnInstance.gameDate.Month)
+                {
+                    case 1:
+                        parameterInstance.WaterVolume = eventHandler.WaterReduction(parameterInstance.WaterVolume, 3.49);
+                        break;
+                    case 2:
+                        parameterInstance.WaterVolume = eventHandler.WaterReduction(parameterInstance.WaterVolume, 4.13);
+                        break;
+                    case 3:
+                        parameterInstance.WaterVolume = eventHandler.WaterReduction(parameterInstance.WaterVolume, 4.66);
+                        break;
+                    case 4:
+                        parameterInstance.WaterVolume = eventHandler.WaterReduction(parameterInstance.WaterVolume, 4.83);
+                        break;
+                    case 5:
+                        parameterInstance.WaterVolume = eventHandler.WaterReduction(parameterInstance.WaterVolume, 4.22);
+                        break;
+                    case 6:
+                        parameterInstance.WaterVolume = eventHandler.WaterReduction(parameterInstance.WaterVolume, 3.90);
+                        break;
+                    case 7:
+                        parameterInstance.WaterVolume = eventHandler.WaterReduction(parameterInstance.WaterVolume, 3.85);
+                        break;
+                    case 8:
+                        parameterInstance.WaterVolume = eventHandler.WaterReduction(parameterInstance.WaterVolume, 3.64);
+                        break;
+                    case 9:
+                        parameterInstance.WaterVolume = eventHandler.WaterReduction(parameterInstance.WaterVolume, 3.61);
+                        break;
+                    case 10:
+                        parameterInstance.WaterVolume = eventHandler.WaterReduction(parameterInstance.WaterVolume, 3.63);
+                        break;
+                    case 11:
+                        parameterInstance.WaterVolume = eventHandler.WaterReduction(parameterInstance.WaterVolume, 3.68);
+                        break;
+                    case 12:
+                        parameterInstance.WaterVolume = eventHandler.WaterReduction(parameterInstance.WaterVolume, 3.51);
+                        break;
+                }
             }
         }
         oldTurn = TurnControl.turnInstance.turn;
