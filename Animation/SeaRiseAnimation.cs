@@ -30,27 +30,11 @@ public class SeaRiseAnimation : MonoBehaviour
         seaRiseSolution(parameters);
     }
 
-    private void disableSeaRise()
+    public void disable()
     {       
         seaRiseAnimation.SetActive(false);
         seaRise.SetBool("isSea", false);        
     }    
-
-    private void notCloseWay()
-    {
-        string buttonValue = EventSystem.current.currentSelectedGameObject.name;
-        close = true;
-        onSeaRise?.Invoke(close);
-        disableSeaRise();        
-    }
-
-    private void closeWay()
-    {
-        string buttonValue = EventSystem.current.currentSelectedGameObject.name;
-        close = false;
-        onSeaRise?.Invoke(close);
-        disableSeaRise();        
-    }
 
     public void seaRiseSolution(SimulateParameters parameters)
     {        

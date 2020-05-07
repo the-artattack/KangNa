@@ -23,11 +23,6 @@ public class InsectAnimation : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void enable(string insectType, SimulateParameters parameters)
     {        
         animateInsect();
@@ -44,7 +39,7 @@ public class InsectAnimation : MonoBehaviour
         insect6.SetBool("isPlay", true);
     }
 
-    private void disableInsect()
+    public void disable(string insectType)
     {
         Insect.SetActive(false);
         insect1.SetBool("isDisable", false);

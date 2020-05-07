@@ -30,27 +30,11 @@ public class FloodAnimation : MonoBehaviour
         FloodSolution(parameters);
     }
 
-    private void disableFlood()
+    public void disable()
     {                
         floodAnimation.SetActive(false);
         flood.SetBool("isFlood", false);        
     }    
-
-    private void drain()
-    {
-        string buttonValue = EventSystem.current.currentSelectedGameObject.name;
-        isDrain = true;
-        onFlooding?.Invoke(isDrain);
-        disableFlood();               
-    }
-
-    private void notDrain()
-    {
-        string buttonValue = EventSystem.current.currentSelectedGameObject.name;
-        isDrain = false;
-        onFlooding?.Invoke(isDrain);
-        disableFlood();        
-    }
 
     public void FloodSolution(SimulateParameters parameters)
     {

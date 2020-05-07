@@ -18,11 +18,11 @@ public class DiseaseAnimation : MonoBehaviour
         diseaseSolution(parameters);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void disable(string diseaseType)
     {
         
     }
+
     public void diseaseSolution(SimulateParameters parameters)
     {
         //Trigger Disease
