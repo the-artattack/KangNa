@@ -12,6 +12,7 @@ public class InsectSolution : MonoBehaviour
         if (activeQuestion.topic == "แมลงหล่า")
         {
             //Do something
+            Debug.Log("ใช้แสงไฟฟ้าล่อแมลงและกำจัด");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 2);
             Evaluation.score++;
             Events.RiceBlackBug = false;
@@ -21,6 +22,7 @@ public class InsectSolution : MonoBehaviour
         else if (activeQuestion.topic == "เพลี้ยกระโดดสีน้ำตาล")
         {
             //Do something
+            Debug.Log("ปล่อยให้ตัวมวนเขียวดูดไข่จัดการ");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 2);
             Evaluation.score++;
             Events.BrownPlantHopper = false;
@@ -29,6 +31,7 @@ public class InsectSolution : MonoBehaviour
         else if (activeQuestion.topic == "เพลี้ยจักจั่นสีเขียว")
         {
             //Do something
+            Debug.Log("จับโดยกับดักแสงไฟ");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 1);
             Evaluation.score++;
             Events.GreenLeafHopper = false;
@@ -38,6 +41,7 @@ public class InsectSolution : MonoBehaviour
         else if (activeQuestion.topic == "หนอนห่อใบข้าว")
         {
             //Do something
+            Debug.Log("ใส่ปุ๋ยไนโตรเจน 10 กก./ไร่");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 4);
 
             Events.LeafFolder = false;
@@ -48,6 +52,7 @@ public class InsectSolution : MonoBehaviour
         else if (activeQuestion.topic == "แมลงบั่ว")
         {
             //Do something
+            Debug.Log("กำจัดวัชพืช");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 3);
             Evaluation.score++;
             Events.RiceGallMidges = false;
@@ -66,6 +71,7 @@ public class InsectSolution : MonoBehaviour
         else if (activeQuestion.topic == "เพลี้ยไฟ")
         {
             //Do something
+            Debug.Log("ไขน้ำท่วมยอดข้าวทิ้งไว้ 1-2 วัน");
             Evaluation.score++;
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 3);
             //Force open canal
@@ -85,6 +91,7 @@ public class InsectSolution : MonoBehaviour
         else if (activeQuestion.topic == "แมลงสิง")
         {
             //Do something
+            Debug.Log("ใช้ยาฆ่าแมลง");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 2);
             Evaluation.score++;
             Events.StinkBug = false;
@@ -96,6 +103,7 @@ public class InsectSolution : MonoBehaviour
         else if (activeQuestion.topic == "เพลี้ยกระโดดหลังขาว")
         {
             //Do something
+            Debug.Log("ไขน้ำเข้าแปลงนา");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 7);
             //Force open canal
             if (parameters.UseCanal == false)
@@ -113,6 +121,7 @@ public class InsectSolution : MonoBehaviour
         if (activeQuestion.topic == "แมลงหล่า")
         {
             //Do something
+            Debug.Log("ปล่อยน้ำเข้าแปลง");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 6);
             //Force open canal
             if (parameters.UseCanal == false)
@@ -126,16 +135,18 @@ public class InsectSolution : MonoBehaviour
         else if (activeQuestion.topic == "เพลี้ยกระโดดสีน้ำตาล")
         {
             //Do something
+            Debug.Log("กำจัดตัวมวนเขียวดูดไข่");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 6);
 
             Events.BrownPlantHopper = false;
             moneyController.bill("ค่าวัสดุ", "ยากำจัดแมลง");
             moneyController.bill("ค่าแรงงาน", "ค่าคนฉีดยาฆ่าแมลง");
         }
-        //ใชยาฆ่าแมลง +0
+        //ใช้ยาฆ่าแมลง +0
         else if (activeQuestion.topic == "เพลี้ยจักจั่นสีเขียว")
         {
             //Do something
+            Debug.Log("ใช้ยาฆ่าแมลง");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 4);
 
             Events.GreenLeafHopper = false;
@@ -146,6 +157,7 @@ public class InsectSolution : MonoBehaviour
         else if (activeQuestion.topic == "หนอนห่อใบข้าว")
         {
             //Do something
+            Debug.Log("กำจัดพืชอาศัย");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 1);
             Evaluation.score++;
             Events.LeafFolder = false;
@@ -156,6 +168,7 @@ public class InsectSolution : MonoBehaviour
         else if (activeQuestion.topic == "แมลงบั่ว")
         {
             //Do something
+            Debug.Log("ใช้ยาฆ่าแมลง");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 7);
 
             Events.RiceGallMidges = false;
@@ -166,6 +179,7 @@ public class InsectSolution : MonoBehaviour
         else if (activeQuestion.topic == "หนอนปลอกข้าว")
         {
             //Do something
+            Debug.Log("ระบายน้ำออกจากแปลงนา");
             Evaluation.score++;
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 4); //only this line for +0 case
             parameters.WaterVolume = 0;
@@ -181,6 +195,7 @@ public class InsectSolution : MonoBehaviour
         else if (activeQuestion.topic == "เพลี้ยไฟ")
         {
             //Do something
+            Debug.Log("ใช้ยาฆ่าแมลง");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 10);
 
             Events.Thrips = false;
@@ -191,6 +206,7 @@ public class InsectSolution : MonoBehaviour
         else if (activeQuestion.topic == "แมลงสิง")
         {
             //Do something
+            Debug.Log("ไขน้ำเข้าแปลงนา");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 5);
             Events.StinkBug = false;
         }
@@ -198,6 +214,7 @@ public class InsectSolution : MonoBehaviour
         else if (activeQuestion.topic == "เพลี้ยกระโดดหลังขาว")
         {
             //Do something
+            Debug.Log("ไขน้ำออกจากแปลงนา");
             Evaluation.score++;
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 6); //only this line for +0 case
             parameters.WaterVolume = 0;

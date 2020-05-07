@@ -23,8 +23,7 @@ public class EventTrigger : MonoBehaviour
     public Question droughtQuestion;
     public QuestionList questionList;
 
-    private bool isInsect;
-    private bool isDisease;
+    public bool isInsect = false;
     private string insectName;
     private string diseaseName;
     public new Animation animation;
@@ -35,8 +34,6 @@ public class EventTrigger : MonoBehaviour
     private SimulateParameters parameters;
     public void Start()
     {
-        isInsect = false;
-        isDisease = false;
         MainGame.onInsectTrigger += InsectTrigger;
         MainGame.onDiseaseTrigger += DiseaseTrigger;
         MainGame.onRainForecastTrigger += UpCommingRainTrigger;
@@ -50,7 +47,6 @@ public class EventTrigger : MonoBehaviour
     private void InsectTrigger(string insect, SimulateParameters parameters)
     {
         isInsect = true;
-        isDisease = false;
         insectName = insect;
         this.parameters = parameters;
         Instruction temp = insects.Where(obj => obj.name == insect).SingleOrDefault();
@@ -60,7 +56,6 @@ public class EventTrigger : MonoBehaviour
 
     private void DiseaseTrigger(string disease, SimulateParameters parameters)
     {
-        isDisease = true;
         isInsect = false;
         diseaseName = disease;
         this.parameters = parameters;
@@ -127,24 +122,28 @@ public class EventTrigger : MonoBehaviour
         if (isInsect)
         {
             Debug.Log("EventTrigger: insect triggered");
-            questionList.addQuestion(isInsect, insectName, parameters);
+            questionList.addQuestion(isInsect, insectName, parameters);            
+            animation.InsectDisable(insectName);
             isInsect = false;
         }
-        else if (isDisease)
+        else if (!isInsect)
         {
             Debug.Log("EventTrigger: disease triggered");
             questionList.addQuestion(!isInsect, diseaseName, parameters);
-            isDisease = false;
+            animation.DiseaseDisable(diseaseName);
+            isInsect = false;
         }
         else
         {
             if (floodQuestion.isActive)
             {
                 questionList.addQuestion(floodQuestion, parameters);
+                animation.FloodDisable();
             }            
             else if(seaRiseQuestion.isActive)
             {
                 questionList.addQuestion(seaRiseQuestion, parameters);
+                animation.SeaRiseDisable();
             }
             else
             {
