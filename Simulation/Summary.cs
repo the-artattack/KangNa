@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Summary 
+public class Summary : MonoBehaviour
 {
     //จำนวนไร่ที่ปลูก
     public int riceField;
@@ -26,7 +27,11 @@ public class Summary
     public double expectedYield; //ผลผลิตที่คาดว่าจะได้รับ
     public double expectedPrice; //ราคาที่คาดว่าจะขายได้ บาท/ตัน
 
-   
+    private void Start()
+    {
+         riceField = Int32.Parse(FirebaseInit.Instance.area);
+    }
+
     public double Wage()
     {
         return prepFieldCost + plantingCost + careCost + harvestCost;

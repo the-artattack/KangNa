@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class SummaryCalculation : MonoBehaviour
 {
     public Summary summary = new Summary();
-    public SimulateParameters simulateParameters;
     public GameObject millBoard;
     public GameObject IncomeBoard;
     public GameObject bill;
@@ -66,8 +65,8 @@ public class SummaryCalculation : MonoBehaviour
         
         equipmentDepreciationCost = summary.EquipmentDepreciationCost();
         equipmentOpportunityCost = summary.EquipmentOpportunityCost();
-        summary.expectedPrice = 14000;
-        summary.expectedYield = simulateParameters.RiceQuantity;
+        summary.expectedPrice = 14000;        
+        //summary.expectedYield = SimulateParameters.parameterInstance.RiceQuantity;
         showMillBoard();
     }
 
@@ -88,11 +87,13 @@ public class SummaryCalculation : MonoBehaviour
     private void showIncomeBoard()
     {
         IncomeBoard.SetActive(true);
+        blackTransparency.SetActive(true);
         Invoke("enableSummary", 10.0f);
     }
 
     public void enableSummary()
     {
+        IncomeBoard.SetActive(false);
         createSummary();
     }
 
@@ -134,13 +135,13 @@ public class SummaryCalculation : MonoBehaviour
         bill.SetActive(false);
 
         riceArea.text = string.Format("{0} ไร่",summary.riceField.ToString());
-        cost.text = string.Format("{0} บาท", summary.Wage().ToString());
+        /*cost.text = string.Format("{0} บาท", summary.Wage().ToString());
         income.text = string.Format("{0} บาท",summary.ExpectedIncome().ToString());
-        profit.text = string.Format("{0} บาท",summary.ProfitOrLoss().ToString());
+        profit.text = string.Format("{0} บาท",summary.ProfitOrLoss().ToString());*/
     }
 
     public void EndingScene()
     {
-        SceneChanger.nextScene(2);
+        SceneChanger.nextScene(FirebaseInit.Instance.CurrentScene + 1);
     }
 }

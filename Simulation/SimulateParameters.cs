@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
-public class SimulateParameters
+public class SimulateParameters : MonoBehaviour
 {
     public static SimulateParameters parameterInstance { get; private set; }
 
     //Parameters
-    private double riceQuantity = 5000; //kg
-    private double waterVolume = 50; //cm
-    private int waterBaseLine = 50; //cm    
-    private double reservoirVolume = 0; //ลบ.ม.
-    
-    private bool isRain = false;
+    public double riceQuantity = 5000; //kg
+    public double waterVolume = 50; //cm
+    public int waterBaseLine = 50; //cm    
+    public double reservoirVolume = 0; //ลบ.ม.
+
+    public bool isRain = false;
     public int day7Count = 0;
     private int rainCount = 0;
     private int limitInsect = 3;
@@ -20,8 +21,8 @@ public class SimulateParameters
     private int limitSeaRise = 3;
 
     //Options
-    private bool useReservoir = false;
-    private bool useCanal = false;
+    public bool useReservoir = false;
+    public bool useCanal = false;
     public bool useInsecticide = false;
     public bool useHerbicide = false;
     public bool useDrain = false;
@@ -35,6 +36,18 @@ public class SimulateParameters
     public List<TMD_class.Forecast> seaRiseForecast = new List<TMD_class.Forecast>();
 
     List<int> chkDuplicate = new List<int>();
+    void Awake()
+    {
+        if (parameterInstance == null)
+        {
+            parameterInstance = this;            
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+   
 
     public SimulateParameters()
     {
@@ -91,7 +104,7 @@ public class SimulateParameters
 
     public int intNotDuplicated(List<int> chkList)
     {
-        Random rnd = new Random();
+        System.Random rnd = new System.Random();
         int number;
         while (true)
         {

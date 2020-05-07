@@ -82,6 +82,7 @@ public class EventTrigger : MonoBehaviour
     private void FloodingTrigger(SimulateParameters parameters)
     {
         Events.Flood = true;
+        flood.isActive = true;
         this.parameters = parameters;
         animation.FloodEnable(parameters);
         InstructionTrigger(flood);        
@@ -97,6 +98,7 @@ public class EventTrigger : MonoBehaviour
     private void SeaRiseTrigger(SimulateParameters parameters)
     {
         Events.SeaRise = true;
+        seaRiseQuestion.isActive = true;
         this.parameters = parameters;
         animation.SeaRiseEnable(parameters);
         InstructionTrigger(seaRise);
@@ -105,6 +107,7 @@ public class EventTrigger : MonoBehaviour
     private void DroughtTrigger(SimulateParameters parameters)
     {
         Events.Drought = true;
+        drought.isActive = true;
         this.parameters = parameters;
         animation.DroughtEnable(parameters);
         InstructionTrigger(drought);
@@ -144,6 +147,10 @@ public class EventTrigger : MonoBehaviour
             {
                 questionList.addQuestion(seaRiseQuestion, parameters);
                 animation.SeaRiseDisable();
+            }
+            else if(droughtQuestion.isActive)
+            {
+                questionList.addQuestion(droughtQuestion, parameters);
             }
             else
             {

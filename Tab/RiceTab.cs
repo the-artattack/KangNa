@@ -74,7 +74,7 @@ public class RiceTab : MonoBehaviour
             }
             else if (day > 90 && day <= 120)
             {
-                ricePhase = "ระยะเก็บเก็ยว";
+                ricePhase = "ระยะเก็บเกี่ยว";
             }           
         }
         else
