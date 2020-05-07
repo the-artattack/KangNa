@@ -56,6 +56,7 @@ public class PlayerCurrency : MonoBehaviour, MoneyInterface
 
     public void DeductMoney(float amount)
     {
+        getArea();
         currentMoney -= (area * amount);
         Debug.Log("Current money: " + currentMoney);
         updateCurrentMoney(currentMoney);

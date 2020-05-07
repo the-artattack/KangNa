@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class MoneyController : MonoBehaviour
 {
-    public List<Money> moneyList = new List<Money>();
+    public static List<Money> moneyList = new List<Money>();
     public MoneyList list;
     private Money money;
     private MoneyInterface moneySystem;
+    public int count = 0;
 
     private void Start()
     {
@@ -19,8 +20,11 @@ public class MoneyController : MonoBehaviour
     {
         Money temp;
         money = list.getMoney(type, name);
-        temp = addMoneyList(money);
-        moneySystem.DeductMoney(temp.cost);
+        if(money != null)
+        {
+            temp = addMoneyList(money);
+            moneySystem.DeductMoney(temp.cost);
+        }        
     }
 
     private Money addMoneyList(Money item)
@@ -32,14 +36,15 @@ public class MoneyController : MonoBehaviour
             //increase cost
             moneyList.Where(i => i.name == item.name).ToList().ForEach(s => s.cost += item.cost);
             temp = moneyList.Where(i => i.name == item.name).SingleOrDefault();
-            Debug.Log("Updated '" + temp.name + "' with total money: " + temp.cost);
+            Debug.Log("Updated '" + temp.name + "' with total money: " + temp.cost);            
         }
         else
         {
             moneyList.Add(item);
             temp = item;
-            Debug.Log("Total money of '" + temp.name + "' not changed: " + temp.cost);
+            Debug.Log("Total money of '" + temp.name + "' not changed: " + temp.cost);            
         }
+        count = moneyList.Count;
         Debug.Log("Money List Count: " + moneyList.Count);        
         return temp;
     }
