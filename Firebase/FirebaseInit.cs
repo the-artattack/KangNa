@@ -108,6 +108,8 @@ public class FirebaseInit : MonoBehaviour
                 area = child.Value.ToString();
             }            
         }
+        FirebaseDatabase.DefaultInstance.GetReference("Education").Child(user.UserId)
+            .ValueChanged -= LoadData;
     }
 
     private void LoadScene(object sender, ValueChangedEventArgs e)
@@ -138,6 +140,8 @@ public class FirebaseInit : MonoBehaviour
                 SceneChanger.nextScene(2); 
             }           
         }
+        FirebaseDatabase.DefaultInstance.GetReference("Users").Child(user.UserId)
+            .ValueChanged -= LoadScene;
     }    
 
     void OnDestroy()

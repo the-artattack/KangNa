@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -22,10 +23,10 @@ public class EducationManager : MonoBehaviour
     public int max = 500;
     public int min = 10;
 
+    public MoneyController moneyController;
     // Start is called before the first frame update
     void Start()
     {
-
         if (riceTypeA != null && riceTypeB != null)
         {
             Button riceAButton = riceTypeA.GetComponent<Button>();
@@ -92,17 +93,23 @@ public class EducationManager : MonoBehaviour
 
     void LandSizeConfirm()
     {
+        FirebaseInit.Instance.area = landSize.text;
         Debug.Log(FirebaseInit.Instance.auth.CurrentUser.UserId);
         FirebaseInit.Instance._database.RootReference
                 .Child("Education")
                 .Child(FirebaseInit.Instance.auth.CurrentUser.UserId)
-                .Child("TypeOfLand").Child(buttonValue).SetValueAsync(landSize.text);
-
-        //Set parameter : area on scene Simulation
-        //Parameters.variableInstance.area = landSize.text;
-
+                .Child("TypeOfLand").Child(buttonValue).SetValueAsync(landSize.text);        
+        SelectLandArea.SetActive(false);
+        blackTransparency.SetActive(false);
+        StartCoroutine(bill());
+    }
+    IEnumerator bill()
+    {                
+        moneyController.bill("ค่าเช่าที่ดิน", "เช่าที่ดิน");
+        yield return new WaitForSeconds(3.0f);
         SceneChanger.nextScene(5);
     }
+
     void IncreaseCurrentLandSize()
     {
         Debug.Log("Increase number");
@@ -154,6 +161,5 @@ public class EducationManager : MonoBehaviour
         Debug.Log("No button pressed!");
         blackTransparency.SetActive(false);
         confirmationBox.SetActive(false);
-    } 
-   
+    }    
 }
