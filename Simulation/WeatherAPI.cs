@@ -8,8 +8,9 @@ using UnityEngine;
 public class WeatherAPI : MonoBehaviour
 {
     private TMD_class myObject = new TMD_class();
-    private string lat = "13.655091";
-    private string lon = "100.494908";
+    //ทุ่งกุลาร้องไห้ จ.ร้อยเอ็ด
+    private string lat = "15.473977";
+    private string lon = "103.684132";
     private static DateTime date = DateTime.Now;
     private int duration;
     private string fields = "rain,cond,tc_min,tc_max,rh,ws10m";
