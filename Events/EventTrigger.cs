@@ -23,7 +23,7 @@ public class EventTrigger : MonoBehaviour
     public Question droughtQuestion;
     public QuestionList questionList;
 
-    public bool isInsect = false;
+    public bool isInsect;
     private string insectName;
     private string diseaseName;
     public new Animation animation;
@@ -34,6 +34,7 @@ public class EventTrigger : MonoBehaviour
     private SimulateParameters parameters;
     public void Start()
     {
+        isInsect = false;
         MainGame.onInsectTrigger += InsectTrigger;
         MainGame.onDiseaseTrigger += DiseaseTrigger;
         MainGame.onRainForecastTrigger += UpCommingRainTrigger;
@@ -125,14 +126,14 @@ public class EventTrigger : MonoBehaviour
         if (isInsect)
         {
             Debug.Log("EventTrigger: insect triggered");
-            questionList.addQuestion(isInsect, insectName, parameters);            
+            questionList.addInsectQuestion(insectName, parameters);            
             animation.InsectDisable(insectName);
             isInsect = false;
         }
         else if (!isInsect)
         {
             Debug.Log("EventTrigger: disease triggered");
-            questionList.addQuestion(!isInsect, diseaseName, parameters);
+            questionList.addDiseaseQuestion(diseaseName, parameters);
             animation.DiseaseDisable(diseaseName);
             isInsect = false;
         }

@@ -32,20 +32,20 @@ public class QuestionList : MonoBehaviour
             trainingCoroutine = StartCoroutine(showActiveQuestion());
         }
     }
-    public void addQuestion(bool isInsect, string questionName, SimulateParameters parameters)
+
+    public void addInsectQuestion(string questionName, SimulateParameters parameters)
     {
-        if (isInsect)
-        {
-            Debug.Log("QuestionList: insect triggered");
-            activeQuestion = insectQuestion.getQuestion(questionName);
-            Events.InsectTrigger(activeQuestion.topic);
-        }
-        else
-        {
-            Debug.Log("QuestionList: disease triggered");
-            activeQuestion = diseaseQuestion.getQuestion(questionName);
-            Events.DiseaseTrigger(activeQuestion.topic);
-        }
+        Debug.Log("QuestionList: insect triggered");
+        activeQuestion = insectQuestion.getQuestion(questionName);
+        Events.InsectTrigger(activeQuestion.topic);
+        addQuestion(activeQuestion, parameters);
+    }
+
+    public void addDiseaseQuestion(string questionName, SimulateParameters parameters)
+    {
+        Debug.Log("QuestionList: disease triggered");
+        activeQuestion = diseaseQuestion.getQuestion(questionName);
+        Events.DiseaseTrigger(activeQuestion.topic);
         addQuestion(activeQuestion, parameters);
     }
 
