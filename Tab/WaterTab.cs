@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class WaterTab : MonoBehaviour
 {
     public Text waterVolumn;
+    public Text waterVolumnText;
     private SimulateParameters parameterInstance;
 
     public static event OnParameterTrigger onParameterUpdateTrigger;
@@ -23,17 +24,18 @@ public class WaterTab : MonoBehaviour
 
     private void Update()
     {
-       if (Convert.ToInt32(parameterInstance.WaterVolume) > 60)
+        waterVolumn.text = string.Format("ระดับน้ำอยู่ที่ {0} ซม.",parameterInstance.waterVolume.ToString());
+       if (Convert.ToInt32(parameterInstance.WaterVolume) > 80)
         {
-            waterVolumn.text = "มากเกินไป";
+            waterVolumnText.text = "มากเกินไป";
         }
-        else if (Convert.ToInt32(parameterInstance.WaterVolume) < 40)
+        else if (Convert.ToInt32(parameterInstance.WaterVolume) < 20)
         {
-            waterVolumn.text = "ไม่เพียงพอต่อการใช้งาน";
+            waterVolumnText.text = "ไม่เพียงพอต่อการใช้งาน";
         }
         else
         {
-            waterVolumn.text = "เพียงพอต่อการใช้งาน";
+            waterVolumnText.text = "เพียงพอต่อการใช้งาน";
         }
     }
 
