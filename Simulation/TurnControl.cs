@@ -15,11 +15,11 @@ public class TurnControl : MonoBehaviour
     public Text dateDisplay;
 
     public static event onRicePhaseHandler onRicePhase;
-    public delegate void onRicePhaseHandler(int day);
+    public delegate void onRicePhaseHandler(int day, DateTime gameDate);
     private void Start()
     {
         dateDisplay.text = ConvertThaiDate(gameDate);
-        onRicePhase?.Invoke(day);
+        onRicePhase?.Invoke(day, gameDate);
         if (turnInstance == null)
         {
             turnInstance = this;
@@ -57,7 +57,7 @@ public class TurnControl : MonoBehaviour
             day++;
             dateDisplay.text = ConvertThaiDate(gameDate);
             Debug.Log("Day: " + gameDate.Date);
-            onRicePhase?.Invoke(day);
+            onRicePhase?.Invoke(day, gameDate);
             return time %= 24;
         }
     }

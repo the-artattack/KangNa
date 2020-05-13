@@ -28,7 +28,6 @@ public class TimeControl : MonoBehaviour
     {
         pauseButton.GetComponent<Image>().sprite = pauseImg;
         advanceTimer = turnDuration;
-        SummaryCalculation.onSummary += Pause;
         EventTrigger.OnTimeControl += Pause;
         QuestionDisplay.OnTimeControl += Play;
     }

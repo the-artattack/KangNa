@@ -24,7 +24,7 @@ public class WaterTab : MonoBehaviour
 
     private void Update()
     {
-        waterVolumn.text = string.Format("ระดับน้ำอยู่ที่ {0} ซม.",parameterInstance.waterVolume.ToString());
+        waterVolumn.text = string.Format("ระดับน้ำอยู่ที่ {0} ซม.",Math.Round(parameterInstance.waterVolume,2).ToString());
        if (Convert.ToInt32(parameterInstance.WaterVolume) > 80)
         {
             waterVolumnText.text = "มากเกินไป";

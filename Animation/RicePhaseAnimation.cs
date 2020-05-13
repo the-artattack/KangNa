@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,7 +26,7 @@ public class RicePhaseAnimation : MonoBehaviour
     {
     }
 
-    public void RicePhaseImageUpdate(int day)
+    public void RicePhaseImageUpdate(int day, DateTime gameDate)
     {
         if (day <= 4)
         {

@@ -1,4 +1,5 @@
 ﻿using Firebase.Database;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 public class RiceTab : MonoBehaviour
@@ -8,6 +9,7 @@ public class RiceTab : MonoBehaviour
     public Text areaText;
     public Text harvestTimeRemainingText;
     public Text ricePrice;
+
     /** Tab1 : Rice */
     public string riceName;
     public string area;
@@ -29,7 +31,7 @@ public class RiceTab : MonoBehaviour
     public delegate void onRiceName(string price);
 
     public static event onHarvestTrigger onHarvest;
-    public delegate void onHarvestTrigger();
+    public delegate void onHarvestTrigger(DateTime date, string riceType);
 
     private void Start()
     {
@@ -52,7 +54,7 @@ public class RiceTab : MonoBehaviour
         Debug.Log("Number of days: " + harvestDay);
     }
 
-    public void checkRicePhase(int day)
+    public void checkRicePhase(int day, DateTime gameDate)
     {
         if (harvestDay == 120)
         {
@@ -102,16 +104,16 @@ public class RiceTab : MonoBehaviour
         }
 
         ricePhaseText.text = ricePhase;
-        checkHarvestTimeRemaining(day);
+        checkHarvestTimeRemaining(day, gameDate);
     }
-    public void checkHarvestTimeRemaining(int day)
+    public void checkHarvestTimeRemaining(int day, DateTime gameDate)
     {        
         harvestTimeRemaining = harvestDay - day;
         harvestTimeRemainingText.text = string.Format("อีก {0}  วัน ถึงเวลาเก็บเกี่ยว", harvestTimeRemaining);
         
         if(day == harvestDay)
         {
-            onHarvest?.Invoke();
+            onHarvest?.Invoke(gameDate, riceNameText.text);
         }       
     }   
 
