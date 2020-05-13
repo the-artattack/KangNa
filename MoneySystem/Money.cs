@@ -1,8 +1,9 @@
 ﻿using System;
+using UnityEngine;
 
-[Serializable]
-public class Money 
+[CreateAssetMenu(fileName = "New Money", menuName = "Money")]
+public class Money : ScriptableObject
 {
-    public string name;
+    public string topic;
     public float cost;
 }

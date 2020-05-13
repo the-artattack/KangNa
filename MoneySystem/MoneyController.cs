@@ -24,7 +24,11 @@ public class MoneyController : MonoBehaviour
         {
             temp = addMoneyList(money);
             moneySystem.DeductMoney(temp.cost);
-        }        
+        }    
+        else
+        {
+            Debug.Log("Can't find : " + name + " - on money list");
+        }
     }
 
     private Money addMoneyList(Money item)
