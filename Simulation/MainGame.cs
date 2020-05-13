@@ -6,6 +6,8 @@ using UnityEngine;
 public class MainGame : MonoBehaviour
 {
     private SimulateParameters parameterInstance;
+    public MoneyList moneyList;
+
     private int oldTurn;
 
     public static event onWeatherHandler onDateChanges;
@@ -550,10 +552,15 @@ public class MainGame : MonoBehaviour
 
     #region Summary    
 
-    private void updateParameters()
+    private void updateParameters(DateTime gameDate, string riceType)
     {
         Parameters.parameters = parameterInstance;
-        Parameters.print();
+        Parameters.userMoneyList = MoneyController.moneyList;
+        Parameters.moneyList = moneyList;
+        Parameters.date = gameDate;
+        Parameters.riceType = riceType;
+
+        //Parameters.print();
     }
     private void UpdateParameters()
     {
