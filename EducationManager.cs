@@ -27,6 +27,7 @@ public class EducationManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        saveModeToFirebase();
         if (riceTypeA != null && riceTypeB != null)
         {
             Button riceAButton = riceTypeA.GetComponent<Button>();
@@ -101,13 +102,17 @@ public class EducationManager : MonoBehaviour
                 .Child("TypeOfLand").Child(buttonValue).SetValueAsync(landSize.text);        
         SelectLandArea.SetActive(false);
         blackTransparency.SetActive(false);
-        StartCoroutine(bill());
+
+        if(buttonValue == "RentLand")
+        {
+            StartCoroutine(bill());
+        }
+        SceneChanger.nextScene(5);
     }
     IEnumerator bill()
     {                
         moneyController.bill("ค่าเช่าที่ดิน", "เช่าที่ดิน");
-        yield return new WaitForSeconds(3.0f);
-        SceneChanger.nextScene(5);
+        yield return new WaitForSeconds(3.0f);        
     }
 
     void IncreaseCurrentLandSize()
@@ -161,5 +166,25 @@ public class EducationManager : MonoBehaviour
         Debug.Log("No button pressed!");
         blackTransparency.SetActive(false);
         confirmationBox.SetActive(false);
-    }    
+    }
+
+    private void saveModeToFirebase()
+    {
+        FirebaseInit.Instance._database.RootReference
+            .Child("Users").Child(FirebaseInit.Instance.auth.CurrentUser.UserId)
+            .Child("Mode")
+            .SetValueAsync(getMode(FirebaseInit.Instance.mode));
+        Debug.Log("Save mode: " + FirebaseInit.Instance.mode);
+    }
+    private string getMode(int mode)
+    {
+        if (mode == 1)
+        {
+            return "expert";
+        }
+        else
+        {
+            return "beginner";
+        }
+    }
 }
