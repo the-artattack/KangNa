@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /** Handle 3 events - Rent Land (to notify user that will cost money)
@@ -40,7 +41,7 @@ public class MethodManager : MonoBehaviour
         cardDisplay.OpenCardWindow(plantingCard);
     }
 
-    public void HarvestMethods()
+    public void HarvestMethods(DateTime gameDate, string riceType)
     {
         Debug.Log("planting method showed");
         timeControl.Pause();

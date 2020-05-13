@@ -23,7 +23,14 @@ public class EventTrigger : MonoBehaviour
     public Question droughtQuestion;
     public QuestionList questionList;
 
-    public bool isInsect;
+    /** which situation is current occur
+     * 0 : nothing
+     * 1 : insect
+     * 2 : disease
+     * 3 : flood
+     * 4 : sea rise
+     * 5 : drought */
+    public int which;
     private string insectName;
     private string diseaseName;
     public new Animation animation;
@@ -34,7 +41,7 @@ public class EventTrigger : MonoBehaviour
     private SimulateParameters parameters;
     public void Start()
     {
-        isInsect = false;
+        which = 0;
         MainGame.onInsectTrigger += InsectTrigger;
         MainGame.onDiseaseTrigger += DiseaseTrigger;
         MainGame.onRainForecastTrigger += UpCommingRainTrigger;
@@ -47,21 +54,21 @@ public class EventTrigger : MonoBehaviour
 
     private void InsectTrigger(string insect, SimulateParameters parameters)
     {
-        isInsect = true;
+        which = 1;
         insectName = insect;
         this.parameters = parameters;
         Instruction temp = insects.Where(obj => obj.name == insect).SingleOrDefault();
-        InstructionTrigger(temp);
+        TriggerBasedOnMode(temp);
         animation.InsectEnable(insect, parameters);
     }
 
     private void DiseaseTrigger(string disease, SimulateParameters parameters)
     {
-        isInsect = false;
+        which = 2;
         diseaseName = disease;
         this.parameters = parameters;
         Instruction temp = diseases.Where(obj => obj.name == disease).SingleOrDefault();
-        InstructionTrigger(temp);
+        TriggerBasedOnMode(temp);
         animation.DiseaseEnable(disease, parameters);
     }
 
@@ -82,11 +89,12 @@ public class EventTrigger : MonoBehaviour
 
     private void FloodingTrigger(SimulateParameters parameters)
     {
+        which = 3;
         Events.Flood = true;
         flood.isActive = true;
         this.parameters = parameters;
         animation.FloodEnable(parameters);
-        InstructionTrigger(flood);        
+        TriggerBasedOnMode(flood);        
     }
 
     private void NotRainTrigger(SimulateParameters parameters)
@@ -98,65 +106,82 @@ public class EventTrigger : MonoBehaviour
 
     private void SeaRiseTrigger(SimulateParameters parameters)
     {
+        which = 4;
         Events.SeaRise = true;
         seaRiseQuestion.isActive = true;
         this.parameters = parameters;
         animation.SeaRiseEnable(parameters);
-        InstructionTrigger(seaRise);
+        TriggerBasedOnMode(seaRise);
     }
 
     private void DroughtTrigger(SimulateParameters parameters)
     {
+        which = 5;
         Events.Drought = true;
         drought.isActive = true;
         this.parameters = parameters;
         animation.DroughtEnable(parameters);
-        InstructionTrigger(drought);
+        TriggerBasedOnMode(drought);
     }
 
-    private void InstructionTrigger(Instruction instruction)
+    private void TriggerBasedOnMode(Instruction instruction)
     {
-        OnTimeControl?.Invoke(); //pause        
-        instructionList.addInstruction(instruction);
+        //beginner mode
+        if(FirebaseInit.Instance.mode == 0)
+        {
+            OnTimeControl?.Invoke(); //pause        
+            instructionList.addInstruction(instruction);
+        }
+        //expert mode
+        else
+        {
+            //show question
+            QuestionTrigger();
+        }
     }
 
     /** Trigger question when user complete read the instruction and click solve button */
     public void QuestionTrigger()
     {
-        if (isInsect)
+        if (which == 1) //insect
         {
+            which = 0; //reset
+
             Debug.Log("EventTrigger: insect triggered");
-            questionList.addInsectQuestion(insectName, parameters);            
+            questionList.addInsectQuestion(insectName, parameters);
             animation.InsectDisable(insectName);
-            isInsect = false;
         }
-        else if (!isInsect)
+        else if (which == 2) //disease
         {
+            which = 0; //reset
+
             Debug.Log("EventTrigger: disease triggered");
             questionList.addDiseaseQuestion(diseaseName, parameters);
             animation.DiseaseDisable(diseaseName);
-            isInsect = false;
+        }
+        else if (which == 3) //flood
+        {
+            which = 0; //reset
+
+            questionList.addQuestion(floodQuestion, parameters);
+            animation.FloodDisable();
+        }
+        else if (which == 4) //sea rise
+        {
+            which = 0; //reset
+
+            questionList.addQuestion(seaRiseQuestion, parameters);
+            animation.SeaRiseDisable();
+        }
+        else if (which == 5) //drought
+        {
+            which = 0; //reset
+
+            questionList.addQuestion(droughtQuestion, parameters);
         }
         else
         {
-            if (floodQuestion.isActive)
-            {
-                questionList.addQuestion(floodQuestion, parameters);
-                animation.FloodDisable();
-            }            
-            else if(seaRiseQuestion.isActive)
-            {
-                questionList.addQuestion(seaRiseQuestion, parameters);
-                animation.SeaRiseDisable();
-            }
-            else if(droughtQuestion.isActive)
-            {
-                questionList.addQuestion(droughtQuestion, parameters);
-            }
-            else
-            {
-                //do nothing
-            }
-        }
+            // do nothing
+        }        
     }
 }

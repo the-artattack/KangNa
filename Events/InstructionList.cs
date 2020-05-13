@@ -13,7 +13,6 @@ public class InstructionList : MonoBehaviour
     private float waitTime = 3.0f;
     private Coroutine trainingCoroutine = null;
 
-   
     public void addInstruction(Instruction instruction)
     {
         instruction.isActive = false;
