@@ -1,31 +1,40 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class Evaluation : MonoBehaviour
 {
+    public static int scoreMax = 0;
     public static int score = 0;
-    public int level;
+    public static int level;
 
     /** Return level from evaluation
-     * Level 1: แย่ (0-4 points)
-     * Level 2: ปานกลาง (5-9 points)
-     * Level 3: พอใช้ (10-14 points)
-     * Level 4: ดี (15-18 points)
+     * Level 1: พอใช้ (0-25%)
+     * Level 2: ปานกลาง (26-50%)
+     * Level 3: ดี (51-75%)
+     * Level 4: ดีมาก (76-100%)
      * max score = 18 */
 
-    public int getEvaluation()
-    {        
-        if(score >= 15) 
+    public static int getEvaluation()
+    {
+        //Evaluate level of educate by percentage from score you get divide by max score
+        float scorePercentage = (score / scoreMax) * 100;
+
+        //76-100%
+        if(scorePercentage > 75) 
         {
-            level = 4;
+            level = 4; 
         }
-        else if(score > 9 &&  score < 15) 
+        //51-75%
+        else if(scorePercentage > 50 && scorePercentage < 76) 
         {
             level = 3;
         }
-        else if(score > 4 && score < 10) 
+        //26-50%
+        else if(scorePercentage > 25 && scorePercentage < 51) 
         {
             level = 2;
         }
+        //0-25%
         else 
         {
             level = 1;
@@ -33,7 +42,7 @@ public class Evaluation : MonoBehaviour
         return level;
     }
 
-    public string getEvaluationString()
+    public static string getEvaluationString()
     {
         string evalutionLevel;
         if(level == 1)

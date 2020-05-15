@@ -126,6 +126,9 @@ public class EventTrigger : MonoBehaviour
 
     private void TriggerBasedOnMode(Instruction instruction)
     {
+        //increse evaluation score for counting the number of event trigger
+        Evaluation.scoreMax++;
+
         //beginner mode
         if(FirebaseInit.Instance.mode == 0)
         {

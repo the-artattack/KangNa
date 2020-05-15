@@ -89,8 +89,10 @@ public class FirebaseInit : MonoBehaviour
     {
         FirebaseDatabase.DefaultInstance.GetReference("Education").Child(user.UserId)
             .ValueChanged += LoadData;
-        FirebaseDatabase.DefaultInstance.GetReference("Users").Child(user.UserId)
-            .ValueChanged += LoadScene;       
+        FirebaseDatabase.DefaultInstance.GetReference("Users").Child(user.UserId).Child("State").Child("scene")
+            .ValueChanged += LoadScene;
+        FirebaseDatabase.DefaultInstance.GetReference("Users").Child(user.UserId).Child("State").Child("balance")
+            .ValueChanged += LoadBalance;
     }
     private void LoadData(object sender, ValueChangedEventArgs e)
     {
@@ -122,14 +124,8 @@ public class FirebaseInit : MonoBehaviour
         }
         else
         {
-            DataSnapshot data = e.Snapshot.Child("State");            
-            if(data.Child("balance").Value != null)
-            {
-                CurrentMoney = Int32.Parse(data.Child("balance").Value.ToString());
-                Debug.Log("balance: " + CurrentMoney);
-            }
-            
-            if (data.Child("scene").Value != null)
+            DataSnapshot data = e.Snapshot;    
+            if (data.Value != null)
             {
                 int scene = Int32.Parse(data.Child("scene").Value.ToString());                
                 Debug.Log("scene : " + scene);
@@ -141,7 +137,26 @@ public class FirebaseInit : MonoBehaviour
                 SceneChanger.nextScene(2); 
             }           
         }
-    }    
+    }
+    private void LoadBalance(object sender, ValueChangedEventArgs e)
+    {
+        if (e.DatabaseError != null)
+        {
+            Debug.LogError(e.DatabaseError.Message);
+            return;
+        }
+        else
+        {
+            DataSnapshot data = e.Snapshot;
+            if (data.Value != null)
+            {
+                CurrentMoney = Int32.Parse(data.Value.ToString());
+                Debug.Log("balance: " + CurrentMoney);
+            }
+        }
+    }
+
+
 
     void OnDestroy()
     {

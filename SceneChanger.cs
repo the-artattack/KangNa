@@ -11,7 +11,7 @@ public class SceneChanger : MonoBehaviour
         FirebaseInit.Instance.CurrentScene = SceneIndex;
         Debug.Log("Current scene:" + FirebaseInit.Instance.CurrentScene);        
         SceneManager.LoadScene(SceneIndex);
-        if(SceneIndex != 1)
+        if(SceneIndex > 2)
         { 
             onSceneChanged?.Invoke();
         }
