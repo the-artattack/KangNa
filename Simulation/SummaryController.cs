@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class SummaryController : MonoBehaviour
 {
-    public SummaryCalculation summary;
-
+    private SummaryDisplay summaryDisplay;
+    private Summary summary;
     public GameObject millBoard;
     public GameObject IncomeBoard;
     public GameObject bill;
@@ -17,8 +17,14 @@ public class SummaryController : MonoBehaviour
     public Button nextButton;
     public Button okButton;
 
-    private void Start()
+
+    private void Awake()
     {
+        summaryDisplay = GameObject.FindObjectOfType<SummaryDisplay>();
+        summary = GameObject.FindObjectOfType<Summary>();
+    }
+    private void Start()
+    {        
         bill.SetActive(false);
         summaryBoard.SetActive(false);
         millBoard.SetActive(false);
@@ -26,17 +32,18 @@ public class SummaryController : MonoBehaviour
         blackTransparency.SetActive(false);
         nextButton.onClick.AddListener(createSummary);
         okButton.onClick.AddListener(EndingSummary);
-        showMillBoard();
+        summary.printMoneyList();
     }
 
-    private void showMillBoard()
+    /** แสดงราคารับซื้อข้าวจากโรงสีประจำวันนี้ */
+    public void showMillBoard()
     {
         millBoard.SetActive(true);
         blackTransparency.SetActive(true);
-        summary.createMillBoard();
         Invoke("playAnimation", 10.0f);
     }
 
+    /** play truck animation */
     private void playAnimation()
     {
         millBoard.SetActive(false);
@@ -45,26 +52,32 @@ public class SummaryController : MonoBehaviour
         StartCoroutine(showIncomeBoard());
     }
 
+    /** แสดงหน้ารายรับที่ได้จากโรงสีข้าว */
     private IEnumerator showIncomeBoard()
     {
         yield return new WaitForSeconds(6.8f);
         IncomeBoard.SetActive(true);
         blackTransparency.SetActive(true);
+        summaryDisplay.createIncomeBoard();
         Invoke("enableSummary", 10.0f);
     }
+    /** แสดงรายการรายรับ - รายจ่าย */ 
     private void enableSummary()
     {
         bill.SetActive(true);
+        IncomeBoard.SetActive(false);
         summaryBoard.SetActive(false);
         blackTransparency.SetActive(true);
-        summary.createBill();
+        summaryDisplay.createBill();
     }
+    /** แสดงผลสรุปต้นทุน รายได้ กำไร */
     private void createSummary()
     {
         summaryBoard.SetActive(true);
         bill.SetActive(false);
-        summary.createSummary();
+        summaryDisplay.createSummary();
     }
+    /** end this scene */
     private void EndingSummary()
     {
         SceneChanger.nextScene(12);

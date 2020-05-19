@@ -8,7 +8,7 @@ public class SimulateParameters : MonoBehaviour
     public static SimulateParameters parameterInstance { get; private set; }
 
     //Parameters
-    public double riceQuantity = 5000; //kg
+    public double riceQuantity; //kg
     public double waterVolume = 50; //cm
     public int waterBaseLine = 50; //cm    
     public double reservoirVolume = 0; //ลบ.ม.
@@ -40,7 +40,7 @@ public class SimulateParameters : MonoBehaviour
     {
         if (parameterInstance == null)
         {
-            parameterInstance = this;            
+            parameterInstance = this;          
         }
         else
         {

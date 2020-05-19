@@ -17,37 +17,37 @@ public class MoneyList : MonoBehaviour
         Money money = null;
         if (type.Equals("ค่าแรงงาน"))
         {
-            Debug.Log("getting money : ค่าแรงงาน");
+            Debug.Log("getting money : ค่าแรงงาน (Labor)");
             money = getLabor(name);
         }
         else if (type.Equals("ค่าวัสดุ"))
         {
-            Debug.Log("getting money : ค่าวัสดุ");
+            Debug.Log("getting money : ค่าวัสดุ (Material)");
             money = getMeterial(name);
         }
         else if (type.Equals("ค่ารถ"))
         {
-            Debug.Log("getting money : ค่ารถ");
+            Debug.Log("getting money : ค่ารถ (Truck)");
             money = getTruck(name);
         }
         else if (type.Equals("ค่าเช่าที่ดิน"))
         {
-            Debug.Log("getting money : ค่าเช่าที่ดิน");
+            Debug.Log("getting money : ค่าเช่าที่ดิน (RentLand)");
             money = rentLand;
         }
         else if (type.Equals("ค่าเสื่อมอุปกรณ์"))
         {
-            Debug.Log("getting money : ค่าเสื่อมอุปกรณ์");
+            Debug.Log("getting money : ค่าเสื่อมอุปกรณ์ (EquipmentDepreciationCost)");
             money = equipmentDepreciation;
         }
         else if (type.Equals("ค่าเสียโอกาสอุปกรณ์"))
         {
-            Debug.Log("getting money : ค่าเสียโอกาสอุปกรณ์");
+            Debug.Log("getting money : ค่าเสียโอกาสอุปกรณ์ (EquipmentOpportunityCost)");
             money = opportunityEquipment;
         }
         else if (type.Equals("ค่าฟาง"))
         {
-            Debug.Log("getting money : ค่าฟาง");
+            Debug.Log("getting money : ค่าฟาง (Straw)");
             money = straw;
         }
         return money;

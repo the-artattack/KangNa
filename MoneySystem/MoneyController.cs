@@ -5,24 +5,28 @@ using UnityEngine;
 
 public class MoneyController : MonoBehaviour
 {
-    public static List<Money> moneyList = new List<Money>();
-    public MoneyList list;
-    private Money money;
+    protected static List<Cost> moneyList = new List<Cost>();
+    public List<Cost> debugList = new List<Cost>();
+    public GameObject list;
+    private MoneyList myList;
+    private Money item;
     private MoneyInterface moneySystem;
     public int count = 0;
 
     private void Start()
     {
         moneySystem = FindObjectOfType<PlayerCurrency>().GetComponent<MoneyInterface>();
+        myList = list.GetComponent<MoneyList>();
     }
 
     public void bill(string type, string name)
     {
-        Money temp;
-        money = list.getMoney(type, name);
-        if(money != null)
+        Cost temp;
+        item = myList.getMoney(type, name);
+        if(item != null)
         {
-            temp = addMoneyList(money);
+            Debug.Log("Get money: " + item.cost);
+            temp = addMoneyList(item.topic, item.cost);
             moneySystem.DeductMoney(temp.cost);
         }    
         else
@@ -31,41 +35,42 @@ public class MoneyController : MonoBehaviour
         }
     }
 
-    private Money addMoneyList(Money item)
+    private Cost addMoneyList(string name, float cost)
     {
-        Money temp;
+        Cost temp;
         //if have this money in this list
-        if (isOnList(item))
+        Cost money = isOnList(name);
+        if (money != null)
         {
             //increase cost
-            moneyList.Where(i => i.name == item.name).ToList().ForEach(s => s.cost += item.cost);
-            temp = moneyList.Where(i => i.name == item.name).SingleOrDefault();
-            Debug.Log("Updated '" + temp.name + "' with total money: " + temp.cost);            
+            float total = cost + money.cost;
+            Debug.Log(money.topic + " Updated cost - from: " + money.cost + " + with: " + cost);
+            money.cost = total;
+            temp = moneyList.Where(i => i.topic == name).SingleOrDefault();
+            Debug.Log("Updated: '" + temp.topic + "' with total money: " + temp.cost);            
         }
         else
         {
-            moneyList.Add(item);
-            temp = item;
-            Debug.Log("Total money of '" + temp.name + "' not changed: " + temp.cost);            
+            temp = new Cost(name, cost);
+            moneyList.Add(temp);
+            Debug.Log("Add new money: '" + name + "' with cost: " + cost);            
         }
+        
+        debugList = moneyList;
         count = moneyList.Count;
-        Debug.Log("Money List Count: " + moneyList.Count);        
+        Debug.Log("Money List Count: " + moneyList.Count);   
         return temp;
     }
 
-    private bool isOnList(Money item)
+    private Cost isOnList(string name)
     {
-        Money temp;
-        bool isContains;
-        temp = moneyList.Where(i => i.name == item.name).SingleOrDefault();
-        if (temp != null)
-        {            
-            isContains = true;
-        }
-        else
-        {
-            isContains = false;
-        }
-        return isContains;
+        Cost temp;
+        temp = moneyList.Where(i => i.topic == name).SingleOrDefault();        
+        return temp;
+    }
+
+    public static List<Cost> GetMoneyList()
+    {
+        return moneyList;
     }
 }
