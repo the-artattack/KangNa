@@ -19,9 +19,11 @@ public class CardDisplay : MonoBehaviour
     private string selectedChoice;
 
     public TimeControl timeControl;
+    private MoneyDisplay moneyDisplay;
 
     private void Start()
     {
+        moneyDisplay = GameObject.FindObjectOfType<MoneyDisplay>();
         choiceA.onClick.AddListener(SelectChoiceA);
         choiceB.onClick.AddListener(SelectChoiceB);
     }        
@@ -67,13 +69,15 @@ public class CardDisplay : MonoBehaviour
         if (activeCard.topic == "PlantingMethod")
         {
             //Spend money
-            moneyController.bill("ค่าแรงงาน", "ค่าจ้างคน");            
+            moneyController.bill("ค่าแรงงาน", "ค่าปลูก");
+            moneyDisplay.notifyMoney("ค่าแรงงาน", "ค่าปลูก");
         }
         //เก็บเกียวเอง
         else if (activeCard.topic == "HarvestMethod")
         {
             //Spend money
-            moneyController.bill("ค่าแรงงาน", "ค่าจ้างคน");
+            moneyController.bill("ค่าแรงงาน", "ค่าเก็บเกี่ยว");
+            moneyDisplay.notifyMoney("ค่าแรงงาน", "ค่าเก็บเกี่ยว");
         }
         CloseCardWindow();
     }
@@ -88,6 +92,7 @@ public class CardDisplay : MonoBehaviour
             //Spend money
             moneyController.bill("ค่ารถ", "รถหว่านเมล็ด");
             moneyController.bill("ค่าวัสดุ", "ค่าน้ำมัน");
+            moneyDisplay.notifyMoney("ค่ารถ", "รถหว่านเมล็ด", "ค่าวัสดุ", "ค่าน้ำมัน");
         }
         //รถเก็บเกี่ยว
         else if (activeCard.topic == "HarvestMethod")
@@ -95,6 +100,7 @@ public class CardDisplay : MonoBehaviour
             //Spend money
             moneyController.bill("ค่ารถ", "รถเก็บเกี่ยว");
             moneyController.bill("ค่าวัสดุ", "ค่าน้ำมัน");
+            moneyDisplay.notifyMoney("ค่ารถ", "รถเก็บเกี่ยว", "ค่าวัสดุ", "ค่าน้ำมัน");
         }
         CloseCardWindow();
     }

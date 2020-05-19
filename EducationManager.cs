@@ -103,6 +103,7 @@ public class EducationManager : MonoBehaviour
         SelectLandArea.SetActive(false);
         blackTransparency.SetActive(false);
 
+        Debug.Log("Button Value: " + buttonValue);
         if(buttonValue == "RentLand")
         {
             StartCoroutine(bill());
@@ -111,7 +112,7 @@ public class EducationManager : MonoBehaviour
     }
     IEnumerator bill()
     {                
-        moneyController.bill("ค่าเช่าที่ดิน", "เช่าที่ดิน");
+        moneyController.bill("ค่าเช่าที่ดิน", "ค่าเช่าที่ดิน");
         yield return new WaitForSeconds(3.0f);        
     }
 

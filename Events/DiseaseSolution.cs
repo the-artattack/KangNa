@@ -5,7 +5,15 @@ using UnityEngine;
 public class DiseaseSolution : MonoBehaviour
 {
     public MoneyController moneyController;
-  
+    private Evaluation evaluation;
+    private MoneyDisplay moneyDisplay;
+
+    private void Start()
+    {
+        evaluation = GameObject.FindObjectOfType<Evaluation>();
+        moneyDisplay = GameObject.FindObjectOfType<MoneyDisplay>();
+    }
+
     public void solutionA(Question activeQuestion, SimulateParameters parameters)
     {
         //ใส่ปุ๋ยที่มีไนโตรเจนที่เหมาะสม +1
@@ -14,10 +22,11 @@ public class DiseaseSolution : MonoBehaviour
             //Do something
             Debug.Log("ใส่ปุ๋ยที่มีไนโตรเจนที่เหมาะสม");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 1);
-            Evaluation.score++;
+            evaluation.increaseScore();
             Events.BacterialBlight = false;
             moneyController.bill("ค่าวัสดุ", "ค่าปุ๋ย");
             moneyController.bill("ค่าแรงงาน", "ค่าดูแลรักษา");
+            moneyDisplay.notifyMoney("ค่าวัสดุ", "ค่าปุ๋ย", "ค่าแรงงาน", "ค่าดูแลรักษา");
 
         }
         //ใส่ปุ๋ยโปแตสเซียมคลอไรด์ +1
@@ -26,10 +35,11 @@ public class DiseaseSolution : MonoBehaviour
             //Do something
             Debug.Log("ใส่ปุ๋ยโปแตสเซียมคลอไรด์");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 1);
-            Evaluation.score++;
+            evaluation.increaseScore();
             Events.BrownSpot = false;
             moneyController.bill("ค่าวัสดุ", "ค่าปุ๋ย");
             moneyController.bill("ค่าแรงงาน", "ค่าดูแลรักษา");
+            moneyDisplay.notifyMoney("ค่าวัสดุ", "ค่าปุ๋ย", "ค่าแรงงาน", "ค่าดูแลรักษา");
         }
         //ฉีดพ่นสารป้องกันกำจัดเชื้อรา +1
         else if (activeQuestion.topic == "โรคเมล็ดด่าง")
@@ -37,10 +47,11 @@ public class DiseaseSolution : MonoBehaviour
             //Do something
             Debug.Log("ฉีดพ่นสารป้องกันกำจัดเชื้อรา");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 1);
-            Evaluation.score++;
+            evaluation.increaseScore();
             Events.DirtyPanicle = false;
             moneyController.bill("ค่าวัสดุ", "ยากำจัดโรค");
             moneyController.bill("ค่าแรงงาน", "ค่าดูแลรักษา");
+            moneyDisplay.notifyMoney("ค่าวัสดุ", "ยากำจัดโรค", "ค่าแรงงาน", "ค่าดูแลรักษา");
         }
         //ใส่ปุ๋ยที่มีไนโตรเจนเยอะๆ +0
         else if (activeQuestion.topic == "โรคไหม้")
@@ -51,13 +62,14 @@ public class DiseaseSolution : MonoBehaviour
             Events.RiceBlast = false;
             moneyController.bill("ค่าวัสดุ", "ค่าปุ๋ย");
             moneyController.bill("ค่าแรงงาน", "ค่าดูแลรักษา");
+            moneyDisplay.notifyMoney("ค่าวัสดุ", "ค่าปุ๋ย", "ค่าแรงงาน", "ค่าดูแลรักษา");
         }
         //กำจัดวัชพืชใกล้แหล่งน้ำ +1
         else if (activeQuestion.topic == "โรคใบหงิก")
         {
             //Do something
             Debug.Log("กำจัดวัชพืชใกล้แหล่งน้ำ");
-            Evaluation.score++;            
+            evaluation.increaseScore();
             if (RiceTab.RicePhase == "ระยะต้นกล้า")
             {
                 parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 3);
@@ -73,6 +85,7 @@ public class DiseaseSolution : MonoBehaviour
 
             Events.RaggedStunt = false;
             moneyController.bill("ค่าแรงงาน", "ค่าดูแลรักษา");
+            moneyDisplay.notifyMoney("ค่าแรงงาน", "ค่าดูแลรักษา");
         }
         //ใช้สารป้องกันกำจัดเชื้อรา +1
         else if (activeQuestion.topic == "โรคกาบใบแห้ง")
@@ -80,10 +93,11 @@ public class DiseaseSolution : MonoBehaviour
             //Do something
             Debug.Log("ใช้สารป้องกันกำจัดเชื้อรา");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 3);
-            Evaluation.score++;
+            evaluation.increaseScore();
             Events.SheathBlight = false;
             moneyController.bill("ค่าวัสดุ", "ยากำจัดโรค");
             moneyController.bill("ค่าแรงงาน", "ค่าดูแลรักษา");
+            moneyDisplay.notifyMoney("ค่าวัสดุ", "ยากำจัดโรค", "ค่าแรงงาน", "ค่าดูแลรักษา");
         }
     }
 
@@ -122,6 +136,7 @@ public class DiseaseSolution : MonoBehaviour
 
             Events.DirtyPanicle = false;
             moneyController.bill("ค่าแรงงาน", "ค่าดูแลรักษา");
+            moneyDisplay.notifyMoney("ค่าแรงงาน", "ค่าดูแลรักษา");
         }
         //ฉีดพ่นสารป้องกันกำจัดเชื้อรา +1
         else if (activeQuestion.topic == "โรคไหม้")
@@ -129,10 +144,11 @@ public class DiseaseSolution : MonoBehaviour
             //Do something
             Debug.Log("ฉีดพ่นสารป้องกันกำจัดเชื้อรา");
             parameters.RiceQuantity = eventHandler.RiceReduction(parameters.RiceQuantity, 2);
-            Evaluation.score++;
+            evaluation.increaseScore();
             Events.RiceBlast = false;
             moneyController.bill("ค่าวัสดุ", "ยากำจัดโรค");
             moneyController.bill("ค่าแรงงาน", "ค่าดูแลรักษา");
+            moneyDisplay.notifyMoney("ค่าวัสดุ", "ยากำจัดโรค", "ค่าแรงงาน", "ค่าดูแลรักษา");
         }
         //ฉีดยาป้องกันโรค +0
         else if (activeQuestion.topic == "โรคใบหงิก")
@@ -155,6 +171,7 @@ public class DiseaseSolution : MonoBehaviour
             Events.RaggedStunt = false;
             moneyController.bill("ค่าวัสดุ", "ยากำจัดโรค");
             moneyController.bill("ค่าแรงงาน", "ค่าดูแลรักษา");
+            moneyDisplay.notifyMoney("ค่าวัสดุ", "ยากำจัดโรค", "ค่าแรงงาน", "ค่าดูแลรักษา");
         }
         //ใส่ปุ๋ย +0
         else if (activeQuestion.topic == "โรคกาบใบแห้ง")
@@ -165,6 +182,7 @@ public class DiseaseSolution : MonoBehaviour
             Events.SheathBlight = false;
             moneyController.bill("ค่าวัสดุ", "ค่าปุ๋ย");
             moneyController.bill("ค่าแรงงาน", "ค่าดูแลรักษา");
+            moneyDisplay.notifyMoney("ค่าวัสดุ", "ค่าปุ๋ย", "ค่าแรงงาน", "ค่าดูแลรักษา");
         }
     }
 }
