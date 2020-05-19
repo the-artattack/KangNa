@@ -23,6 +23,8 @@ public class EventTrigger : MonoBehaviour
     public Question droughtQuestion;
     public QuestionList questionList;
 
+    private Evaluation evaluation;
+
     /** which situation is current occur
      * 0 : nothing
      * 1 : insect
@@ -42,6 +44,7 @@ public class EventTrigger : MonoBehaviour
     public void Start()
     {
         which = 0;
+        evaluation = GameObject.FindObjectOfType<Evaluation>();
         MainGame.onInsectTrigger += InsectTrigger;
         MainGame.onDiseaseTrigger += DiseaseTrigger;
         MainGame.onRainForecastTrigger += UpCommingRainTrigger;
@@ -127,7 +130,7 @@ public class EventTrigger : MonoBehaviour
     private void TriggerBasedOnMode(Instruction instruction)
     {
         //increse evaluation score for counting the number of event trigger
-        Evaluation.scoreMax++;
+        evaluation.updateMaxScore();
 
         //beginner mode
         if(FirebaseInit.Instance.mode == 0)
@@ -138,14 +141,15 @@ public class EventTrigger : MonoBehaviour
         //expert mode
         else
         {
-            //show question
-            QuestionTrigger();
+            
+            OnTimeControl?.Invoke(); //pause       
+            QuestionTrigger(); //show question
         }
     }
 
     /** Trigger question when user complete read the instruction and click solve button */
     public void QuestionTrigger()
-    {
+    {        
         if (which == 1) //insect
         {
             which = 0; //reset
