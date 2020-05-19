@@ -7,6 +7,7 @@ using Firebase.Database;
 using Firebase.Extensions;
 using Firebase.Unity.Editor;
 using System;
+using System.Threading.Tasks;
 
 public class FirebaseInit : MonoBehaviour
 {
@@ -89,11 +90,80 @@ public class FirebaseInit : MonoBehaviour
     {
         FirebaseDatabase.DefaultInstance.GetReference("Education").Child(user.UserId)
             .ValueChanged += LoadData;
-        FirebaseDatabase.DefaultInstance.GetReference("Users").Child(user.UserId).Child("State").Child("scene")
-            .ValueChanged += LoadScene;
-        FirebaseDatabase.DefaultInstance.GetReference("Users").Child(user.UserId).Child("State").Child("balance")
-            .ValueChanged += LoadBalance;
+        StartCoroutine(LoadSceneAndBalance());
     }
+
+    private IEnumerator WaitTask(Task task)
+    {
+        while (task.IsCompleted == false)
+        {
+            yield return null;
+        }
+        if (task.IsFaulted)
+        {
+            throw task.Exception;
+        }
+    }
+    private IEnumerator LoadSceneAndBalance()
+    {
+        Task<DataSnapshot> balance = FirebaseDatabase.DefaultInstance.GetReference("Users")
+            .Child(user.UserId)
+            .Child("State")
+            .Child("balance")
+            .GetValueAsync();
+        yield return WaitTask(balance);
+        if (balance.Result.Value == null)
+        {
+            CurrentMoney = 100000;
+        }
+        else
+        {
+            CurrentMoney = Int32.Parse(balance.Result.Value.ToString());            
+        }
+        Debug.Log("balance: " + CurrentMoney);
+
+        Task<DataSnapshot> mode = FirebaseDatabase.DefaultInstance.GetReference("Users")
+            .Child(user.UserId)
+            .Child("Mode")
+            .GetValueAsync();
+        yield return WaitTask(mode);
+        if (mode.Result.Value == null)
+        {
+            this.mode = 0;
+        }
+        else
+        {
+            if(mode.Result.Value.ToString() == "expert")
+            {
+                this.mode = 1;
+            }
+            else
+            {
+                this.mode = 0;
+            }
+        }
+        Debug.Log("mode: " + this.mode);
+
+        Task<DataSnapshot> scene = FirebaseDatabase.DefaultInstance.GetReference("Users")
+            .Child(user.UserId)
+            .Child("State")
+            .Child("scene")
+            .GetValueAsync();
+        yield return WaitTask(scene);
+        int sceneIndex;
+        if (scene.Result.Value == null)
+        {
+            sceneIndex = 2;
+        }
+        else
+        {
+            sceneIndex = Int32.Parse(scene.Result.Value.ToString());
+        }
+        
+        Debug.Log("scene: " + sceneIndex);
+        SceneChanger.nextScene(sceneIndex);
+    }
+
     private void LoadData(object sender, ValueChangedEventArgs e)
     {
         if (e.DatabaseError != null)
@@ -113,50 +183,7 @@ public class FirebaseInit : MonoBehaviour
                 area = child.Value.ToString();
             }            
         }
-    }
-
-    private void LoadScene(object sender, ValueChangedEventArgs e)
-    {
-        if (e.DatabaseError != null)
-        {
-            Debug.LogError(e.DatabaseError.Message);
-            return;
-        }
-        else
-        {
-            DataSnapshot data = e.Snapshot;    
-            if (data.Value != null)
-            {
-                int scene = Int32.Parse(data.Child("scene").Value.ToString());                
-                Debug.Log("scene : " + scene);
-                SceneChanger.nextScene(scene);
-            }
-            else
-            {
-                CurrentMoney = 100000;
-                SceneChanger.nextScene(2); 
-            }           
-        }
-    }
-    private void LoadBalance(object sender, ValueChangedEventArgs e)
-    {
-        if (e.DatabaseError != null)
-        {
-            Debug.LogError(e.DatabaseError.Message);
-            return;
-        }
-        else
-        {
-            DataSnapshot data = e.Snapshot;
-            if (data.Value != null)
-            {
-                CurrentMoney = Int32.Parse(data.Value.ToString());
-                Debug.Log("balance: " + CurrentMoney);
-            }
-        }
-    }
-
-
+    }    
 
     void OnDestroy()
     {
