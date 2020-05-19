@@ -20,8 +20,11 @@ public class QuestionDisplay : MonoBehaviour
     public static event onTimeControl OnTimeControl;
 
     private SimulateParameters parameters;
+    private Evaluation evaluation;
+
     private void Start()
     {
+        evaluation = GameObject.FindObjectOfType<Evaluation>();
         choiceA.onClick.AddListener(SelectChoiceA);
         choiceB.onClick.AddListener(SelectChoiceB);
     }
@@ -71,13 +74,13 @@ public class QuestionDisplay : MonoBehaviour
         {
             //Do something
             parameters.UseCanal = false;
-            Evaluation.score++;
+            evaluation.increaseScore();
         }      
         else if(activeQuestion.topic == "Flood") //ต้องการระบายน้ำ +1
         {
             //Do something
             parameters.UseCanal = true;
-            Evaluation.score++;
+            evaluation.increaseScore();
         }
         else if (activeQuestion.topic == "Drought") //ใช้น้ำคลอง +1
         {
@@ -85,7 +88,7 @@ public class QuestionDisplay : MonoBehaviour
             if (parameters.UseReservoir != true)
             {
                 parameters.UseCanal = true;
-                Evaluation.score++;
+                evaluation.increaseScore();
             }            
         }
         else //For insect and disease case

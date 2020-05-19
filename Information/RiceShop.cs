@@ -8,7 +8,7 @@ public class RiceShop : MonoBehaviour
     private Transform container;
     public GameObject shopItem; 
     private MoneyInterface moneySystem;
-
+    public Money seedCost;
     public GameObject confirmationBox;
     public GameObject blackTransparency;
     private void Start()
@@ -87,6 +87,7 @@ public class RiceShop : MonoBehaviour
         Debug.Log("Buy " + riceName);
         int ricePrice = Int32.Parse(price);
         Debug.Log(ricePrice);
+        seedCost.cost = ricePrice;
         moneySystem.BuyRice(ricePrice);
         FirebaseInit.Instance._database.RootReference
                         .Child("Education")

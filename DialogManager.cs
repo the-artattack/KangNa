@@ -91,7 +91,7 @@ public class DialogManager : MonoBehaviour
         {
             animator.SetBool("isEnd", true);
         }
-        else if(currentSceneName.Equals("8StartPlant"))
+        else if(currentSceneName.Equals("9StartPlant"))
         {
             updateBalance();
             SceneChanger.nextScene(SceneIndex);
