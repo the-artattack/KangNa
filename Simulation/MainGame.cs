@@ -7,6 +7,7 @@ public class MainGame : MonoBehaviour
 {
     private SimulateParameters parameterInstance;
     public MoneyList moneyList;
+    private Evaluation evaluation;
 
     private int oldTurn;
 
@@ -34,6 +35,7 @@ public class MainGame : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        evaluation = GameObject.FindObjectOfType<Evaluation>();
         WeatherAPI.onWeatherTrigger += onWeatherComplete;
         UpdateParameters();
     }
@@ -41,6 +43,9 @@ public class MainGame : MonoBehaviour
     private void onWeatherComplete()
     {
         parameterInstance = new SimulateParameters();
+
+        //ผลผลิต 1 rai: 363 kg (ข้าวหอมมะลิ105)
+        parameterInstance.riceQuantity = Convert.ToDouble(FirebaseInit.Instance.area) * 363;
 
         oldTurn = TurnControl.turnInstance.turn;
 
@@ -554,11 +559,13 @@ public class MainGame : MonoBehaviour
 
     private void updateParameters(DateTime gameDate, string riceType)
     {
-        Parameters.parameters = parameterInstance;
-        Parameters.userMoneyList = MoneyController.moneyList;
-        Parameters.moneyList = moneyList;
-        Parameters.date = gameDate;
-        Parameters.riceType = riceType;
+        Parameters.SetParameters(parameterInstance);
+        Parameters.SetUserMoneyList(MoneyController.GetMoneyList());
+        Parameters.SetMoneyList(moneyList);
+        Parameters.SetDate(gameDate);
+        Parameters.SetRiceType(riceType);
+        Parameters.SetScore(evaluation.score);
+        Parameters.SetMaxScore(evaluation.scoreMax);
 
         //Parameters.print();
     }
@@ -577,7 +584,7 @@ public class MainGame : MonoBehaviour
     private void getParameterUpdate(SimulateParameters parameters)
     {
         parameterInstance = parameters;
-        Parameters.parameters = parameters;
+        Parameters.SetParameters(parameters);
     }
     #endregion
 
