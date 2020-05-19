@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class CalendarActivity : MonoBehaviour
 {
@@ -30,7 +31,9 @@ public class CalendarActivity : MonoBehaviour
         public void onDateSelected(int day, int month, int year)
         {
             Debug.Log("Unity Date Selected: " + day + "-" + month + "-" + year);
-            WeatherAPI.CurrentDate = new DateTime(year, month, day);
+           // WeatherAPI.CurrentDate = new DateTime(year, month, day);
+            PlayerPrefs.SetString("GameDate", new DateTime(year, month, day).ToBinary().ToString());
+            SceneChanger.nextScene(FirebaseInit.Instance.CurrentScene + 1);
         }
     }
 
@@ -47,14 +50,16 @@ public class CalendarActivity : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Init();
+        Init();        
+        CurrentMonth();
+    }
+    public void SelectDate()
+    {
         CalendarTrigger((int obj) =>
         {
             Debug.Log("Local Handler called: " + obj);
         });
-        CurrentMonth();
     }
-
     private void Init()
     {
         currentMonth = WeatherAPI.CurrentDate.Month;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.EventSystems;
 
 public class TurnControl : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class TurnControl : MonoBehaviour
     public Text TurnDisplay;
     public DateTime startDate;
     public int turn = 5;
-    public DateTime gameDate = DateTime.Now;
+    public DateTime gameDate;
     public int day = 0;
     public Text dateDisplay;
 
@@ -18,6 +19,7 @@ public class TurnControl : MonoBehaviour
     public delegate void onRicePhaseHandler(int day, DateTime gameDate);
     private void Start()
     {
+        gameDate = getDate();
         dateDisplay.text = ConvertThaiDate(gameDate);
         onRicePhase?.Invoke(day, gameDate);
         if (turnInstance == null)
@@ -29,6 +31,13 @@ public class TurnControl : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+    private DateTime getDate()
+    {
+        long temp = Convert.ToInt64(PlayerPrefs.GetString("GameDate"));
+        //Convert the date time from binary to a DataTime variable
+        DateTime date = DateTime.FromBinary(temp);
+        return date;
     }
     private void OnEnable()
     {
