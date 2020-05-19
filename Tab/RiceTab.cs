@@ -24,12 +24,6 @@ public class RiceTab : MonoBehaviour
     /** Tab3: Water */
     public bool useRain = true;
 
-    public static event onVariableChange onVariableChanges;
-    public delegate void onVariableChange(string area);
-
-    public static event onRiceName onRiceData;
-    public delegate void onRiceName(string price);
-
     public static event onHarvestTrigger onHarvest;
     public delegate void onHarvestTrigger(DateTime date, string riceType);
 
@@ -149,7 +143,7 @@ public class RiceTab : MonoBehaviour
                 }
             }
             ricePrice.text = string.Format("{0} บาท/กิโลกรัม", price);
-            onRiceData?.Invoke(price);
+            Parameters.SetSeedCost(Int32.Parse(price));            
         }
     }
 
@@ -171,7 +165,6 @@ public class RiceTab : MonoBehaviour
                 area = child.Value.ToString();
             }
             areaText.text = string.Format("พื้นที่เพาะปลูก: {0} ไร่", area);
-            onVariableChanges?.Invoke(area);
             readRicePrice();
         }
     }

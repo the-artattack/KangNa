@@ -22,7 +22,7 @@ public class WeatherAPI : MonoBehaviour
 
     public void Start()
     {
-        date = getDate();
+        date = DateTime.Now;
         print("WeatherAPI Date: " + date);
         Init();  
     }
@@ -48,7 +48,7 @@ public class WeatherAPI : MonoBehaviour
 
                     foreach (TMD_class.Forecast forecast in myObject.WeatherForecasts[0].forecasts)
                     {
-                        allForecast.Add(forecast);
+                        allForecast.Add(forecast);                        
                     }
 
                     RestClient.Get("https://data.tmd.go.th/nwpapi/v1/forecast/location/daily/at?lat=" + lat + "&lon=" + lon + "&fields=" + fields + "&date=" + date.ToString("yyyy-MM-dd") + "&duration=" + (duration + 60).ToString())
@@ -71,6 +71,7 @@ public class WeatherAPI : MonoBehaviour
                                     foreach (TMD_class.Forecast forecast in myObject.WeatherForecasts[0].forecasts)
                                     {
                                         allForecast.Add(forecast);
+                                        
                                     }
 
                                     Debug.Log("Weather API: Created.");

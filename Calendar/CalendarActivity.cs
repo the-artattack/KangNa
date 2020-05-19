@@ -123,6 +123,7 @@ public class CalendarActivity : MonoBehaviour
                 foreach (TMD_class.Forecast i in currentMonthForecast)
                 {
                     string forecast = i.time.Day + " " + MonthString(i.time.Month) + " - " + WeatherAPI.Conditions(i.data.cond);
+                    Debug.Log(forecast);
                     generateText(forecast);
                 }
 

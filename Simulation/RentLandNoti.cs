@@ -23,7 +23,6 @@ public class RentLandNoti : MonoBehaviour
         rentLandNoti.SetActive(false);
         blackTransparency.SetActive(false);
         moneySystem = FindObjectOfType<PlayerCurrency>().GetComponent<MoneyInterface>();
-        RiceTab.onVariableChanges += getArea;
         checkArea();        
     }
 
