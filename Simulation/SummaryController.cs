@@ -33,18 +33,20 @@ public class SummaryController : MonoBehaviour
         nextButton.onClick.AddListener(createSummary);
         okButton.onClick.AddListener(EndingSummary);
         summary.printMoneyList();
+        DialogManager.onMillTrigger += showMillBoard;
     }
-
+    
     /** แสดงราคารับซื้อข้าวจากโรงสีประจำวันนี้ */
     public void showMillBoard()
     {
+        DialogManager.onMillTrigger -= showMillBoard;
+        Debug.Log("ShowMillBoard");
         millBoard.SetActive(true);
-        blackTransparency.SetActive(true);
-        Invoke("playAnimation", 10.0f);
+        blackTransparency.SetActive(true);        
     }
 
     /** play truck animation */
-    private void playAnimation()
+    public void playAnimation()
     {
         millBoard.SetActive(false);
         blackTransparency.SetActive(false);
@@ -55,14 +57,14 @@ public class SummaryController : MonoBehaviour
     /** แสดงหน้ารายรับที่ได้จากโรงสีข้าว */
     private IEnumerator showIncomeBoard()
     {
+        Debug.Log("showIncomeBoard");
         yield return new WaitForSeconds(6.8f);
         IncomeBoard.SetActive(true);
         blackTransparency.SetActive(true);
-        summaryDisplay.createIncomeBoard();
-        Invoke("enableSummary", 10.0f);
+        summaryDisplay.createIncomeBoard();        
     }
     /** แสดงรายการรายรับ - รายจ่าย */ 
-    private void enableSummary()
+    public void enableSummary()
     {
         bill.SetActive(true);
         IncomeBoard.SetActive(false);

@@ -124,8 +124,7 @@ public class Summary : MonoBehaviour
             summaryDisplay.createMillBoard();
             Debug.Log("Rice price predicted: " + ricePricePredicted); 
             taskComplete = true;
-            SetUp();
-            summaryController.showMillBoard();
+            SetUp();            
         }
     }
 

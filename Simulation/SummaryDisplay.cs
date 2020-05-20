@@ -10,12 +10,13 @@ public class SummaryDisplay : MonoBehaviour
     //Mill board
     public Text harvestDateMillBoard;
     public Text riceTypeMillBoard;
-    public Text ricePricePredicted;
+    public Text ricePricePredictedMillBoard;
     public Text totalMillIncome;
 
     //Income board
     public Text harvestDateIncomeBoard;
     public Text riceTypeIncomeBoard;
+    public Text ricePricePredictedIncomeBoard;
     public Text riceWeight;
     public Text riceMoisture;
     public Text millTruck;
@@ -69,7 +70,7 @@ public class SummaryDisplay : MonoBehaviour
         //พันธุ์ข้าว
         riceTypeMillBoard.text = summary.riceType;
         //ราคารับซื้อข้าวเดือนนี้
-        ricePricePredicted.text = string.Format("{0:0,0} บาท", summary.ricePricePredicted);
+        ricePricePredictedMillBoard.text = string.Format("{0:0,0} บาท", summary.ricePricePredicted);
     }
 
     public void createIncomeBoard()
@@ -79,7 +80,7 @@ public class SummaryDisplay : MonoBehaviour
         //พันธุ์ข้าว
         riceTypeIncomeBoard.text = summary.riceType;
         //ราคารับซื้อข้าวเดือนนี้
-        ricePricePredicted.text = string.Format("{0:0,0} บาท", summary.ricePricePredicted);
+        ricePricePredictedIncomeBoard.text = string.Format("{0:0,0} บาท", summary.ricePricePredicted);
         //น้ำหนักข้าวที่ชั่งได้
         riceWeight.text = string.Format("{0} ตัน", summary.riceQuantity);
         //ค่าความชื้น
