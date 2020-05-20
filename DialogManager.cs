@@ -12,6 +12,8 @@ public class DialogManager : MonoBehaviour
     private Queue<string> sentences;
     private string currentSceneName;
 
+    public static event OnMillTrigger onMillTrigger;
+    public delegate void OnMillTrigger();
     // Start is called before the first frame update
     void Awake()
     {
@@ -91,10 +93,23 @@ public class DialogManager : MonoBehaviour
         {
             animator.SetBool("isEnd", true);
         }
+        else if (currentSceneName.Equals("7ShopRice"))
+        {
+            animator.SetBool("isEnd", true);
+        }
+        else if (currentSceneName.Equals("8Calendar"))
+        {
+            animator.SetBool("isEnd", true);
+        }
         else if(currentSceneName.Equals("9StartPlant"))
         {
             updateBalance();
             SceneChanger.nextScene(SceneIndex);
+        }
+        else if (currentSceneName.Equals("11Mill"))
+        {
+            animator.SetBool("isEnd", true);
+            onMillTrigger?.Invoke();
         }
         else
         {
