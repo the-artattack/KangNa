@@ -2,8 +2,11 @@
 using Proyecto26;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class WeatherAPI : MonoBehaviour
 {
@@ -15,23 +18,39 @@ public class WeatherAPI : MonoBehaviour
     private int duration;
     private string fields = "rain,cond,tc_min,tc_max,rh,ws10m";
 
-    private static List<TMD_class.Forecast> allForecast = new List<TMD_class.Forecast>();
+    protected static List<TMD_class.Forecast> allForecast = new List<TMD_class.Forecast>();
 
     public static event OnEventTrigger onWeatherTrigger;
     public delegate void OnEventTrigger();
 
-    public void Start()
-    {
-        date = DateTime.Now;
-        print("WeatherAPI Date: " + date);
-        Init();  
-    }
+    private string currentSceneName;
     private DateTime getDate()
     {
         long temp = Convert.ToInt64(PlayerPrefs.GetString("GameDate"));
         //Convert the date time from binary to a DataTime variable
         DateTime date = DateTime.FromBinary(temp);
         return date;
+    }
+    private void OnEnable()
+    {
+        Scene m_Scene = SceneManager.GetActiveScene();
+        currentSceneName = m_Scene.name;
+        Debug.Log("CurrentScene: " + currentSceneName);
+        if (currentSceneName.Equals("10Simulation"))
+        {
+            Debug.Log("OnEnable");
+            SetDate(getDate());
+        }
+        else
+        {
+            SetDate(DateTime.Now);
+        }
+    }
+    public void SetDate(DateTime date)
+    {
+        this.date = date;
+        print("WeatherAPI Date: " + date);
+        Init();
     }
     private void Init()
     {       
@@ -45,10 +64,9 @@ public class WeatherAPI : MonoBehaviour
                 {
 
                     myObject = JsonConvert.DeserializeObject<TMD_class>(response.Text);
-
                     foreach (TMD_class.Forecast forecast in myObject.WeatherForecasts[0].forecasts)
                     {
-                        allForecast.Add(forecast);                        
+                        //allForecast.Add(forecast);                        
                     }
 
                     RestClient.Get("https://data.tmd.go.th/nwpapi/v1/forecast/location/daily/at?lat=" + lat + "&lon=" + lon + "&fields=" + fields + "&date=" + date.ToString("yyyy-MM-dd") + "&duration=" + (duration + 60).ToString())
@@ -59,7 +77,7 @@ public class WeatherAPI : MonoBehaviour
 
                             foreach (TMD_class.Forecast forecast in myObject.WeatherForecasts[0].forecasts)
                             {
-                                allForecast.Add(forecast);
+                                //allForecast.Add(forecast);
                             }
 
                             RestClient.Get("https://data.tmd.go.th/nwpapi/v1/forecast/location/daily/at?lat=" + lat + "&lon=" + lon + "&fields=" + fields + "&date=" + date.ToString("yyyy-MM-dd") + "&duration=" + (duration + 90).ToString())
@@ -70,8 +88,7 @@ public class WeatherAPI : MonoBehaviour
 
                                     foreach (TMD_class.Forecast forecast in myObject.WeatherForecasts[0].forecasts)
                                     {
-                                        allForecast.Add(forecast);
-                                        
+                                        allForecast.Add(forecast);                                        
                                     }
 
                                     Debug.Log("Weather API: Created.");
