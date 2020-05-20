@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Linq;
-using UnityEngine.SceneManagement;
 
 public class CalendarActivity : MonoBehaviour
 {
@@ -43,15 +42,17 @@ public class CalendarActivity : MonoBehaviour
     private int currentMonth;
     private int selectedMonth;
 
-    private int currentMonthCount;
-    private int nextMonthCount;
-    private int next2MonthCount;
+    private int currentMonthCount = 0;
+    private int nextMonthCount = 0;
+    private int next2MonthCount = 0;
+    private int currentState;
 
     // Start is called before the first frame update
     void Start()
     {
-        Init();        
-        CurrentMonth();
+        WeatherAPI.onWeatherTrigger += Init;
+        //Init();        
+        //CurrentMonth();
     }
     public void SelectDate()
     {
@@ -62,23 +63,41 @@ public class CalendarActivity : MonoBehaviour
     }
     private void Init()
     {
+        currentMonthCount = 0;
+        nextMonthCount = 0;
+        next2MonthCount = 0;
         currentMonth = WeatherAPI.CurrentDate.Month;
         selectedMonth = currentMonth;
         foreach (TMD_class.Forecast forecast in WeatherAPI.AllForecast)
-        {
-            if (currentMonth == forecast.time.Month)
+        {           
+            if (currentMonth == forecast.time.Month && forecast.data.cond >= 5 && forecast.data.cond <= 8)
             {
+                Debug.Log(currentMonth + " / " + forecast.time.Month);
+                currentMonthCount++;
                 currentMonthForecast.Add(forecast);
-            }
-            else if (currentMonth + 1 == forecast.time.Month)
+            }            
+        }
+        foreach (TMD_class.Forecast forecast in WeatherAPI.AllForecast)
+        {
+            if (currentMonth + 1 == forecast.time.Month && forecast.data.cond >= 5 && forecast.data.cond <= 8)
             {
+                nextMonthCount++;
                 nextMonthForecast.Add(forecast);
-            }
-            else if (currentMonth + 2 == forecast.time.Month)
+            }            
+        }
+        foreach (TMD_class.Forecast forecast in WeatherAPI.AllForecast)
+        {
+            if (currentMonth + 2 == forecast.time.Month && forecast.data.cond >= 5 && forecast.data.cond <= 8)
             {
+                next2MonthCount++;
                 next2MonthForecast.Add(forecast);
             }
         }
+        WeatherAPI.onWeatherTrigger -= Init;
+        Debug.Log("currentMonthCount count: " + currentMonthCount);
+        Debug.Log("nextMonthCount count: " + nextMonthCount);
+        Debug.Log("next2MonthCount count: " + next2MonthCount);
+        CurrentMonth();
     }
 
     public string MonthString(int month)
@@ -118,12 +137,12 @@ public class CalendarActivity : MonoBehaviour
     {
         if (selectedMonth == currentMonth)
         {
+            Debug.Log("SelectedMonth: " + selectedMonth + " and CurrentMonth: " + currentMonth);
             if (currentMonthForecast != null && currentMonthForecast.Any())
             {
                 foreach (TMD_class.Forecast i in currentMonthForecast)
                 {
                     string forecast = i.time.Day + " " + MonthString(i.time.Month) + " - " + WeatherAPI.Conditions(i.data.cond);
-                    Debug.Log(forecast);
                     generateText(forecast);
                 }
 
@@ -135,8 +154,7 @@ public class CalendarActivity : MonoBehaviour
     }
 
     public void nextMonth()
-    {
-        OnDestroy();
+    {        
         if (selectedMonth - currentMonth >= 0 && selectedMonth - currentMonth < 2)
         {
             month.text = MonthString(selectedMonth + 1);
@@ -150,9 +168,9 @@ public class CalendarActivity : MonoBehaviour
                     foreach (TMD_class.Forecast i in nextMonthForecast)
                     {
                         string forecast = i.time.Day + " " + MonthString(i.time.Month) + " - " + WeatherAPI.Conditions(i.data.cond);
-                        generateText(forecast);
+                        generateText(forecast);                      
                     }
-
+                    
                     Debug.Log("Next 1 month");
                 }
                 else
@@ -179,7 +197,6 @@ public class CalendarActivity : MonoBehaviour
 
     public void prevMonth()
     {
-        OnDestroy();
         if (selectedMonth - currentMonth < 3 && selectedMonth - currentMonth > 0)
         {
             month.text = MonthString(selectedMonth - 1);
@@ -232,20 +249,47 @@ public class CalendarActivity : MonoBehaviour
             scrollObj.transform.SetParent(scrollContent.transform, false);
             scrollObj.transform.gameObject.GetComponent<Text>().text = forecast.ToString();
             objs.Add(scrollObj);
+            OnDestroy();
         }
     }
 
     public void OnDestroy()
-    {
-        Debug.Log("cur count: " + currentMonthCount);
-        Debug.Log("cur count: " + nextMonthCount);
-        Debug.Log("cur count: " + next2MonthCount);
-        while (objs.Count > currentMonthCount)
+    {        
+        Debug.Log("currentMonthCount count: " + currentMonthCount);
+        Debug.Log("nextMonthCount count: " + nextMonthCount);
+        Debug.Log("next2MonthCount count: " + next2MonthCount);
+        if (selectedMonth == currentMonth + 1)
         {
-            if (objs[0] != null)
-                Destroy(objs[0].gameObject);
+            while (objs.Count > nextMonthCount)
+            {
+                Debug.Log("Obj count: " + objs.Count);
+                if (objs[0] != null)
+                    Destroy(objs[0].gameObject);
 
-            objs.RemoveAt(0);
+                objs.RemoveAt(0);
+            }
+        }
+        else if (selectedMonth == currentMonth + 2)
+        {
+            while (objs.Count > next2MonthCount)
+            {
+                Debug.Log("Obj count: " + objs.Count);
+                if (objs[0] != null)
+                    Destroy(objs[0].gameObject);
+
+                objs.RemoveAt(0);
+            }
+        }
+        else
+        {
+            while (objs.Count > currentMonthCount)
+            {
+                Debug.Log("Obj count: " + objs.Count);
+                if (objs[0] != null)
+                    Destroy(objs[0].gameObject);
+
+                objs.RemoveAt(0);
+            }
         }
     }
 
